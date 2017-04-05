@@ -2,6 +2,7 @@
 #include<signal.h>
 #include "open62541.h"
 #include "coordinates.h"
+#include "state.h"
 
 
 UA_Boolean running = true;
@@ -21,7 +22,8 @@ int main(void) {
     config.networkLayersSize = 1;
     UA_Server *server = UA_Server_new(config);
 
-    addCurrentPositionSourceVariable(server,1);
+    addCurrentPositionSourceVariable(server, 1);
+    addCurrentStateSourceVariable(server, 2); 
 
     UA_Server_run(server, &running);
     UA_Server_delete(server);
