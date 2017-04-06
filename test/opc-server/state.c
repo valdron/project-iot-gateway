@@ -9,17 +9,55 @@
 // Bit 3: 1 = fehler; 0 = kein fehler
 
 // reserved
-// Bit 4: 1 = ; 0 = off
+// Bit 4: 1 = switching aufsatz; 0 = off
 // Bit 5: 1 = on; 0 = off
 // Bit 6: 1 = on; 0 = off
 // Bit 7: 1 = on; 0 = off
 
-#define STARTSTATE 0b10000000
+#define STARTSTATE 0b00000001
+
+UA_DateTimeStruct getCurrentTimestruct() {
+    return UA_DateTime_toStruct( UA_DateTime_now());
+}
+
+UA_Byte getState(UA_DateTimeStruct dt) {
+
+    //off
+    if(dt.hour > 21 || dt.hour < 6)
+        return 0b00000000;
+    //Moving
+    if(dt.sec % 6 == 0)
+        return 0b00000111;
+    //Nieten
+    if(dt.sec % 6 == 1 && dt.milliSec < 500)
+        return 0b00000101;
+    //Moving + switching
+    if(dt.sec % 6 < 3)
+        return 0b00010111;
+    //Bohren
+    if(dt.sec % 6 == 3 && dt.milliSec < 500)
+        return 0b00000101;
+    //switching to schrauber
+    if(dt.sec % 6 < 4)
+        return 0b00010101;
+    //schreuben
+    if(dt.sec % 6 == 4 && dt.milliSec < 500)
+        return 0b00000101;
+    //moving back + switching
+    if(dt.sec % 6 < 5)
+        return 0b00010111;
+
+    return 0b00000001;
+}
 
 
 static UA_StatusCode readCurrentState(void *handle, const UA_NodeId nodeid, UA_Boolean sourceTimeStamp, 
                                         const UA_NumericRange *range, UA_DataValue *dataValue) {
-    UA_Byte  val = STARTSTATE;
+    
+    UA_DateTimeStruct dt = getCurrentTimestruct();
+
+        
+    UA_Byte  val = getState(dt);
     UA_Variant_setScalarCopy(&dataValue->value, &val,  &UA_TYPES[UA_TYPES_BYTE]);
     dataValue->hasValue = true;
     return UA_STATUSCODE_GOOD;
