@@ -34,7 +34,7 @@ make install #evtl sudo make install
 ```cmake
 INCLUDE_DIRECTORIES("." dir1 dir2)
 ADD_EXECUTABLE(NAME file1.c file2.c file3.c ...)
-TARGET\_LINK_LIBRARIES(TARGETNAME LIBRARY)
+TARGET_LINK_LIBRARIES(TARGETNAME LIBRARY)
 ```
 
 
