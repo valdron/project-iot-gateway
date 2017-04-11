@@ -1,3 +1,5 @@
+
+#include<stdio.h>
 #include "open62541.h"
 #include "state.h"
 
@@ -78,9 +80,12 @@ void addCurrentStateSourceVariable(UA_Server *server, int nodeNr) {
     stateDataSource.handle = NULL;
     stateDataSource.read = readCurrentState;
     stateDataSource.write = NULL;
+    
+
     UA_Server_addDataSourceVariableNode(server, currentNodeId, parentNodeId,
                                         parentReferenceNodeId, currentName,
                                         variableTypeNodeId, attr,
                                         stateDataSource, NULL);
+    printf("adding state variable\n");
 
 }
