@@ -10,6 +10,7 @@ IG_Data getNextData();
 // should be called before getNextData();
 bool anyNewData();
 
+
 // initializes the connection to the Datasource(OPC UA) and starts the extra thread with loop over incoming data
 // TODO: needs config parameters (as pointer?) 
 // TODO: parameter for flags?
