@@ -22,7 +22,7 @@ void IG_Queue_put(IG_Queue* queue, IG_Data* new_data){
 
 	// Creating new element for the queue
 	IG_QElement* element = (IG_QElement*)malloc(sizeof(IG_QElement));
-
+	
 	// TODO: Sollen die Daten einfach der pointer weiter ggb. werden oder neu im HEAP?
 	// Mit pointer weniger aufwand wegen kopieren der pointer and weniger speicherverbrauch 	
 	element->data = new_data;
@@ -71,7 +71,11 @@ ID_Data* IG_Queue_take(IG_Queue* queue){
 
 }
 
-IG_Bool IG_Queue_isEmpty(
+IG_Bool IG_Queue_isEmpty(IG_Queue* queue){
+	if(size>0)
+		return false;
+	return true;
+}
 
 
 
