@@ -31,14 +31,14 @@ IG_Queue * IG_Queue_new();
 // TODO:Change: Second parameter is now a pointer
 // Changed parameter IG_Data to IG_Data*
 // Reason= IG_Data contains pointers, they get lost on Call-By-Value
-void IG_Queue_put(IG_Queue * queue, IG_Data* new_data);
+void IG_Queue_put(IG_Queue * queue, IG_Data new_data);
 
 // takes the data form the front of the Queue
 // or returns IG_DATA_EMPTY if the queue is Empty
 // TODO: checking if its empty could be also done if the caller checks the queue->size himself
 // This could avoid an unnecessary function call
-IG_Data* IG_Queue_take(IG_Queue * queue)
+IG_Data* IG_Queue_take(IG_Queue* queue);
 
 //returns true if the size is 0
 // TODO: Which queue? Need a pointer here to the queue, or we access directly the size variable
-IG_Bool IG_Queue_isEmpty(/*IG_Queue*/);
+IG_Bool IG_Queue_isEmpty(IG_Queue* queue);
