@@ -54,7 +54,7 @@ ID_Data* IG_Queue_take(IG_Queue* queue){
 	// Check if queue is empty???
 	if(queue->size==0){
 		// TODO
-		return nullptr;
+		return IG_DATA_EMPTY;
 	}
 	
 	// Get pointer to data of first element in queue
