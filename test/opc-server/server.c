@@ -1,5 +1,6 @@
 
 #include<signal.h>
+#include<stdio.h>
 #include "open62541.h"
 #include "coordinates.h"
 #include "state.h"
@@ -21,9 +22,10 @@ int main(void) {
     config.networkLayers = &nl;
     config.networkLayersSize = 1;
     UA_Server *server = UA_Server_new(config);
-
+    printf("before pos\n");
     addCurrentPositionSourceVariable(server, 1);
-    addCurrentStateSourceVariable(server, 2); 
+    printf("after pos\n");
+    addCurrentStateSourceVariable(server, 1); 
 
     UA_Server_run(server, &running);
     UA_Server_delete(server);
