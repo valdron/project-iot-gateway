@@ -20,9 +20,10 @@ typedef double IG_Double;
 // IG Statuscode
 // TODO: 
 typedef enum IG_Status {
-	IG_STATUS_GOOD,
-	IG_STATUS_BA,
-	IG_STATUS_QUEUE_FULL,
+    IG_STATUS_GOOD, 
+    IG_STATUS_BAD,
+    IG_STATUS_QUEUE_FULL
+    /*add more as needed*/
 } IG_Status;
 
 //TODO: insert relevant Datatypes (floatingpoint, integer, )
@@ -40,4 +41,10 @@ typedef struct IG_Data{
 	void * data;
 	IG_DateTime timestamp;
 } IG_Data;
+
+//TODO: functions for working with IG_Data : 
+// -init(creates new on the heap), 
+// -delete(frees memory), 
+// -take_data (returns pointer and deletes IG_Data after after)
+
 
