@@ -49,9 +49,9 @@ void IG_Queue_put(IG_Queue* queue, IG_Data* new_data){
 void IG_Queue_put(IG_Queue* queue, IG_Data new_data) {
 	new_pointer = (IG_Data*)malloc(sizeof(IG_Data));
 	new_pointer->id = new_data.id;
-	new_pointer->datatype = new_data.IG_Datatype;
+	new_pointer->datatype = new_data.datatype;
 	new_pointer->data = new_data.data;
-	new_pointer->IG_DataTime = new_data.IG_DataTime;
+	new_pointer->timestamp = new_data.timestamp;
 	// Recall so we dont have to rewrite
 	IG_Queue_put(queue, new_pointer);
 }
