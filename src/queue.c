@@ -83,7 +83,7 @@ ID_Data* IG_Queue_take(IG_Queue* queue){
 }
 
 IG_Bool IG_Queue_isEmpty(IG_Queue* queue){
-	return (queue->size>0);
+	return (queue->size==0);
 }
 
 
