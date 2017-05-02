@@ -3,15 +3,15 @@
 #include "pthread.h"
 
 typedef struct IG_Queue{
-	IG_UInt32 size;
-	IG_QElement * front;
-	IG_QElement * end;
-	pthread_mutex_t * mutex;
+	IG_UInt32 size,
+	IG_QElement * front,
+	IG_QElement * end,
+	pthread_mutex_t * mutex
 } IG_Queue;
 
 typedef struct IG_QElement{
-	IG_QElement * next;
-	IG_Data * data;
+	IG_QElement * next,
+	IG_Data * data
 } IG_QElement;
 
 //Creates a new empty Queue on the heap and returns a pointer to it
