@@ -45,6 +45,17 @@ void IG_Queue_put(IG_Queue* queue, IG_Data* new_data){
 	pthread_mutex_unlock(queue->mutex);
 }
 
+// Overloading function to ensure data is not lost while beeing on the stack
+void IG_Queue_put(IG_Queue* queue, IG_Data new_data) {
+	new_pointer = (IG_Data*)malloc(sizeof(IG_Data));
+	new_pointer->id = new_data.id;
+	new_pointer->datatype = new_data.IG_Datatype;
+	new_pointer->data = new_data.data;
+	new_pointer->IG_DataTime = new_data.IG_DataTime;
+	// Recall so we dont have to rewrite
+	IG_Queue_put(queue, new_pointer);
+}
+
 ID_Data* IG_Queue_take(IG_Queue* queue){
 
 
@@ -72,9 +83,7 @@ ID_Data* IG_Queue_take(IG_Queue* queue){
 }
 
 IG_Bool IG_Queue_isEmpty(IG_Queue* queue){
-	if(size>0)
-		return false;
-	return true;
+	return (queue->size>0);
 }
 
 
