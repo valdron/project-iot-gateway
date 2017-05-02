@@ -1,8 +1,5 @@
 // DEFINES FOR CONSTANTS
 #define IG_DATA_EMPTY {0, IG_NULL, NULL, 0}
-// Just for purpose
-#define enum bool {false,true}
-
 
 //TYPEDEFS
 // Time in 100ns intervals since 01.01.1601;
@@ -32,15 +29,11 @@ typedef enum IG_Status {
 typedef enum IG_Datatype {
     IG_DOUBLE, 
     IG_NULL,
-	IG_INT,
-	IG_CHAR,
-	IG_BOOL
     /*...*/
 } IG_Datatype;
 
 
 // IG Data
-
 typedef struct IG_Data{
 	IG_ID id;
 	IG_Datatype datatype;
