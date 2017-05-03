@@ -1,5 +1,12 @@
+#ifndef INTERNALS_H
+#define INTERNALS_H
+
+#include<stdlib.h>
+#include<stdint.h>
+#include<stdbool.h>
+
 // DEFINES FOR CONSTANTS
-#define IG_DATA_EMPTY {0, IG_NULL, NULL, 0}
+
 
 //TYPEDEFS
 // Time in 100ns intervals since 01.01.1601;
@@ -19,7 +26,7 @@ typedef double IG_Double;
 
 // IG Statuscode
 // TODO: 
-typedef enum IG_Status {
+typedef enum {
     IG_STATUS_GOOD, 
     IG_STATUS_BAD,
     IG_STATUS_QUEUE_FULL
@@ -27,7 +34,7 @@ typedef enum IG_Status {
 } IG_Status;
 
 //TODO: insert relevant Datatypes (floatingpoint, integer, )
-typedef enum IG_Datatype {
+typedef enum {
     IG_DOUBLE, 
     IG_NULL,
     /*...*/
@@ -35,16 +42,18 @@ typedef enum IG_Datatype {
 
 
 // IG Data
-typedef struct IG_Data{
+typedef struct{
 	IG_ID id;
 	IG_Datatype datatype;
 	void * data;
 	IG_DateTime timestamp;
 } IG_Data;
 
+static const IG_Data IG_DATA_EMPTY = (IG_Data){0, IG_NULL, NULL, 0};
+
 //TODO: functions for working with IG_Data : 
 // -init(creates new on the heap), 
 // -delete(frees memory), 
 // -take_data (returns pointer and deletes IG_Data after after)
 
-
+#endif

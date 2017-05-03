@@ -13,7 +13,7 @@ int main(int argc, char * argv[]) {
 
 
     // call run with parameters
-
+    run();
 
     // shutdown notice
     
