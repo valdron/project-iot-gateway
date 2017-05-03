@@ -25,9 +25,9 @@ bool anyNewData(IG_Datenerfasser * erfasser);
 IG_Status init(IG_Datenerfasser * erfasser);
 
 //Allocates new IG_Datenerfasser struct on the heap
-IG_Datenerfasser * IG_IG_Datenerfasser_create(IG_Config * config);
+IG_Datenerfasser * IG_Datenerfasser_create(IG_Config * config);
 
 
 //Frees the memory needed for the struct including the queue and the config
-Datenerfassung * IG_IG_Datenerfasser_delete(IG_Datenerfasser * erfasser);
+Datenerfassung * IG_Datenerfasser_delete(IG_Datenerfasser * erfasser);
 

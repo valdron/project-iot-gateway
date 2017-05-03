@@ -10,7 +10,7 @@ typedef struct IG_Datenversender{
 
 
 // gives the IG_Data to the datenversender thread (pushes it to the queue)
-IG_Status sendData(IG_Datenversender * sender, IG_Data * data)
+IG_Status sendData(IG_Datenversender * sender, IG_Data * data);
 
 
 
