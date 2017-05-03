@@ -1,0 +1,7 @@
+
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/bin)
+
+ADD_EXECUTABLE(OPCServer server.c state.c coordinates.c)
+
+TARGET_LINK_LIBRARIES(OPCServer open62541)

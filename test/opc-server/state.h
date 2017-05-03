@@ -1,0 +1,1 @@
+void addCurrentStateSourceVariable(UA_Server *server, int nodeNr);
