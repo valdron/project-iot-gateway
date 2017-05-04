@@ -1,9 +1,10 @@
 #include "queue.h"
+#include "internals.h"
 
 IG_Queue * IGQueue_new(){
 
 	// Init queue
-	IG_Queue* queue = (IQ_Queue*)malloc(sizeof(IG_Queue));
+	IG_Queue* queue = (IG_Queue*)malloc(sizeof(IG_Queue));
 	queue->size = 0;
 	queue->front = NULL;
 	queue->end = NULL;
@@ -30,12 +31,12 @@ void IG_Queue_put(IG_Queue* queue, IG_Data* new_data){
 
 	// First element to enqueue	
 	if(queue->size == 0){
-		queue->front = new_data;
-		queue->end = new_data;
+		queue->front = element;
+		queue->end = element;
 	}
 	else if(queue->size > 0){
 		// Current last element shall point to the new last element
-		queue->end->next = element
+		queue->end->next = element;
 		// Set queue end pointer to the new last element
 		queue->end = element;
 	}
@@ -46,8 +47,8 @@ void IG_Queue_put(IG_Queue* queue, IG_Data* new_data){
 }
 
 // Overloading function to ensure data is not lost while beeing on the stack
-void IG_Queue_put(IG_Queue* queue, IG_Data new_data) {
-	new_pointer = (IG_Data*)malloc(sizeof(IG_Data));
+void IG_Queue_put_copy(IG_Queue* queue, IG_Data new_data) {
+	IG_Data * new_pointer = (IG_Data*)malloc(sizeof(IG_Data));
 	new_pointer->id = new_data.id;
 	new_pointer->datatype = new_data.datatype;
 	new_pointer->data = new_data.data;
@@ -56,7 +57,7 @@ void IG_Queue_put(IG_Queue* queue, IG_Data new_data) {
 	IG_Queue_put(queue, new_pointer);
 }
 
-ID_Data* IG_Queue_take(IG_Queue* queue){
+IG_Data* IG_Queue_take(IG_Queue* queue){
 
 
 	// Lock
@@ -65,12 +66,12 @@ ID_Data* IG_Queue_take(IG_Queue* queue){
 	// Check if queue is empty???
 	if(queue->size==0){
 		// TODO
-		return IG_DATA_EMPTY;
+		pthread_mutex_unlock(queue->mutex);	
+		return &IG_DATA_EMPTY;
 	}
 	
-	// Get pointer to data of first element in queue
-	IG_Data* dequeued_data = queue->front;
-
+	// Get pointer to first element in queue
+	IG_QElement* dequeued_data = queue->front;
 	// Set front pointer of queue to the next element in the queue
 	queue->front = queue->front->next;
 
@@ -78,7 +79,13 @@ ID_Data* IG_Queue_take(IG_Queue* queue){
 
 	pthread_mutex_unlock(queue->mutex);	
 
-	return dequeue_data;
+	//take datapointer out of listelement
+	IG_Data * data = dequeued_data->data;
+
+	//free listelement
+	free(dequeued_data);
+
+	return data;
 
 }
 
