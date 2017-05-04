@@ -13,4 +13,4 @@
 // should be called once at startup from main() and should block until the gateway is shutdown
 // TODO: which parameters will be needed at startup? config filename(s)?
 
-IG_Status run(/*...*/);
+IG_Status run(char * filename);

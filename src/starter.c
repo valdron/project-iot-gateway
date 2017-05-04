@@ -12,26 +12,12 @@
 //COMMAND DEFINES
 #define SHUTDOWN "shutdown"
 #define HELP "help"
-#define PRINT_HELP "commands: \n help: prints help\nshutdown: exits\n"
+#define PRINT_HELP "commands: \nhelp: prints help\nshutdown: exits\n"
+#define PROMPT "IG-Command Prompt ->"
 
-void commandloop() {
-    char commandbuffer[50]; 
-    while(true) {
-        printf("IG>");
-        scanf("%s", commandbuffer);
+void commandloop();
 
-        if(!strcmp(commandbuffer, SHUTDOWN) ) {
-            break;
-        } else if(!strcmp(commandbuffer, HELP) ) {
-            printf(PRINT_HELP);
-        } else {
-            printf(PRINT_HELP);
-        }
-    }
-}
-
-
-IG_Status run() {
+IG_Status run(char * filename) {
 
     //read config from file
 
@@ -64,5 +50,18 @@ IG_Status run() {
 
 }
 
+void commandloop() {
+    char commandbuffer[50]; 
+    while(true) {
+        printf(PROMPT);
+        scanf("%s", commandbuffer);
 
-
+        if(!strcmp(commandbuffer, SHUTDOWN) ) {
+            break;
+        } else if(!strcmp(commandbuffer, HELP) ) {
+            printf(PRINT_HELP);
+        } else {
+            printf(PRINT_HELP);
+        }
+    }
+}

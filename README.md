@@ -37,5 +37,11 @@ ADD_EXECUTABLE(NAME file1.c file2.c file3.c ...)
 TARGET_LINK_LIBRARIES(TARGETNAME LIBRARY)
 ```
 
+## Building ##
 
+```bash
+mkdir build && cd build
+cmake ../src
+make
+```
 
