@@ -8,7 +8,7 @@ IG_Queue * IG_Queue_new(){
 	queue->size = 0;
 	queue->front = NULL;
 	queue->end = NULL;
-	queue->mutex = malloc(sizeof(*(queue->mutex)));
+	queue->mutex = malloc(sizeof(pthread_mutex_t);
 
 	// Init mutex for this specific queue
 	pthread_mutex_init(queue->mutex,NULL);
