@@ -13,7 +13,7 @@
 typedef int64_t IG_DateTime;
 
 // Internal Identification number
-typedef uint32_t IG_ID; 
+typedef uint32_t IG_Id; 
 
 typedef bool IG_Bool;
 typedef uint32_t IG_UInt32;
@@ -43,7 +43,7 @@ typedef enum {
 
 // IG Data
 typedef struct{
-	IG_ID id;
+	IG_Id id;
 	IG_Datatype datatype;
 	void * data;
 	IG_DateTime timestamp;
