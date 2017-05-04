@@ -1,19 +1,18 @@
-#ifdef QUEUE_H
-#define QUEUE_H
-#include "pthread.h"
+
+#include<pthread.h>
 #include "internals.h"
-#endif
+
 
 #include "queue.h"
 #include <stdio.h>
 
 
 typedef struct threadArgs{
-	IG_Queue* queue,
-	char* threadName
+	IG_Queue* queue;
+	char* threadName;
 } threadArgs;
 
-void erzeugeDaten(IG_Queue *);
+void erzeugeDaten(IG_Queue *, char *);
 void leseDaten(IG_Queue *);
 
 int main(void){
@@ -30,7 +29,7 @@ int main(void){
 	for(int i = 0; i<100; ++i){
 		IG_Data* data = (IG_Data*)malloc(sizeof(IG_Data));
 		data->id = i;
-		data->datatype = IG_INT;
+		data->datatype = IG_INT32;
 		int* record = (int*)malloc(sizeof(int));
 		*(record) = i*i;		
 		data->data = (void*)record;
@@ -72,7 +71,7 @@ void erzeugeDaten(IG_Queue * queue,char* string){
 	for(int i = 0; i<100; ++i){
 		IG_Data* data = (IG_Data*)malloc(sizeof(IG_Data));
 		data->id = i;
-		data->datatype = IG_INT;
+		data->datatype = IG_INT32;
 		int* record = (int*)malloc(sizeof(int));
 		record = string;		
 		data->data = (void*)record;

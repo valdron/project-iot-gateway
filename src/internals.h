@@ -36,7 +36,14 @@ typedef enum {
 //TODO: insert relevant Datatypes (floatingpoint, integer, )
 typedef enum {
     IG_DOUBLE, 
+    IG_FLOAT,
     IG_NULL,
+    IG_INT32,
+    IG_UINT32,
+    IG_INT64,
+    IG_UINT64,
+    IG_DATETIME,
+    IG_BOOL,
     /*...*/
 } IG_Datatype;
 
