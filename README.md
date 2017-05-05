@@ -13,12 +13,12 @@ cd build
 cmake ..
 ```
 CMakeCache.txt bearbeiten   
-UA\_ENABLE_AMALGAMATION:BOOL=FALSE   
+UA\_ENABLE_AMALGAMATION:BOOL=OFF   
 ersetzen durch  
 UA\_ENABLE_AMALGAMATION:BOOL=ON  
 ```bash
 cmake ..
-make install #evtl sudo make install
+sudo make install
 ```
 
 ### paho_mqtt ###
@@ -27,7 +27,7 @@ make install #evtl sudo make install
 git clone https://github.com/eclipse/paho.mqtt.c.git
 cd paho.mqtt.c
 cmake .
-make install #evtl sudo make install
+sudo make install
 ```
 
 ## Creating CMakeLists.txt ##
@@ -37,5 +37,11 @@ ADD_EXECUTABLE(NAME file1.c file2.c file3.c ...)
 TARGET_LINK_LIBRARIES(TARGETNAME LIBRARY)
 ```
 
+## Building ##
 
+```bash
+mkdir build && cd build
+cmake ..
+make
+```
 

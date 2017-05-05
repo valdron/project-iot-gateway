@@ -1,10 +1,14 @@
+#ifndef DATENVERSENDER_H
+#define DATENVERSENDER_H
+
 //for datatypes
 #include "queue.h"
 #include "internals.h"
+#include "configuration.h"
 
-typedef struct IG_Datenversender{
-    IG_Config * config,
-    IG_Queue * queue
+typedef struct{
+    IG_Config * config;
+    IG_Queue * queue;
 } IG_Datenversender;
 
 
@@ -17,4 +21,6 @@ IG_Status sendData(IG_Datenversender * sender, IG_Data * data);
 // initializes the connection to the Datadestination(MQTT-Broker) and starts the extra thread with loop over incoming data
 // TODO: needs config parameters (as pointer?) 
 // TODO: parameter for flags?
-IG_Status init(IG_Datenversender * sender);
+IG_Status init_versender(IG_Datenversender * sender);
+
+#endif
