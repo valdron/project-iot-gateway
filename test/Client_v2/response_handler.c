@@ -1,6 +1,7 @@
-#include "open62541.h"
-#include "Internals.h"
+#include<open62541.h>
 #include <stdio.h>
+#include "internals.h"
+#include "Client_v2.h"
 
 void handler_TheAnswerChanged(UA_UInt32 monId, UA_DataValue *value, void *context) {
     IG_Data *data;

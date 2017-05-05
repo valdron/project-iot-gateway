@@ -140,7 +140,7 @@ int init(UA_Client * client){
                         printf("\tSubID:\t\t%d\n", SubID);                       
                         UA_Client_Subscriptions_addMonitoredItem(client,SubID,
                             UA_NODEID_NUMERIC(1,getNodeIdFromXml(searchptr)),
-                            UA_ATTRIBUTEID_VALUE, &handler_TheAnswerChanged,NULL, monIDs[idCounter-1]);
+                            UA_ATTRIBUTEID_VALUE, &handler_TheAnswerChanged,NULL, &monIDs[idCounter-1]);
                         
                     
                         if(searchptr = strstr(searchptr, searchDurchschnittswertBoolean)){
