@@ -1,6 +1,6 @@
 
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build/bin)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 ADD_EXECUTABLE(OPCServer server.c state.c coordinates.c)
 

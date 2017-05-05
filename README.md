@@ -80,7 +80,7 @@ TARGET_LINK_LIBRARIES(TARGETNAME LIBRARY)
 
 ```bash
 mkdir build && cd build
-cmake ../src
+cmake ..
 make
 ```
 

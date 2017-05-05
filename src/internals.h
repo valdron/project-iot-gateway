@@ -36,7 +36,14 @@ typedef enum {
 //TODO: insert relevant Datatypes (floatingpoint, integer, )
 typedef enum {
     IG_DOUBLE, 
+    IG_FLOAT,
     IG_NULL,
+    IG_INT32,
+    IG_UINT32,
+    IG_INT64,
+    IG_UINT64,
+    IG_DATETIME,
+    IG_BOOL,
     /*...*/
 } IG_Datatype;
 
@@ -49,6 +56,7 @@ typedef struct{
 	IG_DateTime timestamp;
 } IG_Data;
 
+
 static const IG_Data IG_DATA_EMPTY = (IG_Data){0, IG_NULL, NULL, 0};
 
 //TODO: functions for working with IG_Data : 
@@ -56,4 +64,12 @@ static const IG_Data IG_DATA_EMPTY = (IG_Data){0, IG_NULL, NULL, 0};
 // -delete(frees memory), 
 // -take_data (returns pointer and deletes IG_Data after after)
 
+// Creates new IG_Data on the heap and inits it with the parameters
+IG_Data * IG_Data_create(IG_Id id, IG_Datatype type, void * data, IG_DateTime time);
+
+//care this doesnt free the memory needed for the data pointer
+void IG_Data_delete(IG_Data * data);
+
+// this frees the data ptr inside
+void IG_Data_delete_members(IG_Data * data);
 #endif
