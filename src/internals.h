@@ -59,11 +59,6 @@ typedef struct{
 
 static const IG_Data IG_DATA_EMPTY = (IG_Data){0, IG_NULL, NULL, 0};
 
-//TODO: functions for working with IG_Data : 
-// -init(creates new on the heap), 
-// -delete(frees memory), 
-// -take_data (returns pointer and deletes IG_Data after after)
-
 // Creates new IG_Data on the heap and inits it with the parameters
 IG_Data * IG_Data_create(IG_Id id, IG_Datatype type, void * data, IG_DateTime time);
 
