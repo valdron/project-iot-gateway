@@ -1,0 +1,30 @@
+ <?xml version="1.0" encoding="utf-8"?>
+    <subscriptions>
+        <subscription>Roboterarm
+            <monitoredItem>Temperture
+                <timeinterval>0.5</timeinterval>
+                <nodeID>117</nodeID>
+                <durchschnittswert>0
+                <publishDurchschnittswert>60</publishDurchschnittswert>
+                </durchschnittswert>
+            </monitoredItem>
+        
+            <monitoredItem>Pressure
+                <timeinterval>0.5</timeinterval>
+                <nodeID>118</nodeID>
+                <durchschnittswert>0
+                    <publishDurchschnittswert>60</publishDurchschnittswert>
+                </durchschnittswert>
+            </monitoredItem>
+
+        <subscription>Roboterarm2
+            <monitoredItem>Temperture
+                <timeinterval>0.25</timeinterval>
+                <nodeID>118</nodeID>
+                <durchschnittswert>0
+                <publishDurchschnittswert>60</publishDurchschnittswert>
+                </durchschnittswert>
+            </monitoredItem>
+        </subscription>
+        
+    </subscriptions>
