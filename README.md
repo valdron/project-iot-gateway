@@ -5,6 +5,7 @@ A Project of students of the Hochschule Esslingen
 
 ### open62541 ###
 Source: https://github.com/open62541/open62541 
+
 LICENSE: Mozilla Public License 2.0
 
 ```bash
@@ -15,6 +16,7 @@ make && sudo make install
 ```
 ### paho_mqtt ###
  Source: https://github.com/eclipse/paho.mqtt.c 
+ 
  LICENSE: Eclipse Distribution License - v 1.0
 ```bash
 git clone https://github.com/eclipse/paho.mqtt.c.git && cd paho.mqtt.c
@@ -25,6 +27,7 @@ make && sudo make install
 ### libxml2 ###
 
 SOURCE: xmlsoft.org/libxml2 
+
 LICENSE: MIT LICENSE
 
 ```bash
