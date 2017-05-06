@@ -6,27 +6,16 @@ A Project of students of the Hochschule Esslingen
 ### open62541 ###
 
 ```bash
-git clone https://github.com/open62541/open62541.git
-cd open62541
-mkdir build
-cd build
-cmake ..
+git clone https://github.com/open62541/open62541.git && cd open62541
+mkdir build && cd build
+cmake -DUA_ENABLE_AMALGAMATION=ON ..
+make && sudo make install
 ```
-CMakeCache.txt bearbeiten   
-UA\_ENABLE_AMALGAMATION:BOOL=OFF   
-ersetzen durch  
-UA\_ENABLE_AMALGAMATION:BOOL=ON  
-```bash
-cmake ..
-sudo make install
-```
-
 ### paho_mqtt ###
 
 ```bash
-git clone https://github.com/eclipse/paho.mqtt.c.git
-cd paho.mqtt.c
-cmake .
+git clone https://github.com/eclipse/paho.mqtt.c.git && cd paho.mqtt.c
+cmake -DPAHO_BUILD_STATIC=TRUE .
 sudo make install
 ```
 
