@@ -30,6 +30,16 @@ cmake .
 sudo make install
 ```
 
+### libxml2 ###
+
+```bash
+curl -o libxml2-2.9.4.tar.gz ftp://xmlsoft.org/libxml2/libxml2-2.9.4.tar.gz
+tar -xvf libxml2-2.9.4.tar.gz
+cd libxml2-2.9.4
+./configure --enable-static=yes
+make && sudo make install #may take some minutes
+```
+
 ## Creating CMakeLists.txt ##
 ```cmake
 INCLUDE_DIRECTORIES("." dir1 dir2)
