@@ -26,7 +26,7 @@ make && sudo make install
 
 ### libxml2 ###
 
-SOURCE: xmlsoft.org/libxml2 
+SOURCE: https://xmlsoft.org/libxml2 
 
 LICENSE: MIT LICENSE
 
