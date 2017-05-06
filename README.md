@@ -16,7 +16,7 @@ make && sudo make install
 ```bash
 git clone https://github.com/eclipse/paho.mqtt.c.git && cd paho.mqtt.c
 cmake -DPAHO_BUILD_STATIC=TRUE .
-sudo make install
+make && sudo make install
 ```
 
 ### libxml2 ###
