@@ -31,12 +31,6 @@ enum IG_Status {
 };
 
 
-enum ValueId{
-    ROBOTERARM_TEMPERATURE_DOUBLE_VALUE, 
-    ROBOTERARM_PRESSURE_DOUBLE_VALUE
-};
-
-
 //TODO: insert relevant Datatypes (floatingpoint, integer, )
 enum IG_Datatype {
     IG_DOUBLE, 
@@ -46,7 +40,6 @@ enum IG_Datatype {
 
 
 // IG Data
-
 typedef struct {
     IG_ID id;
     IG_Datatype datatype;
@@ -54,3 +47,17 @@ typedef struct {
     IG_DateTime timestamp;
     bool avgValue;
 }IG_Data;
+
+//Typen der Nodes HARDCODED <- ggf zu verbessern
+enum itemType{
+        ROBOTERARM_TEMPERATURE_DOUBLE_VALUE = 117,
+        ROBOTERARM_PRESSURE_DOUBLE_VALUE = 118
+};
+
+//To save data of the Items
+typedef struct {
+    UA_UInt32 subId;
+    UA_UInt32 monId;
+    enum itemType type;
+    bool avgValue;
+}MonitoredItems;

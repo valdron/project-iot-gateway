@@ -1,8 +1,8 @@
  <?xml version="1.0" encoding="utf-8"?>
     <subscriptions>
         <subscription>Roboterarm
+            <timeinterval>0.5</timeinterval>
             <monitoredItem>Temperture
-                <timeinterval>0.5</timeinterval>
                 <nodeID>117</nodeID>
                 <durchschnittswert>0
                 <publishDurchschnittswert>60</publishDurchschnittswert>
@@ -10,7 +10,6 @@
             </monitoredItem>
         
             <monitoredItem>Pressure
-                <timeinterval>0.5</timeinterval>
                 <nodeID>118</nodeID>
                 <durchschnittswert>0
                     <publishDurchschnittswert>60</publishDurchschnittswert>
@@ -18,8 +17,8 @@
             </monitoredItem>
 
         <subscription>Roboterarm2
+            <timeinterval>0.25</timeinterval>
             <monitoredItem>Temperture
-                <timeinterval>0.25</timeinterval>
                 <nodeID>118</nodeID>
                 <durchschnittswert>0
                 <publishDurchschnittswert>60</publishDurchschnittswert>
