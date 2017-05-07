@@ -180,6 +180,7 @@ int init(UA_Client * client, MonitoredItems *monitoredItems){
                                                     //Somit kann ich den Wert verarbeiten ohne die
                                                     //mońitoredItemID zu berücksichtigen welche nicht eindeutig ist                                                                               
                 
+<<<<<<< HEAD
                 //Kopieren des Wertes des erstem Items
                 //Addresse des erstn Items wird als Referenz für die
                 //Subscription benutzt                                                
@@ -189,6 +190,41 @@ int init(UA_Client * client, MonitoredItems *monitoredItems){
                             
 
                 //Prüfe ob noch mehr Items zur Subscription gehören        
+=======
+                if(searchptr = strstr(searchptr, searchTimeinterval)){
+                    searchptr += sizeof(searchTimeinterval) - sizeof(char);
+                    printf("\tTimeintervall:\t%f\n",getDoubleFromXml(searchptr));
+                    UA_Client_Subscriptions_new(client,
+                        getSubscriptonSettings(getDoubleFromXml(searchptr)),&SubID);
+                    //UA_Client_Subscriptions_new(...) ändert den Wert der SubID
+                    //Deshalb wird neu zugewiesen
+                    SubID = i;
+
+                    if(searchptr = strstr(searchptr, searchNodeID)){
+                        searchptr += sizeof(searchNodeID) - sizeof(char);   
+                        //ItemID muss Unique sein. Jedes Item braucht seine eigene ID
+                        idCounter++;
+                        monIDs = realloc(monIDs, idCounter*sizeof(UA_UInt32));           
+                        printf("\tNodeID:\t\t%d\n", getNodeIdFromXml(searchptr));
+                        printf("\tSubID:\t\t%d\n", SubID);                       
+                        UA_Client_Subscriptions_addMonitoredItem(client,SubID,
+                            UA_NODEID_NUMERIC(1,getNodeIdFromXml(searchptr)),
+                            UA_ATTRIBUTEID_VALUE, &handler_TheAnswerChanged,NULL, &monIDs[idCounter-1]);
+                        
+                    
+                        if(searchptr = strstr(searchptr, searchDurchschnittswertBoolean)){
+                            searchptr += sizeof(searchDurchschnittswertBoolean) - sizeof(char);
+                            //48 ist der ASCII wert für die 0 aus dem XML file
+                            if(!((int)searchptr[0] == 48))
+                                printf("\tWert ist ein Druchschnittswert\n");
+                            else
+                                printf("\tWert wird immer geliefert\n");
+                        }
+                    }
+                }
+                //Prüfung ob die Subscription beendet ist oder noch 
+                //mehr Items hinzugefügt werden müssen
+>>>>>>> c038bccfe8c218f35219e8ba49280e7d58e880b6
                 int x;
                 int z;
                 char * xptr = strstr(searchptr,searchSubscription);

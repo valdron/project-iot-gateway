@@ -1,7 +1,11 @@
-#include "open62541.h"
-#include "Internals.h"
+#include<open62541.h>
 #include <stdio.h>
+<<<<<<< HEAD
 #include <stdbool.h>
+=======
+#include "internals.h"
+#include "Client_v2.h"
+>>>>>>> c038bccfe8c218f35219e8ba49280e7d58e880b6
 
 static char boolToChar(bool i){
     if(i){
