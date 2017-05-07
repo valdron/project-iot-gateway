@@ -22,6 +22,8 @@ typedef struct{
 //Creates a new empty Queue on the heap and returns a pointer to it
 IG_Queue * IG_Queue_new();
 
+void IG_Queue_delete();
+
 // Insert new data to the queue
 void IG_Queue_put(IG_Queue * queue, IG_Data * new_Data);
 void IG_Queue_put_copy(IG_Queue * queue, IG_Data new_Data);

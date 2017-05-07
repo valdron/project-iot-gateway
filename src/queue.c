@@ -1,17 +1,32 @@
 #include "queue.h"
 #include "internals.h"
 
-IG_Queue * IGQueue_new(){
+IG_Queue * IG_Queue_new(){
 
 	// Init queue
 	IG_Queue* queue = (IG_Queue*)malloc(sizeof(IG_Queue));
 	queue->size = 0;
 	queue->front = NULL;
 	queue->end = NULL;
+	queue->mutex = malloc(sizeof(pthread_mutex_t));
 
 	// Init mutex for this specific queue
 	pthread_mutex_init(queue->mutex,NULL);
 	return queue;
+}
+
+void IG_Queue_delete(IG_Queue * queue){
+	pthread_mutex_lock(queue->mutex);
+	while(!IG_Queue_isEmpty(queue)){
+		IG_Data* element = IG_Queue_take(queue);
+		free(element->data);		
+		free(element);
+		//IG_Data_delete(element);
+	}
+	pthread_mutex_unlock(queue->mutex);
+	pthread_mutex_destroy(queue->mutex);
+	free(queue->mutex);
+	free(queue);
 }
 
 // Function to enqueue data
@@ -23,9 +38,7 @@ void IG_Queue_put(IG_Queue* queue, IG_Data* new_data){
 
 	// Creating new element for the queue
 	IG_QElement* element = (IG_QElement*)malloc(sizeof(IG_QElement));
-	
-	// TODO: Sollen die Daten einfach der pointer weiter ggb. werden oder neu im HEAP?
-	// Mit pointer weniger aufwand wegen kopieren der pointer and weniger speicherverbrauch 	
+
 	element->data = new_data;
 	element->next = NULL;
 
@@ -65,7 +78,6 @@ IG_Data* IG_Queue_take(IG_Queue* queue){
 
 	// Check if queue is empty???
 	if(queue->size==0){
-		// TODO
 		pthread_mutex_unlock(queue->mutex);	
 		return &IG_DATA_EMPTY;
 	}
