@@ -1,5 +1,5 @@
 
-
+project(IoTGateway)
 
 cmake_minimum_required(VERSION 3.8)
 
@@ -21,10 +21,10 @@ else()
 endif()
 
 # shortcut
-set(SOURCE_DIR ${SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src)
 
 
-INCLUDE_DIRECTORIES(${SOURCE_DIR} ${libxml2_INCLUDE_DIRS})
+
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src ${libxml2_INCLUDE_DIRS})
 
 
 #  makes tests
