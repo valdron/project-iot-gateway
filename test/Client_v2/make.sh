@@ -1,1 +1,0 @@
-gcc -std=c99 open62541.c Client_v2.c init_xml.c response_handler.c -o Client_v2
