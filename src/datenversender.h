@@ -18,19 +18,18 @@ typedef struct{
 IG_Status sendData(IG_Datenversender * sender, IG_Data * data);
 
 
-// returns next Data or returns IG_DATA_EMPTY;
-// fetches the data from queue
-IG_Data getNextData(IG_Datenversender * sender);
 
 // returns if there is any new data in the queue
 // should be called before getNextData();
 bool anyNewData(IG_Datenversender * sender);
 
+void* doSomeThing(void *arg);
+
 
 // initializes the connection to the Datadestination(MQTT-Broker) and starts the extra thread with loop over incoming data
 // TODO: needs config parameters (as pointer?) 
 // TODO: parameter for flags?
-IG_Status init_versender(IG_Datenversender * sender);
+IG_Status init_versender(IG_Datenversender * sender, IG_Data * data);
 
 
 
