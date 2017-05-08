@@ -9,18 +9,11 @@
                 </durchschnittswert>
             </monitoredItem>
         
-            <monitoredItem>Pressure
-                <nodeID>118</nodeID>
-                <durchschnittswert>0
-                    <publishDurchschnittswert>60</publishDurchschnittswert>
-                </durchschnittswert>
-            </monitoredItem>
-
         <subscription>Roboterarm2
             <timeinterval>0.25</timeinterval>
             <monitoredItem>Temperture
                 <nodeID>118</nodeID>
-                <durchschnittswert>0
+                <durchschnittswert>1
                 <publishDurchschnittswert>60</publishDurchschnittswert>
                 </durchschnittswert>
             </monitoredItem>

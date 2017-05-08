@@ -1,10 +1,9 @@
-
-#include <stdio.h>
-#include <open62541.h>
+#include "open62541.h"
 #include "init_xml.h"
-#include "internals.h"
-#include "Client_v2.h"
 #include "response_handler.h"
+#include "Client_v2.h"
+#include <stdio.h>
+
 
 
 int main(){
