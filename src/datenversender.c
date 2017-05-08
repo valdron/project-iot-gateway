@@ -25,7 +25,11 @@ IG_Status sendData(IG_Datenversender * sender, IG_Data * data) {
 
 void* doSomeThing(void *arg)
 {
-struct readThreadParams *params = arg;
+            // Loop, when thread creation is succeeded
+    while (// Laufbedingung 0)
+     {
+
+  struct readThreadParams *params = arg;
   IG_Mqtt *stack = params->stack;
   IG_Datenversender * sender = params->sender;  
   IG_Data * data = params->data;
@@ -39,6 +43,10 @@ struct readThreadParams *params = arg;
     pubmsg(stack, &payload, sender);
     return IG_STATUS_GOOD;
     }
+                    // Do Something
+                delay(100);     // 100 ms
+
+}
    
 }
 
@@ -79,20 +87,7 @@ conn_opts.cleansession = 1;
         }
         else {
             printf("\n Thread created successfully\n");
-
-            // Loop with thread
-                while (1) {
-   
-                delay(100);     // 100 ms
-
+       }
 }
-
-}
-
-
-
-
-
-        }
 
 
