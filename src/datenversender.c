@@ -50,7 +50,7 @@ void* doSomeThing(void *arg)
    
 }
 
-IG_Status init_versender(IG_Datenversender * sender, IG_Data * data) {
+IG_Status init_versender(IG_Datenversender * sender) {
 /* All this value in config struct "sender" || ADDRESS "tcp://localhost:1883" || CLIENTID "ExampleClientPub" || TOPIC "MQTT Examples"  ||QOS 1 TIMEOUT 10000L*/
 int rc;
 int err;
@@ -69,7 +69,7 @@ readParams->stack = IG_Mqtt_create();
 
 
 // Create the Client
-MQTTClient_create(&client, sender->config.getAddress(), sender->config.getClientID(), MQTTCLIENT_PERSISTENCE_NONE, NULL);
+MQTTClient_create(&client, getAddress(sender->config), getClientID(sender->config), MQTTCLIENT_PERSISTENCE_NONE, NULL);
 conn_opts.keepAliveInterval = 20;
 conn_opts.cleansession = 1;
 
@@ -77,13 +77,15 @@ conn_opts.cleansession = 1;
  if ((rc = MQTTClient_connect(client, &conn_opts)) != MQTTCLIENT_SUCCESS)
     {
         printf("Failed to connect, return code %d\n", rc);
-        exit(EXIT_FAILURE);
+        return IG_STATUS_BAD;
     }
 
  // CallBackMethod Sending out
     err = pthread_create(&(tid[i]), NULL, &doSomeThing, readParams);
         if (err != 0) {
-            printf("\ncan't create thread :[%s]", strerror(err));
+            printf("\ncan't create thread");
+            disconnect(&(readParams->stack.client));
+            return IG_STATUS_BAD;
         }
         else {
             printf("\n Thread created successfully\n");

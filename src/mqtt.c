@@ -29,4 +29,3 @@ MQTTClient_disconnect(client, 10000);
 MQTTClient_destroy(&client);
 }
 
-(void *)&args) != 0
