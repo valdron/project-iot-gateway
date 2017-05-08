@@ -23,4 +23,12 @@ IG_Status sendData(IG_Datenversender * sender, IG_Data * data);
 // TODO: parameter for flags?
 IG_Status init_versender(IG_Datenversender * sender);
 
+
+
+//creates new struct on the heap and initializes it with the parameters
+IG_Datenversender * IG_Datenversender_create(IG_Config * config);
+
+// frees the memory needed for the struct
+void IG_Datenversender_delete(IG_Datenversender * versender);
+
 #endif

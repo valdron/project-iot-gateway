@@ -1,20 +1,19 @@
-#ifdef QUEUE_H
-#define QUEUE_H
-#include "pthread.h"
+
+#include<pthread.h>
 #include "internals.h"
-#endif
+
 
 #include "queue.h"
 #include <stdio.h>
 
 
 typedef struct threadArgs{
-	IG_Queue* queue,
-	char* threadName
+	IG_Queue* queue;
+	char* threadName;
 } threadArgs;
 
-void erzeugeDaten(IG_Queue *);
-void leseDaten(IG_Queue *);
+void* erzeugeDaten(void*);
+void* leseDaten(void*);
 
 int main(void){
 	
@@ -30,7 +29,7 @@ int main(void){
 	for(int i = 0; i<100; ++i){
 		IG_Data* data = (IG_Data*)malloc(sizeof(IG_Data));
 		data->id = i;
-		data->datatype = IG_INT;
+		data->datatype = IG_INT32;
 		int* record = (int*)malloc(sizeof(int));
 		*(record) = i*i;		
 		data->data = (void*)record;
@@ -52,37 +51,56 @@ int main(void){
 	
 	printf("Zerstöre Queue\n");
 	IG_Queue_delete(queue);
+	printf("Erfolgreich zerstört\n");
 
 	// #2 Versuch: Test der Queue Funktionen (2 Thread)
+
+	printf("Erzeuge Queue\n");
+	queue = IG_Queue_new();
+	printf("Erzeugen erfolgreich\n");	
 
 	// Einer liest, einer schreibt
 	pthread_t threadWrite, threadRead;
 	
 	// Erzeuge Struct für Argumente
-	threadArgs args = (threadArgs){queue, "Writer"};
+	threadArgs argsW = (threadArgs){queue, "Writer"};
+	threadArgs argsR = (threadArgs){queue, "Reader"};
 	
-	pthread_create(&threadWrite,NULL,&erzeugeDaten,(void*)&args);
+	// pthread erzeugen
+	pthread_create(&threadWrite,NULL,&erzeugeDaten,(void*)&argsW);
+	pthread_create(&threadRead,NULL,&leseDaten,(void*)&argsR);
 
+	// Warten bis alle Daten eingetragen und ausgelesen wurden
+	pthread_join(threadWrite,NULL);
+	pthread_join(threadRead,NULL);
 
+	sleep(10);
 	return 0;
 }
 
 // 2. Parameter um später anzugeben welcher Thread hier Daten hinzugefügt hat
-void erzeugeDaten(IG_Queue * queue,char* string){
+void* erzeugeDaten(void* args){
+	threadArgs* argReader = (threadArgs*)args;
+	IG_Queue* queue = argReader->queue;
+	char* record = argReader->threadName;
+	printf("Thread: %s gestartet\n",record);
 	for(int i = 0; i<100; ++i){
+		printf("Thread: %s fügt Paket mit ID: %d ein\n",record, i);
 		IG_Data* data = (IG_Data*)malloc(sizeof(IG_Data));
 		data->id = i;
-		data->datatype = IG_INT;
-		int* record = (int*)malloc(sizeof(int));
-		record = string;		
+		data->datatype = IG_INT32;		
 		data->data = (void*)record;
 		data->timestamp = 0;
 		// Einfügen in die Queue
 		IG_Queue_put(queue,data);
 	}
 }
-void leseDaten(IG_Queue * queue){
+void* leseDaten(void* args){
+	threadArgs* argReader = (threadArgs*)args;
+	IG_Queue* queue = argReader->queue;
+	char* text = argReader->threadName;
 	while(!IG_Queue_isEmpty(queue)){
+		printf("Current thread: %s\n",text);
 		IG_Data* data = IG_Queue_take(queue);
 		printf("ID: %d\n",data->id);
 		printf("Datentyp: IG_INT\n");

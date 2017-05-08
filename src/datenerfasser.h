@@ -11,7 +11,7 @@
 
 typedef struct{
     IG_Queue * queue;
-    IG_Config * conf;
+    IG_Config * config;
 } IG_Datenerfasser;
 
 
@@ -33,7 +33,7 @@ IG_Status init_erfasser(IG_Datenerfasser * erfasser);
 IG_Datenerfasser * IG_Datenerfasser_create(IG_Config * config);
 
 
-//Frees the memory needed for the struct including the queue and the config
+//Frees the memory needed for the struct including the queue
 void IG_Datenerfasser_delete(IG_Datenerfasser * erfasser);
 
 #endif
