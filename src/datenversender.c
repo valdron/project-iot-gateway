@@ -72,19 +72,27 @@ conn_opts.cleansession = 1;
         exit(EXIT_FAILURE);
     }
 
-// Loop with thread
-while (1) {
-    // CallBackMethod Sending out
+ // CallBackMethod Sending out
     err = pthread_create(&(tid[i]), NULL, &doSomeThing, readParams);
         if (err != 0) {
             printf("\ncan't create thread :[%s]", strerror(err));
         }
         else {
             printf("\n Thread created successfully\n");
+
+            // Loop with thread
+                while (1) {
+   
+                delay(100);     // 100 ms
+
+}
+
+}
+
+
+
+
+
         }
-   delay(100);     // 100 ms
 
-}
-
-}
 
