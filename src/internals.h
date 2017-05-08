@@ -4,8 +4,6 @@
 #include<stdlib.h>
 #include<stdint.h>
 #include<stdbool.h>
-
-// for Dataversender !! PLS OVERWATCH !!! 
 #include "string.h"
 #include "MQTTClient.h"
 
@@ -31,9 +29,9 @@ typedef double IG_Double;
 // IG Statuscode
 // TODO: 
 typedef enum {
-    IG_STATUS_GOOD, //0
-    IG_STATUS_BAD, // 1
-    IG_STATUS_QUEUE_FULL // 2
+    IG_STATUS_GOOD, 
+    IG_STATUS_BAD, 
+    IG_STATUS_QUEUE_FULL
     /*add more as needed*/
 } IG_Status;
 
