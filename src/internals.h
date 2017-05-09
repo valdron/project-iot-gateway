@@ -5,6 +5,10 @@
 #include<stdint.h>
 #include<stdbool.h>
 
+// for Dataversender !! PLS OVERWATCH !!! 
+#include "string.h"
+#include "MQTTClient.h"
+
 // DEFINES FOR CONSTANTS
 
 
@@ -27,9 +31,9 @@ typedef double IG_Double;
 // IG Statuscode
 // TODO: 
 typedef enum {
-    IG_STATUS_GOOD, 
-    IG_STATUS_BAD,
-    IG_STATUS_QUEUE_FULL
+    IG_STATUS_GOOD, //0
+    IG_STATUS_BAD, // 1
+    IG_STATUS_QUEUE_FULL // 2
     /*add more as needed*/
 } IG_Status;
 
