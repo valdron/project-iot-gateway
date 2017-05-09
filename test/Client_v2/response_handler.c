@@ -1,5 +1,5 @@
-#include "open62541.h"
-#include "Internals.h"
+#include <open62541.h>
+#include "internals.h"
 #include "Client_v2.h"
 #include <stdio.h>
 #include <stdbool.h>
