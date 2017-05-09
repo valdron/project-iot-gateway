@@ -3,10 +3,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include "open62541.h"
+#include <open62541.h>
 #include "response_handler.h"
+#include "Client_v2.h"
 
 static UA_SubscriptionSettings getSubscriptonSettings(double time){
+    //Kann durch parsen von XML erstzt werden -> einstellungen über XML
+    // TODO readSettingsFromXml();
     UA_SubscriptionSettings * settings;
     settings = (UA_SubscriptionSettings*)malloc(sizeof(UA_SubscriptionSettings));
     settings->requestedPublishingInterval = (UA_Double)(time * 1000);
@@ -28,6 +31,7 @@ static int printStringXml(char *txtptr){
     printf("\n");
 }
 
+//Funktion geht von passender Position von txtptr aus
 static double getDoubleFromXml(char * txtptr){  
     //Zeiger zeigt auf die Stelle nach dem Tag
     char doubleBuffer[6];
@@ -43,21 +47,41 @@ static double getDoubleFromXml(char * txtptr){
     return atof(doubleBuffer);  
 }
 
-static int getNodeIdFromXml(char * txtptr){
-    char idBuffer[3+1];
-    for(int i = 0; txtptr[i] != '<' && txtptr[i] != '\n' && 
-                    txtptr[i] != EOF; i++){
-            if (i >= 3){
-                printf("ERROR NodeId value in Xml is to high. (To many digits)\n");
-                return -1;
+static int getNodeIdFromXml(char * txtptr,const char * searchNodeId, int verschiebung){
+    if(txtptr = strstr(txtptr,searchNodeId)){
+        txtptr += verschiebung;
+        char idBuffer[3+1];
+        for(int i = 0; txtptr[i] != '<' && txtptr[i] != '\n' && 
+                        txtptr[i] != EOF; i++){
+                if (i >= 3){
+                    printf("ERROR NodeId value in Xml is to high. (To many digits)\n");
+                    return -1;
+                }
+                idBuffer[i] = txtptr[i];
             }
-            idBuffer[i] = txtptr[i];
-        }
-    idBuffer[3+1] = '\0';
-    return atoi(idBuffer);  
+        idBuffer[3+1] = '\0';
+        return atoi(idBuffer);
+    }else{
+        printf("ERROR -> Tag nicht in XML gefunden\nWert kann nicht hunzigefügt werden");
+        return -1;
+    }  
 }
 
-int init(UA_Client * client){
+static bool itemIsAvgValue(char * searchptr, const char * searchDurchschnittswertBoolean, int verschiebung){ 
+    if(searchptr = strstr(searchptr, searchDurchschnittswertBoolean)){
+        searchptr += verschiebung;
+        //48 ist der ASCII wert für die 0 aus dem XML file
+        if(!((int)searchptr[0] == 48)){
+            printf("\tWert ist ein Druchschnittswert\n");
+            return true;
+        }else{
+            printf("\tWert wird immer geliefert\n");
+            return false;
+        }                                
+    }    
+}
+
+int init(UA_Client * client, MonitoredItems *monitoredItems){
     printf("*********INIT STARTED*********");
     FILE *fp;
     long fileSize;
@@ -89,7 +113,7 @@ int init(UA_Client * client){
 
     fp = fopen("OPC_init.xml", "r");
     if(fp == NULL){
-        printf("Datei nicht gefuden\n");
+        printf("Datei nicht gefuden oder konnte nicht geöffnet werden\n");
         return -1;
     }
     fseek(fp, 0L, SEEK_END);
@@ -100,8 +124,18 @@ int init(UA_Client * client){
     fclose(fp);
 
     searchptr = &xmlConfig[0];
-    
 
+    //Get Count of the Monitored Items
+    int countMonitoredItems = 0;
+    while(searchptr = strstr(searchptr, searchMonitoredItem)){
+        countMonitoredItems++;
+        searchptr++;
+    }
+    //Allocate memory for the array of Monitired Items
+    monitoredItems = (MonitoredItems*) calloc(countMonitoredItems, sizeof(MonitoredItems));
+    //put read pointer back to start of te Xml-string
+    searchptr = &xmlConfig[0];
+    //Parsing the XML
     for(int i = 0;searchptr != NULL; i++){
         if(searchptr == '\0'){
              printf("Ende des Files erreicht\n");
@@ -112,49 +146,49 @@ int init(UA_Client * client){
             searchptr += sizeof(searchSubscription) - sizeof(char);
             printf("\n\nSubscription:\t");
             printStringXml(searchptr);
-            UA_UInt32 SubID = i;
-            printf("SubID:\t%d\n", SubID);
-            UA_UInt32 *monIDs;
-            int idCounter = 1;
+            monitoredItems[i].subId = i;            
+
+            if(searchptr = strstr(searchptr, searchTimeinterval)){
+                searchptr += sizeof(searchTimeinterval) - sizeof(char);
+                printf("Timeintervall:\t%f\n",getDoubleFromXml(searchptr));
+                UA_Client_Subscriptions_new(client,getSubscriptonSettings(getDoubleFromXml(searchptr)),
+                                    &monitoredItems[i].subId);
+                printf("SubID:\t%d\n", monitoredItems[i].subId);
+            }     
             
-            while(searchptr = strstr(searchptr, searchMonitoredItem)){
+            for(int item = i;searchptr = strstr(searchptr, searchMonitoredItem);item++){
                 searchptr += sizeof(searchMonitoredItem) - sizeof(char);
                 printf("\tMonitored Item:\t");
-                printStringXml(searchptr);
+                printStringXml(searchptr);                
+                                                                  //SuchString muss als Parameter übergben werden                                             
+                monitoredItems[item].avgValue = itemIsAvgValue(searchptr,searchDurchschnittswertBoolean,
+                                                        sizeof(searchDurchschnittswertBoolean)-sizeof(char)); 
+                //monId wird von OPC Stack zugewiesen -> nicht unique -> nicht damit arbeiten
+                //Für diese zuweiseung (muss) die NodeId im itemType enum hinterlegt sein
+                monitoredItems[item].type = getNodeIdFromXml(searchptr,searchNodeID,sizeof(searchNodeID)-sizeof(char)); //<- Funnktion gibt -1 zurück falls die NodeId nicht               
+                UA_Client_Subscriptions_addMonitoredItem(client,monitoredItems[i].subId,                                //gefunden werden konnte in der XML
+                    UA_NODEID_NUMERIC(1,getNodeIdFromXml(searchptr,searchNodeID,sizeof(searchNodeID)-sizeof(char))), 
+                    UA_ATTRIBUTEID_VALUE, &handler_TheAnswerChanged,
+                    (void*) &monitoredItems[item],  //<- context Paraeter in der Handlerfunktion
+                    &(monitoredItems[item].monId)); //Ich halte im Item eine Referenz auf das
+                                                    //Item "selber" (auf eine Struktur mit relevanten)
+                                                    //Infos und kann in der Handlefunktion einfach auf
+                                                    //das Item zugreifen und die daten auslesen
+                                                    //Prüfung ob die Subscription beendet ist oder noch
+                                                    //Typen müssen allerdings im enum stehen
+                                                    //mehr Items hinzugefügt werden müssen
+                                                    //Somit kann ich den Wert verarbeiten ohne die
+                                                    //mońitoredItemID zu berücksichtigen welche nicht eindeutig ist                                                                               
                 
-                if(searchptr = strstr(searchptr, searchTimeinterval)){
-                    searchptr += sizeof(searchTimeinterval) - sizeof(char);
-                    printf("\tTimeintervall:\t%f\n",getDoubleFromXml(searchptr));
-                    UA_Client_Subscriptions_new(client,
-                        getSubscriptonSettings(getDoubleFromXml(searchptr)),&SubID);
-                    //UA_Client_Subscriptions_new(...) ändert den Wert der SubID
-                    //Deshalb wird neu zugewiesen
-                    SubID = i;
+                //Kopieren des Wertes des erstem Items
+                //Addresse des erstn Items wird als Referenz für die
+                //Subscription benutzt                                                
+                monitoredItems[item].subId = monitoredItems[i].subId;
+                printf("\tNodeID:\t\t%d\n", getNodeIdFromXml(searchptr, searchNodeID, sizeof(searchNodeID)-sizeof(char)));
+                printf("\tSubID:\t\t%d\n", monitoredItems[item].subId); 
+                            
 
-                    if(searchptr = strstr(searchptr, searchNodeID)){
-                        searchptr += sizeof(searchNodeID) - sizeof(char);   
-                        //ItemID muss Unique sein. Jedes Item braucht seine eigene ID
-                        idCounter++;
-                        monIDs = realloc(monIDs, idCounter*sizeof(UA_UInt32));           
-                        printf("\tNodeID:\t\t%d\n", getNodeIdFromXml(searchptr));
-                        printf("\tSubID:\t\t%d\n", SubID);                       
-                        UA_Client_Subscriptions_addMonitoredItem(client,SubID,
-                            UA_NODEID_NUMERIC(1,getNodeIdFromXml(searchptr)),
-                            UA_ATTRIBUTEID_VALUE, &handler_TheAnswerChanged,NULL, &monIDs[idCounter-1]);
-                        
-                    
-                        if(searchptr = strstr(searchptr, searchDurchschnittswertBoolean)){
-                            searchptr += sizeof(searchDurchschnittswertBoolean) - sizeof(char);
-                            //48 ist der ASCII wert für die 0 aus dem XML file
-                            if(!((int)searchptr[0] == 48))
-                                printf("\tWert ist ein Druchschnittswert\n");
-                            else
-                                printf("\tWert wird immer geliefert\n");
-                        }
-                    }
-                }
-                //Prüfung ob die Subscription beendet ist oder noch 
-                //mehr Items hinzugefügt werden müssen
+                //Prüfe ob noch mehr Items zur Subscription gehören        
                 int x;
                 int z;
                 char * xptr = strstr(searchptr,searchSubscription);
