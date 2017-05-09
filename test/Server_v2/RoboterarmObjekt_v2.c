@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+
+
 UA_Variant *t_temperatureAttr,*t_pressureAttr;
 
 UA_NodeId RoborterarmId = {1,UA_NODEIDTYPE_NUMERIC, {1001}};
@@ -61,7 +63,6 @@ void *calcCurrentTemp(void *serverPtr) {
         UA_Server_writeValue(serverPtr,UA_NODEID_NUMERIC(1,117),*t_temperatureAttr);
         sleep(1);
     }
-    return UA_STATUSCODE_GOOD;
 } 
 
 //Pressure Threading Funktion
@@ -75,7 +76,6 @@ void *calcCurrentPressure(void *serverPtr){
         UA_Server_writeValue(serverPtr,UA_NODEID_NUMERIC(1,118),*t_pressureAttr);
         sleep(1);
     }
-    return UA_STATUSCODE_GOOD;
 }
 
 void defineObjectTypes(UA_Server *server) {
