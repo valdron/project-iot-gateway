@@ -1,16 +1,18 @@
  <?xml version="1.0" encoding="utf-8"?>
     <subscriptions>
         <subscription>Roboterarm
-            <timeinterval>0.5</timeinterval>
+            <timeinterval>2</timeinterval>
             <monitoredItem>Temperture
                 <nodeID>117</nodeID>
                 <durchschnittswert>0
                 <publishDurchschnittswert>60</publishDurchschnittswert>
                 </durchschnittswert>
             </monitoredItem>
+         </subscription>
+        
         
         <subscription>Roboterarm2
-            <timeinterval>0.25</timeinterval>
+            <timeinterval>1</timeinterval>
             <monitoredItem>Temperture
                 <nodeID>118</nodeID>
                 <durchschnittswert>1
