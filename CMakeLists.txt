@@ -1,7 +1,7 @@
 
 
 
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.0)
 
 find_package(libxml2)
 find_library(open62541_LIB open62541)
