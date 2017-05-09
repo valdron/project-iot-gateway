@@ -4,6 +4,8 @@
 #include<stdlib.h>
 #include<stdint.h>
 #include<stdbool.h>
+#include "string.h"
+#include "MQTTClient.h"
 
 // DEFINES FOR CONSTANTS
 
@@ -27,7 +29,7 @@ typedef double IG_Double;
 // IG Statuscode
 // TODO: 
 typedef enum {
-    IG_STATUS_GOOD, 
+    IG_STATUS_GOOD,
     IG_STATUS_BAD,
     IG_STATUS_QUEUE_FULL
     /*add more as needed*/
