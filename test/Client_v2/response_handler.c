@@ -43,12 +43,6 @@ void handler_TheAnswerChanged(UA_UInt32 monId, UA_DataValue *value, void *struct
                  break;
     }
 
-    if(dataInfo->avgValue == true){
-        data->avgValue = true;
-    }else{
-        data->avgValue = false;
-    }
-
-    printf("ItemId:  %d\tWert:  %f   \tSubID   :%d\tDurchschnittswert    %c\n", data->datatype,*((double*)data->data),dataInfo->subId,boolToChar(data->avgValue));
+    printf("ItemId:  %d\tWert:  %f   \tSubID   :%d\t\n", data->datatype,*((double*)data->data),dataInfo->subId);
     //SendeAnSpeicher(data);
 }
