@@ -1,2 +1,11 @@
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-add_subdirectory(opc-server)
+
+#add opc-server
+add_subdirectory(Client_v2)
+
+add_subdirectory(Server_v2)
+
+#add queue test
+add_subdirectory(QueueTest)
+
