@@ -20,6 +20,8 @@ bool checkForNewData(IG_Datenversender * sender){
 
 IG_Status sendData(IG_Datenversender * sender, IG_Data * data) {
 // right data in to Queue
+
+    IG_Queue_put(&(sender->queue),data);
  // TODO: ?
 }
 
@@ -38,7 +40,7 @@ void* doSomeThing(void *arg)
     return  IG_STATUS_BAD;
     }
     else {   
-    char *payload = IG_Queue_take(sender->queue);
+    char *payload = getPayload(IG_Queue_take(&(sender->queue)));
     // publish the message
     pubmsg(stack, &payload, sender);
     return IG_STATUS_GOOD;
