@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mqttconfig>
+    <mqttbroker hostname="localhost" protoprefix="tcp" port="1883"/>
+    <topic igid="1" topic="/maschine1/temp/avglasthour"/>
+    <topic igid="2" topic="/maschine1/pressure/current"/>
+</mqttconfig>

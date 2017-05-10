@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opcconfig>
+    <opcserver hostname="localhost" port="16667"/>
+    <subscription intervalms="1000">
+        <item nodeidnum="117" name="Pressure"/>
+        <item nodeidnum="118" name="Temperature"/>
+    </subscription>
+    <subscription>
+        <item nodeidnum="119" name="state"/>
+    </subscription>
+</opcconfig>
