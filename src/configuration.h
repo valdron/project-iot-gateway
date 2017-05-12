@@ -1,7 +1,18 @@
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
+#include<libxml/tree.h>
+#include<libxml/xpath.h>
+#include<libxml/xpathInternals.h>
+#include<libxml/parser.h>
 #include "internals.h"
+
+//defines the xml rootnodenames for each config
+#define STANDARD_ROOT_NODE_NAME "igconfig"
+#define OPC_ROOT_NODE_NAME "opcconfig"
+#define MQTT_ROOT_NODE_NAME "mqttconfig"
+#define VERARBEITER_ROOT_NODE_NAME "verarbeiterconfig"
+
 //TODO: Functions for reading from file and creating config structs
 
 //describes what kind of Config it is
@@ -17,7 +28,7 @@ typedef enum { IG_ID_RES, MQTT_TOPIC, OPC_SUBSCRIPTIONS, VERARBEITUNG, OPC_CONFI
 
 typedef struct{
     IG_ConfigType type;
-    // xmlDoc ptr
+    xmlDocPtr ptr;
     /*...*/
 } IG_Config;
 
@@ -37,7 +48,10 @@ typedef struct{
 } IG_ConfigResponse;
 
 // generic config request function
-void get_config(IG_Config * config, IG_ConfigRequest * request, IG_ConfigResponse * response);
+IG_Status IG_Config_get(IG_Config * config, IG_ConfigRequest * request, IG_ConfigResponse * response);
 
+
+//create config from filename and ConfigType
+IG_Config * IG_Config_create(char * filename, IG_ConfigType type);
 
 #endif
