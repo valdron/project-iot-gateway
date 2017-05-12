@@ -14,9 +14,9 @@ static void stopHandler(int sign) {
 }
 
 int main(void) {
-    pthread_t threadClacTemperatur, threadCalcPressure;
-    int statusthreadClacTemperatur = 0, statusThreadCalcPressure = 0;
-    initVariants();
+    pthread_t threadClacTemperatur, threadCalcPressure, threadGetState;
+
+    initVariables();
 
     signal(SIGINT, stopHandler);
     signal(SIGTERM, stopHandler);
@@ -33,16 +33,20 @@ int main(void) {
     defineObjectTypes(server);
     addRoboterarmObjectInstance(server, "Roborterarm");
     addRoboterarmTypeConstructor(server);
-
-    statusthreadClacTemperatur = pthread_create( &threadClacTemperatur, NULL, calcCurrentTemp, server);
-    if( statusthreadClacTemperatur != 0 ) {
+    
+    if(pthread_create( &threadClacTemperatur, NULL, calcCurrentTemp, server) != 0 ) {
         printf("threadClacTemperatur konnte nicht erzeugt werden\n");
         return EXIT_FAILURE;
     }
     // Thread 2 erzeugen
-    statusThreadCalcPressure = pthread_create( &threadCalcPressure, NULL, calcCurrentPressure, server);
-    if( statusThreadCalcPressure != 0 ) {
+   
+    if(pthread_create( &threadCalcPressure, NULL, calcCurrentPressure, server) != 0 ) {
         printf("threadCalcPressure konnte nicht erzeugt werden\n");
+        return EXIT_FAILURE;
+    }
+
+    if(pthread_create( &threadGetState, NULL, askForState, server) != 0 ) {
+        printf("threadGetState konnte nicht erzeugt werden\n");
         return EXIT_FAILURE;
     }
 
