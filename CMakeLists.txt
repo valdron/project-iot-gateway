@@ -1,7 +1,7 @@
 
+project(IoTGateway)
 
-
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.0)
 
 find_package(libxml2)
 find_library(open62541_LIB open62541)
@@ -21,10 +21,10 @@ else()
 endif()
 
 # shortcut
-set(SOURCE_DIR ${SOURCE_DIR} ${CMAKE_SOURCE_DIR}/src)
 
 
-INCLUDE_DIRECTORIES(${SOURCE_DIR} ${libxml2_INCLUDE_DIRS})
+
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src ${libxml2_INCLUDE_DIRS})
 
 
 #  makes tests

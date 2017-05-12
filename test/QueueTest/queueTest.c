@@ -1,5 +1,5 @@
 
-#include<pthread.h>
+#include <pthread.h>
 #include "internals.h"
 
 
@@ -21,7 +21,7 @@ int main(void){
 	// Erzuge Queue
 	printf("---------- 1 Thread ----------\n");
 	printf("Erzeuge Queue\n");
-	IG_Queue* queue = IG_Queue_new();
+	IG_Queue* queue = IG_Queue_new(IG_QUEUE_NONBLOCKING);
 	printf("Erzeugen erfolgreich\n");	
 
 	printf("Füge Daten hinzu\n");
