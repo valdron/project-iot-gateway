@@ -1,6 +1,7 @@
 #include <open62541.h>
 #include "internals.h"
 #include "Client_v2.h"
+#include "datenerfasser.h"
 #include <stdio.h>
 #include <stdbool.h>
 
@@ -29,13 +30,16 @@ void handler_TheAnswerChanged(UA_UInt32 monId, UA_DataValue *value, void *struct
     //zuweisung der Daten
     data->data = value->value.data;
 
+    //Hier wird noch die NodeID als ID benutzt
+    data->id = dataInfo->type;
+
     switch(dataInfo->type){
         case ROBOTERARM_TEMPERATURE_DOUBLE_VALUE:
-            data->datatype = ROBOTERARM_TEMPERATURE_DOUBLE_VALUE;
+            data->datatype = IG_DOUBLE;
             break;
 
         case ROBOTERARM_PRESSURE_DOUBLE_VALUE:
-            data->datatype = ROBOTERARM_PRESSURE_DOUBLE_VALUE;
+            data->datatype = IG_DOUBLE;
             break;
 
         default: printf("Unbekannte ID\n");
@@ -44,5 +48,7 @@ void handler_TheAnswerChanged(UA_UInt32 monId, UA_DataValue *value, void *struct
     }
 
     printf("ItemId:  %d\tWert:  %f   \tSubID   :%d\t\n", data->datatype,*((double*)data->data),dataInfo->subId);
-    //SendeAnSpeicher(data);
+    
+    //Schreibe data in Queue
+    IG_Queue_put(dataInfo->queue, data);
 }

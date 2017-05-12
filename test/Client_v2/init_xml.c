@@ -6,6 +6,7 @@
 #include <open62541.h>
 #include "response_handler.h"
 #include "Client_v2.h"
+#include "queue.h"
 
 static UA_SubscriptionSettings getSubscriptonSettings(double time){
     //Kann durch parsen von XML erstzt werden -> einstellungen über XML
@@ -81,7 +82,7 @@ static bool itemIsAvgValue(char * searchptr, const char * searchDurchschnittswer
     }    
 }
 
-int init(UA_Client * client, MonitoredItems *monitoredItems){
+int init(UA_Client * client, MonitoredItems *monitoredItems, IG_Queue * queue){
     printf("*********INIT STARTED*********");
     FILE *fp;
     long fileSize;
@@ -166,6 +167,14 @@ int init(UA_Client * client, MonitoredItems *monitoredItems){
                 //monId wird von OPC Stack zugewiesen -> nicht unique -> nicht damit arbeiten
                 //Für diese zuweiseung (muss) die NodeId im itemType enum hinterlegt sein
                 monitoredItems[item].type = getNodeIdFromXml(searchptr,searchNodeID,sizeof(searchNodeID)-sizeof(char)); //<- Funnktion gibt -1 zurück falls die NodeId nicht               
+                //configptr kommt aus dem struct das dem Thread übergeben wird
+                //monitoredItems[item].datenerfasser = IG_Datenerfasser_create(configptr);
+
+                //*Queue kommt als parameter aus der main als structattribut
+                //und wir im Item gespeichert damit es weiß in welche queue es 
+                //geschreiebn werden soll
+                monitoredItems[item].queue = queue;
+
                 UA_Client_Subscriptions_addMonitoredItem(client,monitoredItems[i].subId,                                //gefunden werden konnte in der XML
                     UA_NODEID_NUMERIC(1,getNodeIdFromXml(searchptr,searchNodeID,sizeof(searchNodeID)-sizeof(char))), 
                     UA_ATTRIBUTEID_VALUE, &handler_TheAnswerChanged,
