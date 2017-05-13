@@ -3,7 +3,7 @@
 IG_Data * IG_Data_create(IG_Id id, IG_Datatype type, void * dataptr, IG_DateTime timestamp) {
     IG_Data * data = (IG_Data *) malloc(sizeof(IG_Data));
     data->id = id;
-    data->type = type;
+    data->datatype = type;
     data->data = dataptr;
     data->timestamp = timestamp;
     return data;
