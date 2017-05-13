@@ -28,7 +28,7 @@ IG_Status sendData(IG_Datenversender * sender, IG_Data * data) {
 void* doSomeThing(void *arg)
 {
             // Loop, when thread creation is succeeded
-    while (/* Laufbedingung 0*/)
+    while ( 1 )
      {
 
   struct readThreadParams *params = arg;
