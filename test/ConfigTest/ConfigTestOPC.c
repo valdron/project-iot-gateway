@@ -11,10 +11,16 @@ int main(void) {
         printf("wrong format of xml\n");
         return -1;
     }
-
     IG_ConfigResponse res;
 
-    IG_Status rt = IG_Config_OPC_get_subscriptions(conf,&res);
+    IG_Status rt = IG_Config_OPC_get_conn_string(conf,&res);
+    if(rt != IG_STATUS_GOOD) {
+        printf("could not get conn_string\n");
+    } else {
+        printf("CONNSTRING: '%s'\n",(unsigned char*) res.data);
+    }
+
+    rt = IG_Config_OPC_get_subscriptions(conf,&res);
     if(rt != IG_STATUS_GOOD) {
         return -1;
     }

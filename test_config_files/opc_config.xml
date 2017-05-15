@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <opcconfig>
-    <opcserver hostname="localhost" port="16667"/>
+    <opcserver proto="opc.tcp" hostname="localhost" port="16664"/>
     <subscription intervalms="1000" subid="1">
         <item nodeidnum="117" igid="1" name="Pressure"/>
         <item nodeidnum="118" igid="2" name="Temperature"/>
