@@ -102,6 +102,7 @@ IG_Status IG_Config_OPC_get_conn_string(IG_Config * config, IG_ConfigResponse * 
 
     if(obj->nodesetval == NULL || obj->nodesetval->nodeTab == NULL) {
         printf("no nodes in xpathobj\n");
+        xmlXPathFreeContext(ctx);        
         return IG_STATUS_BAD;
     }
     xmlNodePtr node = *obj->nodesetval->nodeTab;
