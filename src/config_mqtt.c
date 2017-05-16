@@ -20,6 +20,7 @@ IG_Status IG_Config_MQTT_get_ClientConfig(IG_Config * config, IG_ConfigResponse 
     rt = IG_Config_MQTT_get_conn_string(config,conn_string);
     if(rt != IG_STATUS_GOOD) {
         printf("could not get conn_string\n");
+        return IG_STATUS_BAD;
     }
     
     
@@ -28,6 +29,7 @@ IG_Status IG_Config_MQTT_get_ClientConfig(IG_Config * config, IG_ConfigResponse 
     rt = IG_Config_MQTT_get_client_name(config,client_name);
     if(rt != IG_STATUS_GOOD) {
         printf("could not get client_name\n");
+        return IG_STATUS_BAD;
     }
 
     
@@ -35,6 +37,7 @@ IG_Status IG_Config_MQTT_get_ClientConfig(IG_Config * config, IG_ConfigResponse 
     rt = IG_Config_MQTT_get_qos_level(config,&qos_level);
     if(rt != IG_STATUS_GOOD) {
         printf("could not get qoslevel\n");
+        return IG_STATUS_BAD;
     }
 
     configres->client_name = client_name;
