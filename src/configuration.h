@@ -76,4 +76,7 @@ IG_Config * IG_Config_create(char * filename, IG_ConfigType type);
 
 void IG_Config_delete(IG_Config * config);
 
+//helper function should not be used directly
+IG_Status IG_Config_get_node_attribute(IG_Config * config, const unsigned char * xpath, const unsigned char * attr, unsigned char ** attr_res);
+
 #endif

@@ -1,76 +1,56 @@
 
 #include<string.h>
 #include<stdio.h>
-#include "internals.h"
 #include "configuration.h"
 
 //HELPER FUNCS-----------------------------
 IG_Status check_root_node(const unsigned char * root_name, IG_ConfigType type);
-//char * gen_xpath_string(IG_ConfigRequestDataType in_type, IG_ConfigResponseDataType out_type, void * in_data);
 //HELPER FUNCS-----------------------------
 
-
-//-------------------------------------------------
-/*IG_Status IG_Config_get(IG_Config * config, 
-                        IG_ConfigRequest * request, 
-                        IG_ConfigResponse * response) {
-    
-    IG_ConfigResponseDataType res_type;
-    IG_ConfigRequestDataType input_type;
-    void * return_data;
-    void * input_data;
-    char * attr_name;
-
-    char * xpath_string;
+IG_Status IG_Config_get_node_attribute(IG_Config * config, const unsigned char * xpath, const unsigned char * attr, unsigned char ** attr_res) {
     xmlXPathContextPtr ctx;
     xmlXPathObjectPtr obj;
     xmlNodePtr node;
 
-    //check if is right config and request is valid (needed?)
-    res_type = request->requestedResponsType;
-    input_type = request->requestType;
-    input_data = request->data;
-    
-    //create xpath string (helperfunc)
-    xpath_string = gen_xpath_string(input_type, res_type, input_data);
-    if(xpath_string == NULL) {
-        printf("could not create xpath string\n");
-        return IG_STATUS_BAD;
-    }
-
-    //create new xpath context
     ctx = xmlXPathNewContext(config->ptr);
     if(ctx == NULL) {
-        printf("could not create XPath context");
+        printf("could not create XPath context\n");
         return IG_STATUS_BAD;
     }
 
-    //eval xpath_string
-    obj = xmlXPathEvalExpression(xpath_string, ctx);
+    obj = xmlXPathEvalExpression(xpath, ctx);
     if(obj == NULL) {
-        printf("could not eval xpath string: %s", xpath_string);
+        xmlXPathFreeContext(ctx);
+        printf("could not eval xpath string: %s\n", xpath);
         return IG_STATUS_BAD;
     }
 
-    //check result
-    if(check_xpath_obj(obj) != IG_STATUS_GOOD) {
-        printf("got no result from xpath\n");
+    if(obj->nodesetval == NULL || obj->nodesetval->nodeTab == NULL) {
+        printf("no nodes in xpathobj\n");
+        xmlXPathFreeContext(ctx);
         return IG_STATUS_BAD;
     }
 
-    //get attribute from result node
-    char * response = xmlGetProp(attr_name);
+    if(obj->nodesetval->nodeNr != 1) {
+        printf("more than one node returned using first one");
+    }
 
-    //generate Response
-    response->successful = true;
-    response->responseType = res_type;
-    response->responseAmount = 1;
-    response->data = return_data;
+    node = *obj->nodesetval->nodeTab;
+    
+    unsigned char * attr_value = xmlGetProp(node, attr);
+    if(attr_value == NULL) {
+        printf("properties missing\n");
+        xmlXPathFreeObject(obj);
+        xmlXPathFreeContext(ctx);
+        return IG_STATUS_BAD;
+    }
 
+    IG_UInt32 size = strlen(attr_value) + 1;
+    *attr_res = (unsigned char *) malloc((size)* sizeof(unsigned char));
+    strncpy(*attr_res, attr_value, size);
     return IG_STATUS_GOOD;
-
 }
-*///-------------------------------------------------
+
 
 //-------------------------------------------------
 IG_Config * IG_Config_create(char * filename, IG_ConfigType type){
@@ -145,82 +125,4 @@ IG_Status check_root_node(const unsigned char * root_name, IG_ConfigType type) {
 
     return rt;
 }
-/*-------------------------------------------------
-
-char * gen_xpath_string(IG_ConfigRequestDataType in_type, 
-                        IG_ConfigResponseDataType out_type, 
-                        void * in_data) {
-    char * xpath_str = NULL;
-    //switch over reqtype
-    switch(out_type) {
-        case IG_CONFIG_REST_IG_ID:
-            if(in_type == IG_CONFIG_REQT_UA_NODEID) {
-                // do stuff
-            } else {
-                printf("wrong in_type\n");
-            }
-        break;
-        
-        case IG_CONFIG_REST_MQTT_TOPIC:
-            if(in_type == IG_CONFIG_REQT_IG_ID) {
-                //dostuff
-            } else {
-                 printf("wrong in_type\n");            
-
-            }
-
-        break;
-         
-        case IG_CONFIG_REST_OPC_SUBSCRIPTIONS:
-            if(in_type == IG_CONFIG_REQT_NONE) {
-                //dostuff
-            } else {
-                 printf("wrong in_type\n");            
-
-            }
-        break;
-         
-        case IG_CONFIG_REST_VERARBEITUNG:
-            if(in_type == IG_CONFIG_REQT_IG_ID) {
-                //dostuff
-            } else {
-                 printf("wrong in_type\n");            
-
-            }
-        break;
-         
-        case IG_CONFIG_REST_OPC_CONFIG:
-            if(in_type == IG_CONFIG_REQT_NONE) {
-                //dostuff
-            } else {
-                 printf("wrong in_type\n");            
-
-            }
-        break;
-         
-        case IG_CONFIG_REST_MQTT_CONFIG:
-            if(in_type == IG_CONFIG_REQT_NONE) {
-                //dostuff
-            } else {
-                 printf("wrong in_type\n");            
-
-            }
-        break;
-         
-        case IG_CONFIG_REST_VERARBEITER_CONFIG:
-            if(in_type == IG_CONFIG_REQT_NONE) {
-                //dostuff
-            } else {
-                 printf("wrong in_type\n");            
-
-            }
-        break;
-         
-        default:
-            printf("ResponseType not implemented\n");
-        break;
-    }
-
-    return xpath_str;
-    }
-*/
+//-------------------------------------------------

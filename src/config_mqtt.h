@@ -1,4 +1,4 @@
-
+#include "configuration.h"
 
 //XPATH STATICS
 

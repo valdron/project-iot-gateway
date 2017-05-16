@@ -82,53 +82,28 @@ IG_Status IG_Config_OPC_get_items(IG_Config * config, IG_ConfigResponse * respon
 //-------------------------
 
 IG_Status IG_Config_OPC_get_conn_string(IG_Config * config, IG_ConfigResponse * response){
-    xmlDocPtr doc;
-    xmlXPathContextPtr ctx;
-    xmlXPathObjectPtr obj;
-
-    doc = config->ptr;
-    ctx = xmlXPathNewContext(doc);
-    if(ctx == NULL) {
-        printf("could not create XPath context\n");
-        return IG_STATUS_BAD;
-    }
-
-    obj = xmlXPathEvalExpression(IG_OPCSERVER_XPATH, ctx);
-    if(obj == NULL) {
-        xmlXPathFreeContext(ctx);
-        printf("could not eval xpath string: %s\n", IG_OPCSUBSCRIPTION_XPATH);
-        return IG_STATUS_BAD;
-    }
-
-    if(obj->nodesetval == NULL || obj->nodesetval->nodeTab == NULL) {
-        printf("no nodes in xpathobj\n");
-        xmlXPathFreeContext(ctx);        
-        return IG_STATUS_BAD;
-    }
-    xmlNodePtr node = *obj->nodesetval->nodeTab;
-
-    unsigned char * str = (unsigned char *) malloc(100*sizeof(unsigned char));
     
+
     //get stringparts
-    unsigned char * proto = xmlGetProp(node, IG_OPCSERVER_PROTOCOL_VARNAME);
-    unsigned char * hostname = xmlGetProp(node, IG_OPCSERVER_HOST_VARNAME);
-    unsigned char * port = xmlGetProp(node, IG_OPCSERVER_PORT_VARNAME);
+    unsigned char * proto = NULL;// = xmlGetProp(node, IG_OPCSERVER_PROTOCOL_VARNAME);
+    unsigned char * hostname = NULL;// = xmlGetProp(node, IG_OPCSERVER_HOST_VARNAME);
+    unsigned char * port = NULL;// = xmlGetProp(node, IG_OPCSERVER_PORT_VARNAME);
     
-    if(proto == NULL || hostname == NULL || port == NULL) {
+    IG_Status rt1 = IG_Config_get_node_attribute(config, IG_OPCSERVER_XPATH, IG_OPCSERVER_PROTOCOL_VARNAME, &proto);
+    IG_Status rt2 = IG_Config_get_node_attribute(config, IG_OPCSERVER_XPATH, IG_OPCSERVER_HOST_VARNAME, &hostname);
+    IG_Status rt3 = IG_Config_get_node_attribute(config, IG_OPCSERVER_XPATH, IG_OPCSERVER_PORT_VARNAME, &port);
+    
+    if(rt1 != IG_STATUS_GOOD || rt2 != IG_STATUS_GOOD || rt3 != IG_STATUS_GOOD) {
         printf("some needed attributes are missing");
-        xmlXPathFreeContext(ctx);
-        xmlXPathFreeObject(obj);
         return IG_STATUS_BAD;
     }
 
     //build string
+    unsigned char * str = (unsigned char *) malloc(100*sizeof(unsigned char));
     snprintf(str, 100, IG_OPC_CONN_STRING_FORMAT, proto, hostname, port);
     
     response->responseAmount = 1;
     response->data = (void*) str;
-
-    xmlXPathFreeContext(ctx);
-    xmlXPathFreeObject(obj);
     return IG_STATUS_GOOD;
 }
 
