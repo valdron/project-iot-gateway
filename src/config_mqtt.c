@@ -25,14 +25,14 @@ IG_Status IG_Config_MQTT_get_ClientConfig(IG_Config * config, IG_ConfigResponse 
     
     //---------Clientname
     client_name = (unsigned char *) malloc(100 * sizeof(unsigned char));
-    rt = IG_Config_MQTT_get_client_name(config->ptr,client_name);
+    rt = IG_Config_MQTT_get_client_name(config,client_name);
     if(rt != IG_STATUS_GOOD) {
         printf("could not get client_name\n");
     }
 
     
     //---------qoslevel
-    rt = IG_Config_MQTT_get_qos_level(config->ptr,&qos_level);
+    rt = IG_Config_MQTT_get_qos_level(config,&qos_level);
     if(rt != IG_STATUS_GOOD) {
         printf("could not get qoslevel\n");
     }
