@@ -85,6 +85,37 @@ IG_Config * IG_Config_create(char * filename, IG_ConfigType type){
     return new;
 }
 //-------------------------------------------------
+IG_Config * IG_Config_create_str(const unsigned char * xml_str, IG_ConfigType type) {
+    xmlDocPtr doc;
+    xmlNodePtr root;
+    doc = xmlParseDoc(xml_str);
+    if(doc == NULL) {
+        printf("could not parse string\n");
+        return NULL;
+    }
+
+    root = xmlDocGetRootElement(doc);
+    if(root == NULL){
+        printf("string has no root node\n");
+        xmlFreeDoc(doc);
+        return NULL;
+    }
+
+    IG_Status rt = check_root_node(root->name,type);
+    if(rt != IG_STATUS_GOOD) {
+        printf("string has wrong rootnodename (name: %s)" ,root->name);
+        xmlFreeDoc(doc);
+        return NULL;
+    }
+
+    IG_Config * new = (IG_Config *) malloc(sizeof(IG_Config));
+    new->ptr = doc;
+    new->type = type;
+    
+    return new;
+}
+
+
 
 
 //-------------------------------------------------

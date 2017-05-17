@@ -73,6 +73,7 @@ typedef struct{
 
 //create config from filename and ConfigType
 IG_Config * IG_Config_create(char * filename, IG_ConfigType type);
+IG_Config * IG_Config_create_str(const unsigned char * xml_str, IG_ConfigType type);
 
 void IG_Config_delete(IG_Config * config);
 

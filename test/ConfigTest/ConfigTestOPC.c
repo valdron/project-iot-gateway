@@ -4,8 +4,20 @@
 
 #define FILENAME "opc_config.xml"
 
+static const unsigned char * OPC_XML_STRING = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
+                                               <opcconfig>\
+                                                   <opcserver proto=\"opc.tcp\" hostname=\"localhost\" port=\"16664\"/>\
+                                                   <subscription intervalms=\"1000\" subid=\"1\">\
+                                                       <item nodeidnum=\"117\" igid=\"1\" name=\"Pressure\"/>\
+                                                       <item nodeidnum=\"118\" igid=\"2\" name=\"Temperature\"/>\
+                                                   </subscription>\
+                                                   <subscription intervalms=\"500\" subid=\"2\">\
+                                                       <item nodeidnum=\"119\" igid=\"3\" name=\"state\"/>\
+                                                   </subscription>\
+                                               </opcconfig>";
+
 int main(void) {
-    IG_Config * conf = IG_Config_create(FILENAME, IG_CONFIG_OPC);
+    IG_Config * conf = IG_Config_create_str(OPC_XML_STRING, IG_CONFIG_OPC);
 
     if(conf == NULL) {
         printf("wrong format of xml\n");
@@ -16,6 +28,7 @@ int main(void) {
     IG_Status rt = IG_Config_OPC_get_conn_string(conf,&res);
     if(rt != IG_STATUS_GOOD) {
         printf("could not get conn_string\n");
+        return -1;
     } else {
         printf("CONNSTRING: '%s'\n",(unsigned char*) res.data);
     }
@@ -32,6 +45,7 @@ int main(void) {
         IG_ConfigResponse it;
         IG_Status status = IG_Config_OPC_get_items(conf,&it,subs[i].subscription_id);
         if(status != IG_STATUS_GOOD) {
+            return -1;
             continue;
         }
         IG_OPC_Item * items = (IG_OPC_Item *) it.data;

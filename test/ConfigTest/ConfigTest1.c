@@ -2,12 +2,18 @@
 #include<stdio.h>
 #include "configuration.h"
 
-#define FILENAME "test_standard.xml"
+
+static const unsigned char * MAIN_XML_STR = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
+                                             <igconfig>\
+                                                 <opcconfig filename=\"opc_config.xml\"/>\
+                                                 <mqttconfig filename=\"mqtt_config.xml\"/>\
+                                                 <verarbeiterconfig filename=\"verarbeiter_config.xml\"/>\
+                                             </igconfig>";
 
 int main(void) {
-    IG_Config * conf = IG_Config_create(FILENAME, IG_CONFIG_STANDARD);
+    IG_Config * conf = IG_Config_create_str(MAIN_XML_STR, IG_CONFIG_STANDARD);
     if(conf == NULL) {
-        printf("couldnot parse file: %s (this is bad)\n",FILENAME);
+        printf("couldnot parse string\n");
         return -1;
     }
 
