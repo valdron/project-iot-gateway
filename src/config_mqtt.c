@@ -6,6 +6,33 @@ IG_Status IG_Config_MQTT_get_conn_string(IG_Config * config, unsigned char * buf
 IG_Status IG_Config_MQTT_get_client_name(IG_Config * config, unsigned char * buffer);
 IG_Status IG_Config_MQTT_get_qos_level(IG_Config * config, IG_UInt32 * qos);
 
+//getting the appropriate topic for the id
+IG_Status IG_Config_MQTT_get_topic(IG_Config * config, 
+                              IG_Id id, 
+                              IG_ConfigResponse * response) {
+
+    unsigned char * topic_str = NULL;
+    unsigned char xpath_str[100];
+
+    //build xpath
+    snprintf(xpath_str,100,IG_CONFIG_MQTT_TOPIC_FORMATSTRING,id);
+
+    IG_Status rt;
+
+    rt = IG_Config_get_node_attribute(config, xpath_str, IG_CONFIG_MQTT_TOPICNAME_VARNAME, &topic_str);
+    if(rt != IG_STATUS_GOOD) {
+        printf("could not get attribute '%s' from xpath '%s'",IG_CONFIG_MQTT_TOPICNAME_VARNAME, xpath_str);
+        return IG_STATUS_BAD;
+    }
+
+    response->responseAmount = 1;
+    response->data = (void*) topic_str;
+
+    return IG_STATUS_GOOD;
+
+}
+
+
 IG_Status IG_Config_MQTT_get_ClientConfig(IG_Config * config, IG_ConfigResponse * response) {
 
     unsigned char * conn_string = NULL;
@@ -20,6 +47,7 @@ IG_Status IG_Config_MQTT_get_ClientConfig(IG_Config * config, IG_ConfigResponse 
     rt = IG_Config_MQTT_get_conn_string(config,conn_string);
     if(rt != IG_STATUS_GOOD) {
         printf("could not get conn_string\n");
+        free(conn_string);
         return IG_STATUS_BAD;
     }
     
@@ -28,6 +56,8 @@ IG_Status IG_Config_MQTT_get_ClientConfig(IG_Config * config, IG_ConfigResponse 
     client_name = (unsigned char *) malloc(100 * sizeof(unsigned char));
     rt = IG_Config_MQTT_get_client_name(config,client_name);
     if(rt != IG_STATUS_GOOD) {
+        free(conn_string);
+        free(client_name);
         printf("could not get client_name\n");
         return IG_STATUS_BAD;
     }
@@ -36,6 +66,8 @@ IG_Status IG_Config_MQTT_get_ClientConfig(IG_Config * config, IG_ConfigResponse 
     //---------qoslevel
     rt = IG_Config_MQTT_get_qos_level(config,&qos_level);
     if(rt != IG_STATUS_GOOD) {
+        free(conn_string);
+        free(client_name);
         printf("could not get qoslevel\n");
         return IG_STATUS_BAD;
     }

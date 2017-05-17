@@ -6,11 +6,12 @@ static const unsigned char * IG_CONFIG_MQTT_BROKER_XPATH = "/mqttconfig/mqttbrok
 static const unsigned char * IG_CONFIG_MQTT_CLIENT_XPATH = "/mqttconfig/mqttclient";
 
 //STATIC FORMATSTRINGS
-static const unsigned char * IG_CONFIG_MQTT_TOPIC_FORMATSTRING = "/mqttconfig/topic[@igid='%s']";
+static const unsigned char * IG_CONFIG_MQTT_TOPIC_FORMATSTRING = "/mqttconfig/topic[@igid='%i']";
 static const char * IG_CONFIG_MQTT_CONN_STRING_FORMAT = "%s://%s:%s";
 
 
 //STATIC VARNAMES
+static const unsigned char * IG_CONFIG_MQTT_TOPICNAME_VARNAME = "string";
 static const unsigned char * IG_CONFIG_MQTT_HOST_VARNAME = "hostname";
 static const unsigned char * IG_CONFIG_MQTT_PORT_VARNAME = "port";
 static const unsigned char * IG_CONFIG_MQTT_PROTOCOL_VARNAME = "protocol";
