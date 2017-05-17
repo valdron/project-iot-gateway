@@ -32,7 +32,8 @@ IG_Status IG_Config_MQTT_get_topic(IG_Config * config,
                               IG_ConfigResponse * response);
 
 //returns the ClientConfig struct
-IG_Status IG_Config_MQTT_get_ClientConfig(IG_Config * config, IG_ConfigResponse * response);
+IG_Status IG_Config_MQTT_get_ClientConfig(IG_Config * config, 
+                                          IG_ConfigResponse * response);
 
 
 
