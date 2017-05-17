@@ -2,22 +2,15 @@
 #include "configuration.h"
 #include "config_opc.h"
 
-#define FILENAME "opc_config.xml"
+#define USAGE "command [xmlfile]"
 
-static const unsigned char * OPC_XML_STRING = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
-                                               <opcconfig>\
-                                                   <opcserver proto=\"opc.tcp\" hostname=\"localhost\" port=\"16664\"/>\
-                                                   <subscription intervalms=\"1000\" subid=\"1\">\
-                                                       <item nodeidnum=\"117\" igid=\"1\" name=\"Pressure\"/>\
-                                                       <item nodeidnum=\"118\" igid=\"2\" name=\"Temperature\"/>\
-                                                   </subscription>\
-                                                   <subscription intervalms=\"500\" subid=\"2\">\
-                                                       <item nodeidnum=\"119\" igid=\"3\" name=\"state\"/>\
-                                                   </subscription>\
-                                               </opcconfig>";
+int main(int argc, char * argv[]) {
 
-int main(void) {
-    IG_Config * conf = IG_Config_create_str(OPC_XML_STRING, IG_CONFIG_OPC);
+    if(argc != 2) {
+        printf(USAGE);
+        return -1;
+    }
+    IG_Config * conf = IG_Config_create(argv[1], IG_CONFIG_OPC);
 
     if(conf == NULL) {
         printf("wrong format of xml\n");

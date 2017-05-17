@@ -2,16 +2,17 @@
 #include<stdio.h>
 #include "configuration.h"
 
+#define USAGE "command [xmlfile]"
 
-static const unsigned char * MAIN_XML_STR = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\
-                                             <igconfig>\
-                                                 <opcconfig filename=\"opc_config.xml\"/>\
-                                                 <mqttconfig filename=\"mqtt_config.xml\"/>\
-                                                 <verarbeiterconfig filename=\"verarbeiter_config.xml\"/>\
-                                             </igconfig>";
+int main(int argc, char * argv[]) {
 
-int main(void) {
-    IG_Config * conf = IG_Config_create_str(MAIN_XML_STR, IG_CONFIG_STANDARD);
+    if(argc != 2) {
+        printf(USAGE);
+        return -1;
+    }
+
+    IG_Config * conf = IG_Config_create(argv[1], IG_CONFIG_STANDARD);
+
     if(conf == NULL) {
         printf("couldnot parse string\n");
         return -1;
