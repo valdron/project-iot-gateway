@@ -5,7 +5,7 @@
 #include "queue.h"
 #include "internals.h"
 #include "configuration.h"
-#include "pthread.h" 
+#include "mqtt.h"
 
 typedef struct{
     IG_Config * config;

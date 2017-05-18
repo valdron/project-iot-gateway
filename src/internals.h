@@ -4,8 +4,7 @@
 #include<stdlib.h>
 #include<stdint.h>
 #include<stdbool.h>
-#include "string.h"
-#include "MQTTClient.h"
+
 
 // DEFINES FOR CONSTANTS
 
