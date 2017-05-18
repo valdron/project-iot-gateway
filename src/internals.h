@@ -5,7 +5,6 @@
 #include<stdint.h>
 #include<stdbool.h>
 
-
 // DEFINES FOR CONSTANTS
 
 
