@@ -15,11 +15,11 @@ IG_Mqtt * IG_Mqtt_create() {
 void pubmsg(IG_Mqtt * stack, char * payload, IG_Datenversender * sender) {
 
     stack->pubmsg.payload = getPayload(payload);
-    stack->pubmsg.payloadlen = strlen(getPayload(payload);
+    stack->pubmsg.payloadlen = strlen(getPayload(payload));
     stack->pubmsg.qos = sender->config.getQOS();
     stack->pubmsg.retained = 0;
-    MQTTClient_publishMessage(stack->client, sender->config.getTopic(), &(stack->pubmsg), &(stack->token));
-    rc = MQTTClient_waitForCompletion(stack->client, stack->token, sender->config.getTimeout());
+    MQTTClient_publishMessage(stack->client, getTopic(sender->config), &(stack->pubmsg), &(stack->token));
+    rc = MQTTClient_waitForCompletion(stack->client, stack->token, getTimeout(sender->config));
     printf("Message with delivery token %d delivered\n", stack->tokentoken);
 
 }
