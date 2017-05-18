@@ -40,7 +40,7 @@ void* doSomeThing(void *arg)
     return  IG_STATUS_BAD;
     }
     else {   
-    char *payload = getPayload(IG_Queue_take(&(sender->queue)));
+    char *payload = getMsgPayload(IG_Queue_take(&(sender->queue)));
     // publish the message
     pubmsg(stack, &payload, sender);
     return IG_STATUS_GOOD;
