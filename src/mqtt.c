@@ -14,7 +14,7 @@ IG_Mqtt * IG_Mqtt_create() {
 
 void pubmsg(IG_Mqtt * stack, char * payload, IG_Datenversender * sender) {
 
-    stack->pubmsg.payload = getPayload(payload);
+    stack->pubmsg.payload = getMsgPayload(payload);
     stack->pubmsg.payloadlen = strlen(getPayload(payload));
     stack->pubmsg.qos = sender->config.getQOS();
     stack->pubmsg.retained = 0;
