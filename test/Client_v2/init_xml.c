@@ -1,12 +1,5 @@
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <open62541.h>
-#include "response_handler.h"
-#include "Client_v2.h"
-#include "queue.h"
+#include "init_xml.h"
 
 static UA_SubscriptionSettings getSubscriptonSettings(double time){
     //Kann durch parsen von XML erstzt werden -> einstellungen über XML
@@ -147,13 +140,15 @@ int init(UA_Client * client, MonitoredItems *monitoredItems, IG_Queue * queue){
             searchptr += sizeof(searchSubscription) - sizeof(char);
             printf("\n\nSubscription:\t");
             printStringXml(searchptr);
-            monitoredItems[i].subId = i;            
-
+            monitoredItems[i].subId = i;
             if(searchptr = strstr(searchptr, searchTimeinterval)){
                 searchptr += sizeof(searchTimeinterval) - sizeof(char);
-                printf("Timeintervall:\t%f\n",getDoubleFromXml(searchptr));
-                UA_Client_Subscriptions_new(client,getSubscriptonSettings(getDoubleFromXml(searchptr)),
+                double timeintervall = getDoubleFromXml(searchptr);
+                printf("Timeintervall:\t%f\n",timeintervall);
+
+                UA_Client_Subscriptions_new(client,getSubscriptonSettings(timeintervall),
                                     &monitoredItems[i].subId);
+
                 printf("SubID:\t%d\n", monitoredItems[i].subId);
             }     
             
@@ -175,7 +170,7 @@ int init(UA_Client * client, MonitoredItems *monitoredItems, IG_Queue * queue){
                 //geschreiebn werden soll
                 monitoredItems[item].queue = queue;
 
-                UA_Client_Subscriptions_addMonitoredItem(client,monitoredItems[i].subId,                                //gefunden werden konnte in der XML
+                UA_Client_Subscriptions_addMonitoredItem(client, monitoredItems[i].subId,                                //gefunden werden konnte in der XML
                     UA_NODEID_NUMERIC(1,getNodeIdFromXml(searchptr,searchNodeID,sizeof(searchNodeID)-sizeof(char))), 
                     UA_ATTRIBUTEID_VALUE, &handler_TheAnswerChanged,
                     (void*) &monitoredItems[item],  //<- context Paraeter in der Handlerfunktion

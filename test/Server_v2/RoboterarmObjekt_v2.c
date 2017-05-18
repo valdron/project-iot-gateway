@@ -37,7 +37,7 @@ void initVariables(){
     //NodeIds werden zugewisen (Keine Optimale Lösung!!!)
     *temperatureNodeId = UA_NODEID_NUMERIC(1,118);
     *pressureNodeId = UA_NODEID_NUMERIC(1,119);
-    *stateNodeId = UA_NODEID_NUMERIC(1,120);
+    *stateNodeId = UA_NODEID_NUMERIC(1,120); 
 
     t_temperatureAttr = UA_Variant_new();
     UA_Variant_init(t_temperatureAttr);
@@ -74,8 +74,6 @@ static UA_StatusCode readCurrentTemp(void *handle, const UA_NodeId nodeid, UA_Bo
 //Pressure on call Funktion
 static UA_StatusCode readCurrentPressure(void *handle, const UA_NodeId nodeid, UA_Boolean sourceTimeStamp,
     const UA_NumericRange *range, UA_DataValue *dataValue) {
-    
-    printf("identifier Pressure : %d\n",(UA_UInt32) pressureNodeId->identifier.numeric);
 
     printf("Read Pressure triggerd\n");
     //generateTemperature gibt neue Pressure zurück vom Typ Double
@@ -92,7 +90,6 @@ static UA_StatusCode readCurrentState(void *handle, const UA_NodeId nodeid, UA_B
     printf("Read State triggerd\n");
     UA_DateTimeStruct dt = getCurrentTimestruct();
 
-        
     UA_Byte  val = getState(dt);
     UA_Variant_setScalarCopy(&dataValue->value, &val,  &UA_TYPES[UA_TYPES_BYTE]);
     dataValue->hasValue = true;
@@ -197,7 +194,8 @@ void defineObjectTypes(UA_Server *server) {
     //-> UA Expert nutzt read. Ansonsten wird das Item nicht angezeigt
     temperatureDataSource.read = readCurrentTemp;
     temperatureDataSource.write = NULL;
-
+    
+    
     UA_Server_addDataSourceVariableNode(server, UA_NODEID_NULL, RoborterarmId,
                               UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
                               UA_QUALIFIEDNAME(1, "Temperature"),

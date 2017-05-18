@@ -1,8 +1,7 @@
-#include "init_xml.h"
-#include "response_handler.h"
-#include "Client_v2.h"
-#include <stdio.h>
 
+
+#include <open62541.h>
+#include "init_xml.h"
 
 //parameter ist vom Typ IG_Datenerfasser
 void *start_OPC_Client_thread(void * parameter){
@@ -15,7 +14,7 @@ void *start_OPC_Client_thread(void * parameter){
   if(retval != UA_STATUSCODE_GOOD) {
     UA_Array_delete(endpointArray, endpointArraySize, &UA_TYPES[UA_TYPES_ENDPOINTDESCRIPTION]);
     UA_Client_delete(client);
-    return;
+    return NULL;
   }
   printf("%i endpoints found\n", (int)endpointArraySize);
   for(size_t i=0;i<endpointArraySize;i++){
@@ -31,13 +30,14 @@ void *start_OPC_Client_thread(void * parameter){
   retval = UA_Client_connect(client, "opc.tcp://localhost:16664");
   if(retval != UA_STATUSCODE_GOOD) {
       UA_Client_delete(client);
-      return;
+      return NULL;
   }
 
   //Liste der Items die im Loop beobachtet werden sollenS
   MonitoredItems *monitoredItems;
+  IG_Datenerfasser *param = (IG_Datenerfasser*)parameter;
   //Init not ready TO DO
-  init(client, monitoredItems, parameter->queue);
+  init(client, monitoredItems, param->queue);
 
   printf("\nInit done!\n\n");
 

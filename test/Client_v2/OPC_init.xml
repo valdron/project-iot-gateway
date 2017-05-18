@@ -3,7 +3,7 @@
         <subscription>Roboterarm
             <timeinterval>2</timeinterval>
             <monitoredItem>Temperture
-                <nodeID>117</nodeID>
+                <nodeID>118</nodeID>
                 <durchschnittswert>0
                 <publishDurchschnittswert>60</publishDurchschnittswert>
                 </durchschnittswert>
@@ -14,11 +14,19 @@
         <subscription>Roboterarm2
             <timeinterval>1</timeinterval>
             <monitoredItem>Temperture
-                <nodeID>118</nodeID>
+                <nodeID>119</nodeID>
                 <durchschnittswert>1
                 <publishDurchschnittswert>60</publishDurchschnittswert>
                 </durchschnittswert>
             </monitoredItem>
+
+            <monitoredItem>State
+                <nodeID>120</nodeID>
+                <durchschnittswert>1
+                <publishDurchschnittswert>60</publishDurchschnittswert>
+                </durchschnittswert>
+            </monitoredItem>
+
         </subscription>
         
     </subscriptions>
