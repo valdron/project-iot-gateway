@@ -1,7 +1,7 @@
 
-
 #include <open62541.h>
 #include "init_xml.h"
+#include "Client_v2.h"
 
 //parameter ist vom Typ IG_Datenerfasser
 void *start_OPC_Client_thread(void * parameter){

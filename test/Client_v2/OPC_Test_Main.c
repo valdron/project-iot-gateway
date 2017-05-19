@@ -19,18 +19,6 @@
 int main(int argc, char * argv[]) {
 
 
-    // parse & check arguments
-    if(argc != 3) {
-        printf(USAGE);
-        return -1;
-    }
-    char * config_filename; 
-    if(!strcmp("-f",argv[0])){
-        printf(USAGE);
-        return -1;
-    } else {
-        config_filename = argv[1];
-    }
 
     //Starting OPC Client Thread
     //-> Struct als übergabe überlegen -> struct liegt in Client_v2.h
@@ -46,20 +34,17 @@ int main(int argc, char * argv[]) {
             printf("OPC Client konnte nicht gestartet werden\nProgramm wird beendet");
             return -1;
     } 
-
-    //Das ist der Datenerfasser Thread
-    /*pthread_t readfromOPCqueue;
+    
+    pthread_t readfromOPCqueue;
 
     if(pthread_create(&readfromOPCqueue, NULL, reading_From_OPC_Queue,
             erfasser->queue) != 0){
             printf("OPC Client konnte nicht gestartet werden\nProgramm wird beendet");
             return -1;
-    }*/
-    // call run with parameters
-    run(config_filename);
-
+    }
+   
     // shutdown notice
-
+    return 0;
 }
 
 

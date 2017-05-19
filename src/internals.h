@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
-
 //Include für den ItemType int struct IG_Data
 #include "../test/Client_v2/Client_v2.h"
 
@@ -56,7 +55,7 @@ typedef enum {
 typedef struct{
 	IG_Id id;
 	IG_Datatype datatype;
-    enum itemType intemtype;
+    enum ItemType itemtype;
 	void * data;
 	IG_DateTime timestamp;
 } IG_Data;

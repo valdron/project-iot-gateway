@@ -3,7 +3,6 @@
 #define DATENERFASSER_H
 
 #include "queue.h"
-#include "datenerfasser.h"
 //for datatypes
 #include "internals.h"
 #include "configuration.h"
