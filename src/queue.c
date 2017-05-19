@@ -33,6 +33,7 @@ void IG_Queue_delete(IG_Queue * queue){
 	pthread_mutex_destroy(&queue->mutex);
 	
 	free(queue);
+	queue = NULL;
 }
 
 // Function to enqueue data
