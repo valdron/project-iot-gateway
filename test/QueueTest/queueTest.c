@@ -23,16 +23,25 @@ int main(void){
 	// Creating queue
 	printf("---------- 1 Thread ----------\n");
 	printf("Erzeuge Queue\n");
+
 	IG_Queue* queue = IG_Queue_new(IG_QUEUE_NONBLOCKING);
+	if(queue==NULL) return EXIT_FAILURE;
+
 	printf("Erzeugen erfolgreich\n");	
 
 	printf("Füge Daten hinzu\n");
 	// Create Data and insert it into the queue
 	for(int i = 0; i<100; ++i){
+
 		IG_Data* data = (IG_Data*)malloc(sizeof(IG_Data));
+		if(data==NULL) return EXIT_FAILURE;		
+
 		data->id = i;
 		data->datatype = IG_INT32;
+
 		int* record = (int*)malloc(sizeof(int));
+		if(record==NULL) return EXIT_FAILURE;
+
 		*(record) = i*i;		
 		data->data = (void*)record;
 		data->timestamp = 0;
@@ -54,6 +63,7 @@ int main(void){
 	printf("Zerstöre Queue\n");
 	// Delete queue
 	IG_Queue_delete(queue);
+	if(queue!=NULL) return EXIT_FAILURE;
 
 	// #2 Try:  Testing the basics queue functions with two threads
 
@@ -63,6 +73,7 @@ int main(void){
 	// Create args struct for pthread
 	printf("Erzeuge Queue\n");
 	queue = IG_Queue_new(IG_QUEUE_BLOCKING);
+	if(queue==NULL) return EXIT_FAILURE;
 	printf("Erzeugen erfolgreich\n");	
 
 
@@ -78,6 +89,7 @@ int main(void){
 	pthread_join(threadRead,NULL);
 
 	IG_Queue_delete(queue);
+	if(queue!=NULL) return EXIT_FAILURE;
 
 	return 0;
 }
@@ -88,7 +100,10 @@ void* erzeugeDaten(void* args){
 	threadArgs* tArgs = (threadArgs*)args;
 
 	for(int i = 0; i<100000; ++i){
+
 		IG_Data* data = (IG_Data*)malloc(sizeof(IG_Data));
+		if(data==NULL) return EXIT_FAILURE;
+
 		data->id = i;
 		data->datatype = IG_INT32;		
 		data->data = (void*)(tArgs->threadName);
