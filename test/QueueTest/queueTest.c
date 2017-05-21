@@ -116,7 +116,7 @@ void* leseDaten(void* args){
 
 	threadArgs* tArgs = (threadArgs*)args;
 	
-	while(!IG_Queue_IsEmpty(tArgs->queue){
+	while(!IG_Queue_isEmpty(tArgs->queue)){
 		IG_Data* data = IG_Queue_take(tArgs->queue);
 		printf("ID: %d\n",data->id);
 		printf("Inhalt: %s\n",(char*)(data->data));
