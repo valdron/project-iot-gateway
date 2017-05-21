@@ -15,3 +15,5 @@ TARGET_LINK_LIBRARIES(QueueTest pthread)
 add_subdirectory(QueueTest)
 >>>>>>> origin
 
+add_subdirectory(ConfigTest)
+

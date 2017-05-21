@@ -1,9 +1,13 @@
 
+
 project(IoTGateway)
+
+include( CTest )
+
 
 cmake_minimum_required(VERSION 3.0)
 
-find_package(libxml2)
+find_package(LibXml2 REQUIRED)
 find_library(open62541_LIB open62541)
 find_library(paho_LIB paho-mqtt3a)
 
@@ -24,7 +28,7 @@ endif()
 
 
 
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src ${libxml2_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src ${LIBXML2_INCLUDE_DIR})
 
 
 #  makes tests
