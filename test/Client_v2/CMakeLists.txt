@@ -4,8 +4,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/OPCTest)
 
 ADD_EXECUTABLE(
 	OPC_Client
-	OPC_Test_Main.c
 	Client_v2.c
+	OPC_Test_Main.c
 	OPC_Queuetest.c
 	init_xml.c
 	response_handler.c

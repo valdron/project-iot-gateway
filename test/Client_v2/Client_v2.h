@@ -3,7 +3,7 @@
 #define CLIENT_V2_H
 
 #include "queue.h"
-//#include <open62541.h>
+#include <open62541.h>
 
 typedef enum{
     ROBOTERARM_TEMPERATURE_DOUBLE_VALUE = 118,
