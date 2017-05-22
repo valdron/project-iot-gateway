@@ -5,16 +5,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <pthread.h>
-#include "Client_v2.h"
-#include "OPC_Queuetest.h"
-#include "datenerfasser.h"
+
+
 #include "starter.h"
-
-
 
 //TODO: documentation about arguments
 
 #define USAGE "USAGE: \nIoTGateway -f [config-file]\n"
+
 
 int main(int argc, char * argv[]) {
 

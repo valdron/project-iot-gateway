@@ -5,9 +5,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
-//Include für den ItemType int struct IG_Data
-#include "../test/Client_v2/Client_v2.h"
 
+//Include für den ItemType int struct IG_Data
 // DEFINES FOR CONSTANTS
 
 
@@ -56,12 +55,11 @@ typedef struct{
 	IG_Id id;
 	IG_Datatype datatype;
     OPCItemType opcItemType;
+    IG_DateTime timestamp;
 	void * data;
-	IG_DateTime timestamp;
 } IG_Data;
 
 
-static const IG_Data IG_DATA_EMPTY = (IG_Data){0, IG_NULL,0, NULL, 0};
 
 // Creates new IG_Data on the heap and inits it with the parameters
 IG_Data * IG_Data_create(IG_Id id, IG_Datatype type, void * data, IG_DateTime time);
