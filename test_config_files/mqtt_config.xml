@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mqttconfig>
+    <mqttbroker protocol="tcp" hostname="localhost" port="1883"/>
+    <mqttclient name="IoT-Gateway" qos="0"/>
+    <topic igid="1" string="/maschine1/temp/avglasthour"/>
+    <topic igid="2" string="/maschine1/pressure/current"/>
+</mqttconfig>
