@@ -1,10 +1,17 @@
 
 
 #include <open62541.h>
-#include "init_xml.h"
+#include <stdio.h>
+#include "opc.h"
+
 
 //parameter ist vom Typ IG_Datenerfasser
-void *start_OPC_Client_thread(void * parameter){
+void start_OPC_Client_thread(void * parameter){
+
+
+//>>>>>>>>>>>>>>>>>>>>>>>>>>> VON HIER
+
+
   UA_Client *client = UA_Client_new(UA_ClientConfig_standard);
   /* Listing endpoints */
   UA_EndpointDescription* endpointArray = NULL;
@@ -14,7 +21,7 @@ void *start_OPC_Client_thread(void * parameter){
   if(retval != UA_STATUSCODE_GOOD) {
     UA_Array_delete(endpointArray, endpointArraySize, &UA_TYPES[UA_TYPES_ENDPOINTDESCRIPTION]);
     UA_Client_delete(client);
-    return NULL;
+    return;
   }
   printf("%i endpoints found\n", (int)endpointArraySize);
   for(size_t i=0;i<endpointArraySize;i++){
@@ -30,13 +37,15 @@ void *start_OPC_Client_thread(void * parameter){
   retval = UA_Client_connect(client, "opc.tcp://localhost:16664");
   if(retval != UA_STATUSCODE_GOOD) {
       UA_Client_delete(client);
-      return NULL;
+      return;
   }
-
+  
   //Liste der Items die im Loop beobachtet werden sollenS
   MonitoredItems *monitoredItems;
   IG_Datenerfasser *param = (IG_Datenerfasser*)parameter;
-  //Init not ready TO DO
+  
+  
+  //FIXME: Init not ready TO DO 
   init(client, monitoredItems, param->queue);
 
   printf("\nInit done!\n\n");
@@ -44,6 +53,11 @@ void *start_OPC_Client_thread(void * parameter){
   //prototype testing init-function -> hardcoded examples
   //testinit(client);
 
+
+  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> BIS HIER sollte in der init_erfasser(...) sein
+ 
+ 
+ 
   while (true){
     //Subscriptions werden ausgeführt/angefragt
     //Main loop des Clients

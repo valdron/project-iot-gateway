@@ -1,6 +1,6 @@
 
 #include "response_handler.h"
-#include "Client_v2.h"
+#include "opc.h"
 #include "queue.h"
 #include <stdio.h>
 
@@ -34,22 +34,22 @@ void handler_TheAnswerChanged(UA_UInt32 monId, UA_DataValue *value, void *struct
     data->data = value->value.data;
 
     //Hier wird noch die NodeID als ID benutzt
-    data->id = dataInfo->itemtype;
+    data->id = dataInfo->type;
 
-    switch(dataInfo->itemtype){
+    switch(dataInfo->type){
         case ROBOTERARM_TEMPERATURE_DOUBLE_VALUE:
             data->datatype = IG_DOUBLE;
-            data->itemtype = ROBOTERARM_TEMPERATURE_DOUBLE_VALUE;
+            
             break;
 
         case ROBOTERARM_PRESSURE_DOUBLE_VALUE:
             data->datatype = IG_DOUBLE;
-            data->itemtype = ROBOTERARM_PRESSURE_DOUBLE_VALUE
+            
             break;
 
         case ROBOTERARM_STATE_INT_VALUE:
             data->datatype = IG_INT32;
-            data->intemtype = ROBOTERARM_STATE_INT_VALUE;
+            
             break;
 
         default: printf("Unbekannte ID\n");

@@ -1,11 +1,11 @@
 
 #include "queue.h"
-#include "../../internals.h"
-#include "Client_v2.h"
+#include "internals.h"
+#include "opc.h"
 #include <stdio.h>
 #include <unistd.h>
 
-void* reading_From_OPC_Queue(void * queue){
+void reading_From_OPC_Queue(void * queue){
     IG_Data * data = IG_Data_create_empty();
     if(data == NULL){
         printf("data konnte nicht erstellt werden\n");
@@ -19,8 +19,9 @@ void* reading_From_OPC_Queue(void * queue){
             continue;
         }           
 
-        printf("%d\n", data->itemtype);
+        printf("%d\n", data->id);
 
+        //FIXME: switch over ids instead
         switch(data->datatype){
             case ROBOTERARM_TEMPERATURE_DOUBLE_VALUE: printf("%d\t\t%d\t\t",data->id,data->datatype);
                     break;

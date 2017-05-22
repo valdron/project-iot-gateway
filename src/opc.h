@@ -7,7 +7,7 @@
 #include "datenerfasser.h"
 
 //parameter ist vom Typ IG_Datenerfasser
-void *start_OPC_Client_thread(void * parameter);
+void start_OPC_Client_thread(void * parameter);
 
 //Typen der Nodes HARDCODED <- ggf zu verbessern
 enum itemType{

@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "response_handler.h"
-#include "Client_v2.h"
+#include "opc.h"
 
 int init(UA_Client * client, MonitoredItems *monitoredItems, IG_Queue *queue);
 
