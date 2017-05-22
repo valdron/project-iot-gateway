@@ -1,32 +1,41 @@
- <?xml version="1.0" encoding="utf-8"?>
-    <subscriptions>
-        <subscription>Roboterarm
-            <timeinterval>2</timeinterval>
-            <monitoredItem>Temperture
-                <nodeID>118</nodeID>
-                <durchschnittswert>0
-                <publishDurchschnittswert>60</publishDurchschnittswert>
-                </durchschnittswert>
-            </monitoredItem>
-         </subscription>
-        
-        
-        <subscription>Roboterarm2
-            <timeinterval>1</timeinterval>
-            <monitoredItem>Temperture
-                <nodeID>119</nodeID>
-                <durchschnittswert>1
-                <publishDurchschnittswert>60</publishDurchschnittswert>
-                </durchschnittswert>
-            </monitoredItem>
 
-            <monitoredItem>State
-                <nodeID>120</nodeID>
-                <durchschnittswert>1
+<?xml version="1.0" encoding="utf-8"?>
+<subscriptions>
+    <subscription>
+        Roboterarm
+        <timeinterval>2</timeinterval>
+        <monitoredItem>
+            Temperture
+            <nodeID>118</nodeID>
+            <durchschnittswert>
+                0
                 <publishDurchschnittswert>60</publishDurchschnittswert>
-                </durchschnittswert>
-            </monitoredItem>
+            </durchschnittswert>
+        </monitoredItem>
+    </subscription>
 
-        </subscription>
-        
-    </subscriptions>
+
+    <subscription>
+        Roboterarm2
+        <timeinterval>1</timeinterval>
+        <monitoredItem>
+            Temperture
+            <nodeID>119</nodeID>
+            <durchschnittswert>
+                1
+                <publishDurchschnittswert>60</publishDurchschnittswert>
+            </durchschnittswert>
+        </monitoredItem>
+
+        <monitoredItem>
+            State
+            <nodeID>120</nodeID>
+            <durchschnittswert>
+                1
+                <publishDurchschnittswert>60</publishDurchschnittswert>
+            </durchschnittswert>
+        </monitoredItem>
+
+    </subscription>
+
+</subscriptions>
