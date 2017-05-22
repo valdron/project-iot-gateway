@@ -4,6 +4,7 @@
 
 #include "string.h"
 #include "MQTTClient.h"
+#include "config_mqtt.h"
 
 typedef struct{
         // MQTT init

@@ -16,7 +16,7 @@ void pubmsg(IG_Mqtt * stack, char * payload, IG_Datenversender * sender) {
 
     stack->pubmsg.payload = getMsgPayload(payload);
     stack->pubmsg.payloadlen = strlen(getPayload(payload));
-    stack->pubmsg.qos = sender->config.getQOS();
+    stack->pubmsg.qos = getQOS(sender->config);
     stack->pubmsg.retained = 0;
     MQTTClient_publishMessage(stack->client, getTopic(sender->config), &(stack->pubmsg), &(stack->token));
     rc = MQTTClient_waitForCompletion(stack->client, stack->token, getTimeout(sender->config));

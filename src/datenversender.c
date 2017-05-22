@@ -57,6 +57,11 @@ IG_Status init_versender(IG_Datenversender * sender) {
 int rc;
 int err;
 pthread_t tid[1];
+IG_Status rt;
+
+rt = IG_Config_MQTT_get_ClientConfig(sender->config, /*IG_ConfigResponse  */);
+
+
 
 struct readThreadParams {
      IG_Datenversender * sender;  
