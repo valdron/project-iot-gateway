@@ -8,7 +8,6 @@
 #include "Client_v2.h"
 #include "OPC_Queuetest.h"
 #include "datenerfasser.h"
-#include "starter.h"
 
 
 

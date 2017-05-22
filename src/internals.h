@@ -55,7 +55,7 @@ typedef enum {
 typedef struct{
 	IG_Id id;
 	IG_Datatype datatype;
-    enum ItemType itemtype;
+    OPCItemType opcItemType;
 	void * data;
 	IG_DateTime timestamp;
 } IG_Data;

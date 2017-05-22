@@ -6,6 +6,7 @@
 #include <unistd.h>
 
 void* reading_From_OPC_Queue(void * queue){
+    
     IG_Data * data = IG_Data_create_empty();
     if(data == NULL){
         printf("data konnte nicht erstellt werden\n");

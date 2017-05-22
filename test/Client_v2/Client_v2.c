@@ -1,7 +1,9 @@
 
 #include <open62541.h>
+#include <stdio.h>
 #include "init_xml.h"
 #include "Client_v2.h"
+#include "datenerfasser.h"
 
 //parameter ist vom Typ IG_Datenerfasser
 void *start_OPC_Client_thread(void * parameter){
@@ -35,9 +37,11 @@ void *start_OPC_Client_thread(void * parameter){
 
   //Liste der Items die im Loop beobachtet werden sollenS
   MonitoredItems *monitoredItems;
+
+  //Brauche ich den Cast in init ind die varible wirklich?
   IG_Datenerfasser *param = (IG_Datenerfasser*)parameter;
   //Init not ready TO DO
-  init(client, monitoredItems, param->queue);
+  init(client, monitoredItems, (IG_Queue*)param->queue);
 
   printf("\nInit done!\n\n");
 
