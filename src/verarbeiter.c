@@ -90,7 +90,7 @@ void IG_Verarbeiter_checkIntervals(IG_Input_RuleSet * ruleSetArray, IG_Int32 rul
 			if(ruleSet->rules[i].deadline < now){
 				IG_Rule * rule = &(ruleSet->rules[i]);
 				IG_Data * dataToSend = encodeToJSON(rule);
-				IG_Queue_put(queue);
+				IG_Queue_put(queue, dataToSend);
 				rule->deadline = IG_DateTime_add(rule->deadline,rule->interval);
 			}	
 		}							
