@@ -67,7 +67,7 @@ void IG_Verarbeiter_applyRules(IG_Data * data,IG_Input_RuleSet * ruleSetArray, I
 	for(IG_Int32 i = 0; i < ruleSetSize; i++){
 		if(ruleSetArray[i].inputId = data->id){
 			// Apply entire RuleSet on data
-			IG_Verarbeiter_applyRule(data, rules[i]);
+			IG_Verarbeiter_applyRule(data, ruleSetArray[i]);
 			break;
 		}				
 	}
