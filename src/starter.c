@@ -17,17 +17,23 @@
 
 void commandloop();
 
-IG_Status run(char * filename) {
+IG_Status run(char * filename, pthread_t *OPC_Client_Thread, pthread_t *readfromOPCqueue) {
 
     //read config from file
 
     
     //create structs
-    IG_Datenerfasser * erfasser = (IG_Datenerfasser *) malloc(sizeof(IG_Datenerfasser));
+    //IG_Datenerfasser * erfasser = (IG_Datenerfasser *) malloc(sizeof(IG_Datenerfasser));
+    IG_Datenerfasser * erfasser = IG_Datenerfasser_create_nonBlocking(IG_Config_create("opc_config.xml", IG_CONFIG_OPC));
     IG_Datenversender * sender = (IG_Datenversender *) malloc(sizeof(IG_Datenversender));
     IG_Verarbeiter * verarbeiter = (IG_Verarbeiter *) malloc(sizeof(IG_Verarbeiter));
     //init structs
     
+    if(init_erfasser(erfasser, OPC_Client_Thread, readfromOPCqueue) != IG_STATUS_GOOD){
+        printf("could not initialize erfasser\n");
+        return IG_STATUS_BAD;
+    }
+
     /*if (init(sender) != IG_STATUS_GOOD ) {
         printf("could not initialize sender");
         return IG_STATUS_BAD;

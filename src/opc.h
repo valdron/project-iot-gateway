@@ -3,26 +3,21 @@
 #define CLIENT_V2_H
 
 #include <open62541.h>
+#include <stdbool.h>
 #include "queue.h"
 #include "datenerfasser.h"
+#include "config_opc.h"
+
+typedef struct{
+    IG_UInt32 anzahlSub;
+    IG_OPC_Subscription *subscriptions;
+    IG_UInt32 * anzahlItemsArray;
+    IG_OPC_Item **itemArray;
+}IG_OPC_Nodes;
 
 //parameter ist vom Typ IG_Datenerfasser
 void start_OPC_Client_thread(void * parameter);
-
-//Typen der Nodes HARDCODED <- ggf zu verbessern
-enum itemType{
-        ROBOTERARM_TEMPERATURE_DOUBLE_VALUE = 118,
-        ROBOTERARM_PRESSURE_DOUBLE_VALUE = 119,
-        ROBOTERARM_STATE_INT_VALUE = 120
-};
-
-//To save data of the Items
-typedef struct {
-    UA_UInt32 subId;
-    UA_UInt32 monId;
-    enum itemType type;
-    IG_Queue * queue; 
-    bool avgValue;
-}MonitoredItems;
+void IG_OPC_Nodes_init(IG_OPC_Nodes *,IG_UInt32 anzahlSubs);
+IG_Status OPC_init(UA_Client * client, IG_OPC_Nodes * nodeStruct, IG_Datenerfasser * param);
 
 #endif

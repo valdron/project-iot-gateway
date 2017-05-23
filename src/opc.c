@@ -2,85 +2,40 @@
 
 #include <open62541.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "opc.h"
 #include "config_opc.h"
 
-IG_Status init(UA_Client * client, MonitoredItems * monitoredItems, IG_Datenerfasser * param);
+//IG_Status OPC_init(UA_Client * client, IG_OPC_Nodes * monitoredItems, IG_Datenerfasser * param);
 void response_handler(UA_UInt32 monId, UA_DataValue *value, void *context);
 
 //parameter ist vom Typ IG_Datenerfasser
-void start_OPC_Client_thread(void * parameter){
+void start_OPC_Client_thread(void * client){
 
-
-//>>>>>>>>>>>>>>>>>>>>>>>>>>> VON HIER
-
-
-  UA_Client *client = UA_Client_new(UA_ClientConfig_standard);
-  /* Listing endpoints */
-  UA_EndpointDescription* endpointArray = NULL;
-  size_t endpointArraySize = 0;
-  UA_StatusCode retval = UA_Client_getEndpoints(client, "opc.tcp://localhost:16664",
-                                                &endpointArraySize, &endpointArray);
-  if(retval != UA_STATUSCODE_GOOD) {
-    UA_Array_delete(endpointArray, endpointArraySize, &UA_TYPES[UA_TYPES_ENDPOINTDESCRIPTION]);
-    UA_Client_delete(client);
-    return;
-  }
-  printf("%i endpoints found\n", (int)endpointArraySize);
-  for(size_t i=0;i<endpointArraySize;i++){
-      printf("URL of endpoint %i is %.*s\n", (int)++i,
-             (int)endpointArray[i].endpointUrl.length,
-             endpointArray[i].endpointUrl.data);
-  }
-
-  UA_Array_delete(endpointArray,endpointArraySize, &UA_TYPES[UA_TYPES_ENDPOINTDESCRIPTION]);
-
-  /* Connect to a server */
-  /* anonymous connect would be: retval = UA_Client_connect(client, "opc.tcp://localhost:16664"); */
-  retval = UA_Client_connect(client, "opc.tcp://localhost:16664");
-  if(retval != UA_STATUSCODE_GOOD) {
-      UA_Client_delete(client);
-      return;
-  }
-  
-  //Liste der Items die im Loop beobachtet werden sollenS
-  MonitoredItems *monitoredItems;
-  IG_Datenerfasser *param = (IG_Datenerfasser*)parameter;
-  
-  
-  //FIXME: Init not ready TO DO 
-  init(client, monitoredItems, param);
-
-  printf("\nInit done!\n\n");
-
-  //prototype testing init-function -> hardcoded examples
-  //testinit(client);
-
-
-  //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> BIS HIER sollte in der init_erfasser(...) sein
- 
- 
- 
-  while (true){
+  while (1){
     //Subscriptions werden ausgeführt/angefragt
     //Main loop des Clients
-    UA_Client_Subscriptions_manuallySendPublishRequest(client);
+    UA_Client_Subscriptions_manuallySendPublishRequest((UA_Client*)client);
   }  
 
-  UA_Client_disconnect(client);
-  UA_Client_delete(client);
+  UA_Client_disconnect((UA_Client*)client);
+  UA_Client_delete((UA_Client*)client);
 }
-	
 
 
-  IG_Status init(UA_Client * client, MonitoredItems * monitoredItems, IG_Datenerfasser * param) {
+IG_Status OPC_init(UA_Client * client, IG_OPC_Nodes * nodeStruct, IG_Datenerfasser * param) {
       IG_ConfigResponse res;
       IG_Status rt = IG_Config_OPC_get_subscriptions(param->config, &res);
       if(rt != IG_STATUS_GOOD) {
         return IG_STATUS_BAD;
       }
+      
+      //Funktion für anzahl aller Items
+      //monitoredItems = (monitoredItems*)malloc(sizeof(monitoredItems*) * anzahlItems());      
       IG_UInt32 subAmount = res.responseAmount;
       IG_OPC_Subscription * subs = res.data;
+      IG_OPC_Nodes_init(nodeStruct, subAmount);
+      nodeStruct->subscriptions = subs;
 
       for(IG_UInt32 i = 0; i < subAmount; i++ ) {
 
@@ -91,23 +46,72 @@ void start_OPC_Client_thread(void * parameter){
         }
         IG_UInt32 itemAmount = res2.responseAmount;
         IG_OPC_Item * items = res2.data;
+        nodeStruct->itemArray[i] = items;
         
-        //needs to be saved elsewhere (in Monitoreditemsstruct )
-        IG_UInt32 subid;
+        for(IG_UInt32 y = 0; y < itemAmount; y++){
+            nodeStruct->itemArray[i][y].queue = param->queue;
+        }
 
-        UA_Client_Subscriptions_new(client, UA_SubscriptionSettings_standard,&subid);
+        nodeStruct->anzahlItemsArray[i] = itemAmount; 
+        
+        //needs to be saved elsewhere (in Monitoreditemsstruct)
 
-        for(IG_UInt32 i = 0; i < itemAmount; i++ ) {
-          //needs to be stored elsewhere (in Monitored items struct)
-          IG_UInt32 itemid;
-          UA_NodeId id = UA_NODEID_NUMERIC(1,items[i].nodeid);
-                                                                                            //vvv insert pointer to correct Monitored Item here
-          UA_Client_Subscriptions_addMonitoredItem(client, subid, id, 0, &response_handler, (void*) &items[i], &itemid);
+        UA_Client_Subscriptions_new(client, UA_SubscriptionSettings_standard,&nodeStruct->subscriptions[i].OPC_subId);
+
+        for(IG_UInt32 x = 0; x < itemAmount; x++ ) {
+
+          UA_NodeId id = UA_NODEID_NUMERIC(1,items[x].nodeid);    
+
+                                                                                                      
+          UA_Client_Subscriptions_addMonitoredItem(client, nodeStruct->subscriptions[i].OPC_subId, id, UA_ATTRIBUTEID_VALUE,
+                                 &response_handler, (void*) &items[x], &items[x].monId);
+                                                    //vvv insert pointer to correct Monitored Item here
         }
       }
-  }
+}
 
 
-  void response_handler(UA_UInt32 monId, UA_DataValue *value, void *context) {
-    printf("hello");
-  }
+void response_handler(UA_UInt32 monId, UA_DataValue *value, void *newMonitoredItem) {
+   
+    IG_Data *data = IG_Data_create_empty();
+
+    IG_OPC_Item *dataInfo = (IG_OPC_Item*) newMonitoredItem;
+    
+    if(value->value.data == NULL){
+        printf("Datapointer ist NULL");
+        return;
+    }
+    switch((intptr_t)value->value.type->typeIndex){
+        case UA_TYPES_DOUBLE:
+            data->datatype = IG_DOUBLE;
+            break;
+        case UA_TYPES_BYTE:
+            data->datatype = IG_BYTE;//Change to Byte!!
+            break;
+        default: printf("Unknowen Type\n");
+            break;
+    }
+    
+    data->timestamp = value->sourceTimestamp;
+    //UA_String sourceTimestamp = UA_DateTime_toString(value->sourceTimestamp);
+    //printf("%.*s\n", (int)sourceTimestamp.length, sourceTimestamp.data);
+
+    //zuweisung der Daten
+    data->data = value->value.data;
+
+    //Hier wird noch die NodeID als ID benutzt
+    data->id = dataInfo->internal_id;
+
+    //printf("ItemId:  %d\tWert:  %f   \t\n", data->id,*((double*)data->data));
+    
+    value->value.storageType = UA_VARIANT_DATA_NODELETE;
+    //Schreibe data in Queue
+    IG_Queue_put(dataInfo->queue, data);
+}
+
+
+void IG_OPC_Nodes_init(IG_OPC_Nodes * Node_Struct, IG_UInt32 anzahlSubs){
+    Node_Struct->anzahlSub = anzahlSubs;
+    Node_Struct->anzahlItemsArray = (IG_UInt32*)malloc(sizeof(IG_UInt32) * anzahlSubs);
+    Node_Struct->itemArray = (IG_OPC_Item**)malloc(sizeof(IG_OPC_Item*) * anzahlSubs);
+}

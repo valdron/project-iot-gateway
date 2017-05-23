@@ -104,10 +104,7 @@ IG_Data* IG_Queue_take(IG_Queue* queue){
 	IG_Data * data = dequeued_data->data;
 
 	//free listelement
-	//@Firat 
-	//Wenn ich das ding heir free kann ich es noch nicht 
-	//mehr benutzen oder nich?
-	//free(dequeued_data);
+	free(dequeued_data);
 
 	return data;
 

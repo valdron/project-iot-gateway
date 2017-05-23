@@ -17,6 +17,7 @@
 // should be called once at startup from main() and should block until the gateway is shutdown
 // TODO: which parameters will be needed at startup? config filename(s)?
 
-IG_Status run(char * filename);
+//weitere Threads hinzufügen
+IG_Status run(char * filename, pthread_t *OPC_Client_Thread,pthread_t *readfromOPCqueue);
 
 #endif

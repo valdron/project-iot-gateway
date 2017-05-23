@@ -24,6 +24,7 @@ typedef int32_t IG_Int32;
 typedef int64_t IG_Int64;
 typedef float IG_Float;
 typedef double IG_Double;
+typedef uint8_t IG_Byte;
 //TODO: ... noch mehr?
 
 // IG Statuscode
@@ -37,6 +38,7 @@ typedef enum {
 
 //TODO: insert relevant Datatypes (floatingpoint, integer, )
 typedef enum {
+    IG_BYTE,
     IG_DOUBLE, 
     IG_FLOAT,
     IG_NULL,
@@ -54,7 +56,6 @@ typedef enum {
 typedef struct{
 	IG_Id id;
 	IG_Datatype datatype;
-    OPCItemType opcItemType;
     IG_DateTime timestamp;
 	void * data;
 } IG_Data;

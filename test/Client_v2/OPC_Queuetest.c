@@ -18,23 +18,17 @@ void reading_From_OPC_Queue(void * queue){
         data = IG_Queue_take((IG_Queue*) queue);
         if(data == NULL){
             continue;
-        }           
-
-
-        //printf("%d\n", data->itemtype);
-
-
-        printf("%d\n", data->id);
-
+        }    
         //FIXME: switch over ids instead
 
         switch(data->datatype){
-            case ROBOTERARM_TEMPERATURE_DOUBLE_VALUE: printf("%d\t\t%d\t\t",data->id,data->datatype);
-                    break;
-            case ROBOTERARM_PRESSURE_DOUBLE_VALUE: printf("%d\t\t%d\t\t",data->id,data->datatype);
-                    break;
-            case ROBOTERARM_STATE_INT_VALUE: printf("%d\t\t%d\t\t",data->id, data->datatype);
-                    break;
+            case IG_DOUBLE: 
+                printf("%d\t\t%d\t\t%f\n",data->id, data->datatype,*((IG_Double*) data->data));
+                break;
+            
+            case IG_BYTE:
+                printf("%d\t\t%d\t\t%x\n",data->id, data->datatype,*((IG_Byte*) data->data));
+                break;
 
             default: printf("Datatype nicht bekannt oder Wert aus Queue leer\n");
         }
