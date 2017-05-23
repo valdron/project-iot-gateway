@@ -75,7 +75,7 @@ void IG_Verarbeiter_applyRule(IG_Data * data,IG_Input_RuleSet * ruleSet);
 void IG_Verarbeiter_checkIntervals(IG_Input_RuleSet * ruleSet, IG_Int32 ruleSetSize, IG_Queue * queue);
 
 // Encodes data into JSON format
-IG_Data * encodeToJSON(IG_Rule *)
+IG_Data * encodeToJSON(IG_Rule *);
 
 // Function that proccesses all the data
 void* IG_WorkLoop(void * args);
