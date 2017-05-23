@@ -76,7 +76,7 @@ void IG_Verarbeiter_applyRules(IG_Data * data,IG_Input_RuleSet * ruleSetArray, I
 
 void IG_Verarbeiter_applyRule(IG_Data * data, IG_Input_RuleSet* ruleSet){
 	// Call all rule functions and invoke the data and the rule specific data
-	for(IG_Int32 i = 0; i < (ruleSet->Size);i++){
+	for(IG_Int32 i = 0; i < (ruleSet->ruleSize);i++){
 		(*(ruleSet->rules[i].function))(data, ruleSet->rules[i].data);
 	}
 }
