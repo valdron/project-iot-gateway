@@ -37,7 +37,7 @@ void* IG_WorkLoop(void * argument){
 	Verarbeiter * verarbeiter = args->verarbeiter;
 	IG_Int32 ruleSetSize = args->ruleSetSize;
 	// Array of RuleSets
-	IG_Input_RuleSet * ruleSet = args->RuleSetSize:
+	IG_Input_RuleSet * ruleSetArray = args->ruleSetArray:
 	
 	IG_Queue * queueErfasser = verarbeiter->erfasser->queue;
 	IG_Queue * queueSender = verarbeiter->sender->queue;
@@ -55,9 +55,9 @@ void* IG_WorkLoop(void * argument){
 
 		// If there is data apply all rules
 		if(data!=NULL)
-			IG_Verarbeiter_applyRules(data,ruleSet, ruleSetSize);
+			IG_Verarbeiter_applyRules(data,ruleSetArray, ruleSetSize);
 
-		IG_Verarbeiter_checkIntervals(ruleSet, ruleSetSize, queueSender);
+		IG_Verarbeiter_checkIntervals(ruleSetArray, ruleSetSize, queueSender);
 		// TODO: Maybe add some functions to create logs/print status
 	}
 }
