@@ -11,7 +11,9 @@ SET(SOURCES_IG  main.c
                 config_main.c
                 config_mqtt
                 config_opc.c
+                internals.c
                 opc.c
-                internals.c)
+                mqtt.c)
+
 ADD_EXECUTABLE(IoTGateway ${SOURCES_IG})
-TARGET_LINK_LIBRARIES(IoTGateway pthread open62541 xml2) #add mqtt + xml library
+TARGET_LINK_LIBRARIES(IoTGateway pthread open62541 xml2 paho-mqtt3c) #add mqtt + xml library
