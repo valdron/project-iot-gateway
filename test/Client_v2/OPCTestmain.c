@@ -12,14 +12,21 @@
 
 
 int main(void) {
-    pthread_t OPC_Client_Thread;
+  
     pthread_t readfromOPCqueue;
 
     char * psydofilename = "abc.xml";
-    if(run(psydofilename, &OPC_Client_Thread, &readfromOPCqueue) != IG_STATUS_GOOD)
-        printf("Starten des Gataways fehlgeschlagen\n");
-        
+    //run Startet alle Threads und sendet, falls etwas nicht
+    //funktioniert hat eine Fehlermeldung zurück
 
-    pthread_join(OPC_Client_Thread,NULL);
+    IG_Datenerfasser * erfasser = IG_Datenerfasser_create_nonBlocking(IG_Config_create("opc_config.xml", IG_CONFIG_OPC));
+
+    init_erfasser(erfasser);
+    
+    if(pthread_create(&readfromOPCqueue, NULL, (void*) reading_From_OPC_Queue, erfasser->queue) != 0){
+        printf("ReadFromQueue Thread konnte nicht erstallt werden\n");
+        return -1;
+    }
+
     pthread_join(readfromOPCqueue,NULL);
 }

@@ -12,7 +12,7 @@ void reading_From_OPC_Queue(void * queue){
         printf("data konnte nicht erstellt werden\n");
         return;
     }
-    printf("IG_ID\t\tIG_Datatype\t\tDatavalue\t\t");
+    printf("IG_ID\t\tIG_Datatype\t\tDatavalue\t\t\n");
 
     while(1){
         data = IG_Queue_take((IG_Queue*) queue);
@@ -23,11 +23,11 @@ void reading_From_OPC_Queue(void * queue){
 
         switch(data->datatype){
             case IG_DOUBLE: 
-                printf("%d\t\t%d\t\t%f\n",data->id, data->datatype,*((IG_Double*) data->data));
+                printf("%d\t\t%d\t\t\t%f\n",data->id, data->datatype,*((IG_Double*) data->data));
                 break;
             
             case IG_BYTE:
-                printf("%d\t\t%d\t\t%x\n",data->id, data->datatype,*((IG_Byte*) data->data));
+                printf("%d\t\t%d\t\t\t%x\n",data->id, data->datatype,*((IG_Byte*) data->data));
                 break;
 
             default: printf("Datatype nicht bekannt oder Wert aus Queue leer\n");

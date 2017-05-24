@@ -17,7 +17,7 @@
 
 void commandloop();
 
-IG_Status run(char * filename, pthread_t *OPC_Client_Thread, pthread_t *readfromOPCqueue) {
+IG_Status run(char * filename) {
 
     //read config from file
 
@@ -29,7 +29,7 @@ IG_Status run(char * filename, pthread_t *OPC_Client_Thread, pthread_t *readfrom
     IG_Verarbeiter * verarbeiter = (IG_Verarbeiter *) malloc(sizeof(IG_Verarbeiter));
     //init structs
     
-    if(init_erfasser(erfasser, OPC_Client_Thread, readfromOPCqueue) != IG_STATUS_GOOD){
+    if(init_erfasser(erfasser) != IG_STATUS_GOOD){
         printf("could not initialize erfasser\n");
         return IG_STATUS_BAD;
     }

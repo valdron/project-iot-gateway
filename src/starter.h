@@ -18,6 +18,6 @@
 // TODO: which parameters will be needed at startup? config filename(s)?
 
 //weitere Threads hinzufügen
-IG_Status run(char * filename, pthread_t *OPC_Client_Thread,pthread_t *readfromOPCqueue);
+IG_Status run(char * filename);
 
 #endif

@@ -14,6 +14,7 @@
 typedef struct{
     IG_Queue * queue;
     IG_Config * config;
+    pthread_t erfasserThread;
 } IG_Datenerfasser;
 
 
@@ -29,7 +30,7 @@ bool anyNewData(IG_Datenerfasser * erfasser);
 // initializes the connection to the Datasource(OPC UA) and starts the extra thread with loop over incoming data
 // TODO: needs config parameters (as pointer?) 
 // TODO: parameter for flags?
-IG_Status init_erfasser(IG_Datenerfasser * erfasser,pthread_t *OPC_Client_Thread,pthread_t *readfromOPCqueue);
+IG_Status init_erfasser(IG_Datenerfasser * erfasser);
 
 //Allocates new IG_Datenerfasser struct on the heap
 IG_Datenerfasser * IG_Datenerfasser_create_nonBlocking(IG_Config * config);

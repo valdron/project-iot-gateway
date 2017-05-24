@@ -1,7 +1,6 @@
 //#include "queue.h"
 #include "datenerfasser.h"
 #include "opc.h"
-#include "../test/Client_v2/OPC_Queuetest.h"
 
 IG_Datenerfasser * IG_Datenerfasser_create_nonBlocking(IG_Config * config) {
     IG_Datenerfasser * erfasser = (IG_Datenerfasser *) malloc(sizeof(IG_Datenerfasser));
@@ -16,7 +15,7 @@ void IG_Datenerfasser_delete(IG_Datenerfasser * erfasser) {
     free(erfasser);
 }
 
-IG_Status init_erfasser(IG_Datenerfasser * erfasser,pthread_t *OPC_Client_Thread, pthread_t *readfromOPCqueue){
+IG_Status init_erfasser(IG_Datenerfasser * erfasser){
 
     UA_Client *client = UA_Client_new(UA_ClientConfig_standard);
 
@@ -63,15 +62,10 @@ IG_Status init_erfasser(IG_Datenerfasser * erfasser,pthread_t *OPC_Client_Thread
 
     printf("\nInit done!\n\n");
 
-    if(pthread_create(OPC_Client_Thread, NULL, (void*) start_OPC_Client_thread, client) != 0){
+    if(pthread_create(&erfasser->erfasserThread, NULL, (void*) start_OPC_Client_thread, client) != 0){
             printf("OPC Client konnte nicht gestartet werden\n");
             return IG_STATUS_BAD;
     } 
-
-    if(pthread_create(readfromOPCqueue, NULL, (void *) reading_From_OPC_Queue, erfasser->queue) != 0){
-            printf("OPC ReadFromQueue Service konnte nicht gestartet werden\n");
-            return IG_STATUS_BAD;
-    }
 
     return IG_STATUS_GOOD;
 }
