@@ -14,6 +14,9 @@ typedef struct{
 
 }IG_Mqtt;
 
+
+IG_Mqtt * IG_Mqtt_create();
+
 // Duty of Message publishing
 void pubmsg(IG_Mqtt * stack, char * payload, int len, char * topic, int timeout);
 

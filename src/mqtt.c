@@ -27,7 +27,7 @@ void pubmsg(IG_Mqtt * stack, char * payload, int len, char * topic, int timeout)
 }
 
 void disconnect(MQTTClient * client) {
-MQTTClient_disconnect(client, 10000);
-MQTTClient_destroy(&client);
+MQTTClient_disconnect(*client, 10000);
+MQTTClient_destroy(client);
 }
 
