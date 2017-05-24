@@ -19,25 +19,25 @@ IG_Status init_verarbeiter(IG_Verarbeiter * verarbeiter){
 	//Insert magic here for config where rules sets are created
 	
 	//Output of magic is an array of IG_Input_RuleSet	
-	IG_INT32 size= 0;
-	IG_Input_RuleSet ruleSets[size]= NULL;
+	IG_Int32 size= 0;
+	IG_Input_RuleSet ruleSets[size];
 	
 	// TODO: Malloc so its on the heap
-	IG_WorkLoopArgs args = (workLoopArgs){verarbeiter, ruleSets, size};
+	IG_WorkLoopArgs args = (IG_WorkLoopArgs){verarbeiter, size, ruleSets};
 	pthread_t thread;	
 
-	pthread_create(&thread,NULL,IG_WorkLoop,(void*)&args)
+	pthread_create(&thread,NULL,IG_WorkLoop,(void*)&args);
 
-	return IG_GOOD;
+	return IG_STATUS_GOOD;
 }
 
 void* IG_WorkLoop(void * argument){
 	// Parse argmuents
-	IG_WorkLoopArgs args = (IG_WorkLoopArgs *)argument;
-	Verarbeiter * verarbeiter = args->verarbeiter;
-	IG_Int32 ruleSetSize = args->ruleSetSize;
+	IG_WorkLoopArgs args = *(IG_WorkLoopArgs *)argument;
+	IG_Verarbeiter * verarbeiter = args.verarbeiter;
+	IG_Int32 ruleSetSize = args.ruleSetSize;
 	// Array of RuleSets
-	IG_Input_RuleSet * ruleSetArray = args->ruleSetArray:
+	IG_Input_RuleSet * ruleSetArray = args.ruleSetArray;
 	
 	IG_Queue * queueErfasser = verarbeiter->erfasser->queue;
 	IG_Queue * queueSender = verarbeiter->sender->queue;
@@ -67,7 +67,7 @@ void IG_Verarbeiter_applyRules(IG_Data * data,IG_Input_RuleSet * ruleSetArray, I
 	for(IG_Int32 i = 0; i < ruleSetSize; i++){
 		if(ruleSetArray[i].inputId = data->id){
 			// Apply entire RuleSet on data
-			IG_Verarbeiter_applyRule(data, ruleSetArray[i]);
+			IG_Verarbeiter_applyRule(data, &ruleSetArray[i]);
 			break;
 		}				
 	}
@@ -77,7 +77,7 @@ void IG_Verarbeiter_applyRules(IG_Data * data,IG_Input_RuleSet * ruleSetArray, I
 void IG_Verarbeiter_applyRule(IG_Data * data, IG_Input_RuleSet* ruleSet){
 	// Call all rule functions and invoke the data and the rule specific data
 	for(IG_Int32 i = 0; i < (ruleSet->ruleSize);i++){
-		(*(ruleSet->rules[i].function))(data, ruleSet->rules[i].data);
+		(*(ruleSet->rules[i].function))(data, &ruleSet->rules[i]);
 	}
 }
 
@@ -91,7 +91,7 @@ void IG_Verarbeiter_checkIntervals(IG_Input_RuleSet * ruleSetArray, IG_Int32 rul
 				IG_Rule * rule = &(ruleSet->rules[i]);
 				IG_Data * dataToSend = encodeToJSON(rule);
 				IG_Queue_put(queue, dataToSend);
-				rule->deadline = IG_DateTime_add(rule->deadline,rule->interval);
+				rule->deadline = IG_DateTime_add_duration(rule->deadline,rule->interval);
 			}	
 		}							
 	}
@@ -99,6 +99,6 @@ void IG_Verarbeiter_checkIntervals(IG_Input_RuleSet * ruleSetArray, IG_Int32 rul
 
 // TODO:
 IG_Data * encodeToJSON(IG_Rule * rule){
-	return NULL
+	return NULL;
 }
 

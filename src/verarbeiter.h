@@ -6,8 +6,29 @@
 #include "datenversender.h"
 #include "datenerfasser.h"
 
+
+typedef struct __IG_Rule IG_Rule;
 // Function pointer prototype
-void (*IG_funcPtr)(IG_Data *,IG_Rule *);
+typedef void (*IG_funcPtr)(IG_Data * data, IG_Rule * rule);
+
+// Enumeration for rule types
+typedef enum{
+	IG_RULE_TRANSMIT,
+	IG_RULE_AVG,
+	IG_RULE_MAX,
+	IG_RULE_MIN
+} IG_RuleType;
+
+// Struct for an rule
+struct __IG_Rule{
+	IG_RuleType rule;
+	IG_Int32 outputId;
+	IG_funcPtr function;
+	IG_DateTime deadline;
+	IG_DateTime interval;
+	IG_Int32 size;	// Number of Data
+	IG_Data * data;
+};
 
 void IG_avg(IG_Data *,IG_Data *);
 void IG_max(IG_Data *,IG_Data *);
@@ -23,24 +44,7 @@ typedef struct{
 } IG_Verarbeiter;
 
 
-// Enumeration for rule types
-typedef enum{
-	IG_RULE_TRANSMIT,
-	IG_RULE_AVG,
-	IG_RULE_MAX,
-	IG_RULE_MIN
-} IG_RuleType;
 
-// Struct for an rule
-typedef struct{
-	IG_RuleType rule;
-	IG_Int32 outputId;
-	IG_funcPtr function;
-	IG_DateTime deadline;
-	IG_DateTime interval;
-	IG_Int32 size;	// Number of Data
-	IG_Data * data;
-} IG_Rule;
 
 // Struct for an set of rules
 typedef struct{

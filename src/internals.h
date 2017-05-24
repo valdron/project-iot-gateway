@@ -102,4 +102,13 @@ void IG_Data_delete(IG_Data * data);
 // this frees the data ptr inside
 void IG_Data_delete_members(IG_Data * data);
 
+IG_DateTime IG_DateTime_now();
+
+IG_DateTime IG_DateTime_add_duration(IG_DateTime time, IG_Duration duration);
+
+
+IG_Duration IG_Duration_from_ms(IG_UInt64 ms);
+
+IG_Duration IG_Duration_from_sec(IG_UInt64 s);
+
 #endif
