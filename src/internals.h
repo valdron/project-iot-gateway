@@ -9,6 +9,23 @@
 //TYPEDEFS AND CONSTANTS
 
 
+// Internal Identification number
+typedef uint32_t IG_Id; 
+
+typedef bool IG_Bool;
+typedef uint32_t IG_UInt32;
+typedef uint64_t IG_UInt64;
+typedef int32_t IG_Int32;
+typedef int64_t IG_Int64;
+typedef uint8_t IG_Byte;
+typedef float IG_Float;
+typedef double IG_Double;
+typedef uint8_t IG_Byte;
+//TODO: ... noch mehr?
+
+
+typedef unsigned char IG_Char;
+
 //Duration in 100ns intervals
 typedef int64_t IG_Duration;
 
@@ -33,22 +50,6 @@ IG_Duration IG_Duration_from_ms(IG_UInt64 ms);
 IG_Duration IG_Duration_from_sec(IG_UInt64 s);
 
 
-// Internal Identification number
-typedef uint32_t IG_Id; 
-
-typedef bool IG_Bool;
-typedef uint32_t IG_UInt32;
-typedef uint64_t IG_UInt64;
-typedef int32_t IG_Int32;
-typedef int64_t IG_Int64;
-typedef uint8_t IG_Byte;
-typedef float IG_Float;
-typedef double IG_Double;
-typedef uint8_t IG_Byte;
-//TODO: ... noch mehr?
-
-
-typedef unsigned char IG_Char;
 
 //contains string length in bytes and the string not null terminated
 typedef struct {
