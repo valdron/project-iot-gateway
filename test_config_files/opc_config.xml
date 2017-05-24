@@ -2,10 +2,10 @@
 <opcconfig>
     <opcserver proto="opc.tcp" hostname="localhost" port="16664"/>
     <subscription intervalms="1000" subid="1">
-        <item nodeidnum="117" igid="1" name="Pressure"/>
+        <item nodeidnum="119" igid="1" name="Pressure"/>
         <item nodeidnum="118" igid="2" name="Temperature"/>
     </subscription>
     <subscription intervalms="500" subid="2">
-        <item nodeidnum="119" igid="3" name="state"/>
+        <item nodeidnum="120" igid="3" name="state"/>
     </subscription>
 </opcconfig>
