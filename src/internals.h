@@ -27,15 +27,15 @@ typedef uint8_t IG_Byte;
 typedef unsigned char IG_Char;
 
 //Duration in 100ns intervals
-typedef int64_t IG_Duration;
+typedef uint64_t IG_Duration;
 
-static const IG_Duration IG_DURATION_MICROS = 10;
-static const IG_Duration IG_DURATION_MILLIS = 10000;
-static const IG_Duration IG_DURATION_SECS   = 10000000;
+static const IG_Duration IG_DURATION_MICROS = 10L;
+static const IG_Duration IG_DURATION_MILLIS = 10000L;
+static const IG_Duration IG_DURATION_SECS   = 10000000L;
 
 // Time in 100ns intervals since 01.01.1601;
-typedef int64_t IG_DateTime;
-static const IG_DateTime IG_DATETIME_UNIX_TIME = 116444736000000000;
+typedef uint64_t IG_DateTime;
+static const IG_DateTime IG_DATETIME_UNIX_TIME = 116444736000000000L;
 
 //returns the current time
 IG_DateTime IG_DateTime_now();
