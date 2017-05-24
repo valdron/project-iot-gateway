@@ -16,8 +16,7 @@
 volatile MQTTClient_deliveryToken deliveredtoken;
 
 
-
-	// Subscribing to all topics
+// Subscribing to all topics
 char* TOPIC = "#";	
 char* CLIENTID = "TestSubscriber";
 	
@@ -47,17 +46,12 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *m
 	{/*Failed to write do error code here.*/
     /*
 	}
-
     for(i=0; i<=message->payloadlen; i++)
     {	
-	
         putchar(*payloadptr++);
-	
     }
-	
     putchar('\n');
 	fclose(fp); // 4
-
     FOR WORKING WITH FILESYSTEM      */
 
     MQTTClient_freeMessage(&message);
@@ -87,12 +81,8 @@ void setParams(int argc, char ** argv){
 
 int main(int argc, char* argv[])
 {
+if (argc > 1) {	setParams(argc,argv);}	
 
-if (argc > 1) {
-	setParams(argc,argv);
-}	
-
-    
 	// Declaring params for the Subscriber Client
     MQTTClient client;
     MQTTClient_connectOptions conn_opts = MQTTClient_connectOptions_initializer;
