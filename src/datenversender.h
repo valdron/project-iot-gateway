@@ -18,11 +18,7 @@ typedef struct{
 IG_Status sendData(IG_Datenversender * sender, IG_Data * data);
 
 
-
-// returns if there is any new data in the queue
-// should be called before getNextData();
-bool checkForNewData(IG_Datenversender * sender);
-
+// Callback-Function Thread
 void* doSomeThing(void *arg);
 
 

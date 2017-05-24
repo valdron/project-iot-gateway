@@ -10,13 +10,12 @@ typedef struct{
         // MQTT init
     MQTTClient client;
     MQTTClient_connectOptions conn_opts ;
-    MQTTClient_message pubmsg;
-    MQTTClient_deliveryToken token;
+    IG_UInt32 qos_level;
 
 }IG_Mqtt;
 
 // Duty of Message publishing
-void pubmsg(MQTTClient_message pubmsg, char * payload, IG_Datenversender * sender);
+void pubmsg(IG_Mqtt * stack, char * payload, int len, char * topic, int timeout);
 
 // Disconnect the Client & Destroy it
 void disconnect(MQTTClient * client);

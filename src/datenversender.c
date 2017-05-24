@@ -1,5 +1,13 @@
 #include "datenversender.h"
 
+const static int timeout = 1000L;
+
+// Struct for the thread-callback-function-params
+struct readThreadParams {
+     IG_Datenversender * sender;  
+     IG_Data * data;
+     IG_Mqtt *servant;
+};
 
 IG_Datenversender * IG_Datenversender_create(IG_Config * config) {
     IG_Datenversender * sender = (IG_Datenversender *) malloc(sizeof(IG_Datenversender));
@@ -13,10 +21,6 @@ void IG_Datenversender_delete(IG_Datenversender * sender) {
     free(sender);
 }
 
-bool checkForNewData(IG_Datenversender * sender){
-    // if Queue isn't empty there is new Data !
-    return IG_Queue_isEmpty(sender->queue);
-}
 
 IG_Status sendData(IG_Datenversender * sender, IG_Data * data) {
 // right data in to Queue
@@ -27,26 +31,35 @@ IG_Status sendData(IG_Datenversender * sender, IG_Data * data) {
 
 void* doSomeThing(void *arg)
 {
-            // Loop, when thread creation is succeeded
-    while ( 1 )
-     {
 
   struct readThreadParams *params = arg;
   IG_Mqtt *stack = params->stack;
   IG_Datenversender * sender = params->sender;  
-  IG_Data * data = params->data;
+  //IG_Data * data = params->data;
 
-    if (checkForNewData(&sender)){
-    return  IG_STATUS_BAD;
-    }
-    else {   
-    char *payload = getMsgPayload(IG_Queue_take(&(sender->queue)));
-    // publish the message
-    pubmsg(stack, &payload, sender);
-    return IG_STATUS_GOOD;
-    }
-                    // Do Something
-                delay(100);     // 100 ms
+            // Loop, when thread creation is succeeded
+    while ( 1 )
+     {
+    //  delay safe!
+    IG_Data * data = IG_Queue_take(sender->queue);
+     
+
+    IG_Status rt;
+    IG_ConfigResponse res;
+    rt = IG_Config_MQTT_get_topic(sender->config,data->id, &res );
+    if(rt != IG_STATUS_GOOD) {
+        continue;
+    } 
+
+    char * topic =  (char*) res.data;
+    char * payload = (char*)data->data;
+    int len = strlen(payload);
+ 
+     // publish the message
+    pubmsg(stack, payload,len, sender, timeout);
+    free(topic);
+    IG_Data_delete_members(data);
+    IG_Data_delete(data);
 
 }
    
@@ -58,25 +71,25 @@ int rc;
 int err;
 pthread_t tid[1];
 IG_Status rt;
+IG_ConfigResponse res;
+rt = IG_Config_MQTT_get_ClientConfig(sender->config, &res );
 
-rt = IG_Config_MQTT_get_ClientConfig(sender->config, /*IG_ConfigResponse  */);
+if(rt != IG_STATUS_GOOD) {
+    return IG_STATUS_BAD;
+}   
+IG_Config_MQTT_ClientConfig * configptr =  (IG_Config_MQTT_ClientConfig*) res.data;
 
 
-
-struct readThreadParams {
-     IG_Datenversender * sender;  
-     IG_Data * data;
-     IG_Mqtt *servant;
-};
 struct readThreadParams *readParams;
 readParams = malloc(sizeof(readThreadParams));
 readParams->sender = sender;                                                     
 readParams->data = data;                                                
 readParams->stack = IG_Mqtt_create();
+readParams->stack->qos_level = configptr->qos_level;
 
 
 // Create the Client
-MQTTClient_create(&client, getAddress(sender->config), getClientID(sender->config), MQTTCLIENT_PERSISTENCE_NONE, NULL);
+MQTTClient_create(&client, configptr.conn_string, configptr.client_name, MQTTCLIENT_PERSISTENCE_NONE, NULL);
 conn_opts.keepAliveInterval = 20;
 conn_opts.cleansession = 1;
 
