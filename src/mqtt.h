@@ -9,7 +9,6 @@
 typedef struct{
         // MQTT init
     MQTTClient client;
-    MQTTClient_connectOptions conn_opts ;
     IG_UInt32 qos_level;
 
 }IG_Mqtt;
