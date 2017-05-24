@@ -1,8 +1,9 @@
+
 #ifndef QUEUE_H
 #define QUEUE_H
 
-#include<pthread.h>
-#include<semaphore.h>
+#include <pthread.h>
+#include <semaphore.h>
 #include "internals.h"
 
 typedef struct node IG_QElement;
@@ -31,6 +32,7 @@ void IG_Queue_delete();
 
 // Insert new data to the queue
 void IG_Queue_put(IG_Queue * queue, IG_Data * new_Data);
+
 void IG_Queue_put_copy(IG_Queue * queue, IG_Data new_Data);
 
 // Return first element of the queue

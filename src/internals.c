@@ -1,3 +1,4 @@
+
 #include "internals.h"
 #include<time.h>
 
@@ -41,3 +42,7 @@ IG_Duration IG_Duration_from_sec(IG_UInt64 s) {
 }
 
 
+// This function is creating an uninitialized IG_Data struct
+IG_Data *IG_Data_create_empty(){
+    return (IG_Data *) malloc(sizeof(IG_Data));
+}

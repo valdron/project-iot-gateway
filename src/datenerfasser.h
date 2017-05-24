@@ -3,15 +3,18 @@
 #define DATENERFASSER_H
 
 #include "queue.h"
+#include "datenerfasser.h"
 //for datatypes
 #include "internals.h"
 #include "configuration.h"
 
 
 
+
 typedef struct{
     IG_Queue * queue;
     IG_Config * config;
+    pthread_t erfasserThread;
 } IG_Datenerfasser;
 
 
@@ -30,7 +33,7 @@ bool anyNewData(IG_Datenerfasser * erfasser);
 IG_Status init_erfasser(IG_Datenerfasser * erfasser);
 
 //Allocates new IG_Datenerfasser struct on the heap
-IG_Datenerfasser * IG_Datenerfasser_create(IG_Config * config);
+IG_Datenerfasser * IG_Datenerfasser_create_nonBlocking(IG_Config * config);
 
 
 //Frees the memory needed for the struct including the queue

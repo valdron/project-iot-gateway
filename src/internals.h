@@ -1,11 +1,13 @@
+
 #ifndef INTERNALS_H
 #define INTERNALS_H
 
-#include<stdlib.h>
-#include<stdint.h>
-#include<stdbool.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <stdbool.h>
 
 //TYPEDEFS AND CONSTANTS
+
 
 //Duration in 100ns intervals
 typedef int64_t IG_Duration;
@@ -42,6 +44,7 @@ typedef int64_t IG_Int64;
 typedef uint8_t IG_Byte;
 typedef float IG_Float;
 typedef double IG_Double;
+typedef uint8_t IG_Byte;
 //TODO: ... noch mehr?
 
 
@@ -64,6 +67,7 @@ typedef enum {
 
 //TODO: insert relevant Datatypes (floatingpoint, integer, )
 typedef enum {
+    IG_BYTE,
     IG_DOUBLE, 
     IG_FLOAT,
     IG_NULL,
@@ -72,8 +76,8 @@ typedef enum {
     IG_INT64,
     IG_UINT64,
     IG_DATETIME,
-    IG_BOOL,
-    IG_DURATION
+    IG_DURATION,
+    IG_BOOL
     /*...*/
 } IG_Datatype;
 
@@ -82,22 +86,20 @@ typedef enum {
 typedef struct{
 	IG_Id id;
 	IG_Datatype datatype;
+    IG_DateTime timestamp;
 	void * data;
-	IG_DateTime timestamp;
 } IG_Data;
 
 // Creates new IG_Data on the heap and inits it with the parameters
 IG_Data * IG_Data_create(IG_Id id, IG_Datatype type, void * data, IG_DateTime time);
+
+// This function is creating an uninitialized IG_Data struct
+IG_Data * IG_Data_create_empty();
 
 //care this doesnt free the memory needed for the data pointer
 void IG_Data_delete(IG_Data * data);
 
 // this frees the data ptr inside
 void IG_Data_delete_members(IG_Data * data);
-
-
-
-
-
 
 #endif
