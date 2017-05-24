@@ -1,3 +1,4 @@
+
 #include "queue.h"
 
 IG_Queue * IG_Queue_new(IG_QueueType type){

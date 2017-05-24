@@ -2,6 +2,19 @@
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/OPCTest)
 
-ADD_EXECUTABLE(Client_v2 Client_v2.c init_xml.c response_handler.c ${PROJECT_SOURCE_DIR}/src/internals.c)
-TARGET_LINK_LIBRARIES(Client_v2 open62541)
-configure_file(OPC_init.xml ${CMAKE_BINARY_DIR}/OPC_init.xml COPYONLY)
+ADD_EXECUTABLE(
+	OPC_Test 
+	OPC_Queuetest.c
+	OPCTestmain.c
+	${PROJECT_SOURCE_DIR}/src/internals.c
+	${PROJECT_SOURCE_DIR}/src/opc.c
+	${PROJECT_SOURCE_DIR}/src/queue.c
+	${PROJECT_SOURCE_DIR}/src/datenerfasser.c
+	${PROJECT_SOURCE_DIR}/src/config_opc.c
+	${PROJECT_SOURCE_DIR}/src/configuration.c
+	${PROJECT_SOURCE_DIR}/src/starter.c
+	)
+
+TARGET_LINK_LIBRARIES(OPC_Test open62541 pthread xml2)
+configure_file(${PROJECT_SOURCE_DIR}/test_config_files/opc_config.xml ${CMAKE_BINARY_DIR}/OPCTest/opc_config.xml COPYONLY)
+
