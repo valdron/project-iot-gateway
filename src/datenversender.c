@@ -88,12 +88,12 @@ readParams->stack->qos_level = configptr->qos_level;
 
 
 // Create the Client
-MQTTClient_create(&stack->client, configptr.conn_string, configptr.client_name, MQTTCLIENT_PERSISTENCE_NONE, NULL);
-stack->conn_opts.keepAliveInterval = 20;
-stack->conn_opts.cleansession = 1;
+MQTTClient_create(&readParams->stack->client, configptr->conn_string, configptr->client_name, MQTTCLIENT_PERSISTENCE_NONE, NULL);
+readParams->stack->conn_opts.keepAliveInterval = 20;
+readParams->stack->conn_opts.cleansession = 1;
 
 // check for Conn_ACK
- if ((rc = MQTTClient_connect(stack->client, &conn_opts)) != MQTTCLIENT_SUCCESS)
+ if ((rc = MQTTClient_connect(readParams->stack->client, &creadParams->stack->conn_opts)) != MQTTCLIENT_SUCCESS)
     {
         printf("Failed to connect, return code %d\n", rc);
         return IG_STATUS_BAD;
@@ -103,7 +103,7 @@ stack->conn_opts.cleansession = 1;
     err = pthread_create(&tid, NULL, &doSomeThing, readParams);
         if (err != 0) {
             printf("\ncan't create thread");
-            disconnect(&(readParams->stack.client));
+            disconnect(&(readParams->stack->client));
             return IG_STATUS_BAD;
         }
         else {
