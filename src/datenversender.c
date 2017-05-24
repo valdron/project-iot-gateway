@@ -93,7 +93,7 @@ readParams->stack->conn_opts.keepAliveInterval = 20;
 readParams->stack->conn_opts.cleansession = 1;
 
 // check for Conn_ACK
- if ((rc = MQTTClient_connect(readParams->stack->client, &creadParams->stack->conn_opts)) != MQTTCLIENT_SUCCESS)
+ if ((rc = MQTTClient_connect(readParams->stack->client, &readParams->stack->conn_opts)) != MQTTCLIENT_SUCCESS)
     {
         printf("Failed to connect, return code %d\n", rc);
         return IG_STATUS_BAD;
