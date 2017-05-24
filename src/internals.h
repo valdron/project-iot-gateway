@@ -20,7 +20,6 @@ typedef int64_t IG_Int64;
 typedef uint8_t IG_Byte;
 typedef float IG_Float;
 typedef double IG_Double;
-typedef uint8_t IG_Byte;
 //TODO: ... noch mehr?
 
 
