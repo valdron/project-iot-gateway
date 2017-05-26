@@ -30,8 +30,7 @@ IG_Status OPC_init(UA_Client * client, IG_OPC_Nodes * nodeStruct, IG_Datenerfass
         return IG_STATUS_BAD;
       }
       
-      //Funktion für anzahl aller Items
-      //monitoredItems = (monitoredItems*)malloc(sizeof(monitoredItems*) * anzahlItems());      
+
       IG_UInt32 subAmount = res.responseAmount;
       IG_OPC_Subscription * subs = res.data;
       IG_OPC_Nodes_init(nodeStruct, subAmount);
@@ -54,15 +53,13 @@ IG_Status OPC_init(UA_Client * client, IG_OPC_Nodes * nodeStruct, IG_Datenerfass
 
         nodeStruct->anzahlItemsArray[i] = itemAmount; 
         
-        //needs to be saved elsewhere (in Monitoreditemsstruct)
 
         UA_Client_Subscriptions_new(client, UA_SubscriptionSettings_standard,&nodeStruct->subscriptions[i].OPC_subId);
 
         for(IG_UInt32 x = 0; x < itemAmount; x++ ) {
 
           UA_NodeId id = UA_NODEID_NUMERIC(1,items[x].nodeid);    
-
-                                                                                                      
+                                                                                
           UA_Client_Subscriptions_addMonitoredItem(client, nodeStruct->subscriptions[i].OPC_subId, id, UA_ATTRIBUTEID_VALUE,
                                  &response_handler, (void*) &items[x], &items[x].monId);
                                                     //vvv insert pointer to correct Monitored Item here
@@ -86,7 +83,7 @@ void response_handler(UA_UInt32 monId, UA_DataValue *value, void *newMonitoredIt
             data->datatype = IG_DOUBLE;
             break;
         case UA_TYPES_BYTE:
-            data->datatype = IG_BYTE;//Change to Byte!!
+            data->datatype = IG_BYTE;
             break;
         default: printf("Unknowen Type\n");
             break;
@@ -99,12 +96,16 @@ void response_handler(UA_UInt32 monId, UA_DataValue *value, void *newMonitoredIt
     //zuweisung der Daten
     data->data = value->value.data;
 
-    //Hier wird noch die NodeID als ID benutzt
+    //Zuweisung der internen Id
     data->id = dataInfo->internal_id;
 
+    //Testausgabe
     //printf("ItemId:  %d\tWert:  %f   \t\n", data->id,*((double*)data->data));
     
+    //(void*)data pointer soll nicht gefreet werden da dieser weiter
+    //verwendet wird
     value->value.storageType = UA_VARIANT_DATA_NODELETE;
+    
     //Schreibe data in Queue
     IG_Queue_put(dataInfo->queue, data);
 }

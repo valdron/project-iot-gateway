@@ -30,6 +30,7 @@ IG_Status run(char * filename) {
     //init structs
     
     if(init_erfasser(erfasser) != IG_STATUS_GOOD){
+        free(erfasser);
         printf("could not initialize erfasser\n");
         return IG_STATUS_BAD;
     }
