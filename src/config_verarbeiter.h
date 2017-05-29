@@ -12,7 +12,7 @@ const static IG_Char * IG_VERARBEITER_RULESET_DATATYPE_VARNAME = "datatype";
 const static IG_Char * IG_VERARBEITER_RULESET_INPUTID_VARNAME = "inid";
 const static IG_Char * IG_VERARBEITER_RULE_TYPE_VARNAME = "type";
 const static IG_Char * IG_VERARBEITER_RULE_OUTPUTID_VARNAME = "outid";
-const static IG_Char * IG_VERARBEITER_RULE_INTERVAL_VARNAME = "intervalms";
+const static IG_Char * IG_VERARBEITER_RULE_INTERVAL_VARNAME = "publishintervalms";
 
 const static IG_Char * IG_VERARBEITER_TRANSMIT_TYPENAME = "transmit";
 const static IG_Char * IG_VERARBEITER_AVERAGE_TYPENAME = "average";

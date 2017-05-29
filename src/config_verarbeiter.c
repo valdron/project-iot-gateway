@@ -38,18 +38,19 @@ IG_Status IG_Config_Verarbeiter_get_RuleSets(IG_Config* conf,
         return IG_STATUS_BAD;
     }
 
-    node = *obj->nodesetval->nodeTab;
+    
     resAmount = obj->nodesetval->nodeNr;
 
     // allocate memory for array
     sets = (IG_Input_RuleSet * ) malloc(sizeof(IG_Input_RuleSet)*resAmount);
 
     for(IG_UInt32 i = 0; i<resAmount; i++) {
+        node = obj->nodesetval->nodeTab[i];
         IG_UInt32 inid;
         IG_Datatype type;
 
-        IG_Char * type_str = xmlGetProp(&node[i],IG_VERARBEITER_RULESET_DATATYPE_VARNAME);
-        IG_Char * inid_str = xmlGetProp(&node[i],IG_VERARBEITER_RULESET_INPUTID_VARNAME);
+        IG_Char * type_str = xmlGetProp(node,IG_VERARBEITER_RULESET_DATATYPE_VARNAME);
+        IG_Char * inid_str = xmlGetProp(node,IG_VERARBEITER_RULESET_INPUTID_VARNAME);
         if(type_str == NULL || inid_str == NULL) {
             free(sets);
             xmlXPathFreeContext(ctx);
@@ -113,7 +114,7 @@ IG_Status IG_Config_Verarbeiter_get_Rules(IG_Config* conf, IG_ConfigResponse * r
         return IG_STATUS_BAD;
     }
 
-    node = *obj->nodesetval->nodeTab;
+    
     resAmount = obj->nodesetval->nodeNr;
 
     // allocate memory for array
@@ -121,14 +122,15 @@ IG_Status IG_Config_Verarbeiter_get_Rules(IG_Config* conf, IG_ConfigResponse * r
 
     //for loop through results and get attributes
     for(IG_UInt32 i = 0; i<resAmount; i++) {
+        node = obj->nodesetval->nodeTab[i];
         IG_UInt32 outid;
         IG_RuleType type;
         IG_Duration interval;
         //TODO: Getprops and parse
 
-        IG_Char * outid_str = xmlGetProp(&node[i],IG_VERARBEITER_RULE_OUTPUTID_VARNAME);
-        IG_Char * type_str = xmlGetProp(&node[i],IG_VERARBEITER_RULE_TYPE_VARNAME);
-        IG_Char * interval_str = xmlGetProp(&node[i],IG_VERARBEITER_RULE_INTERVAL_VARNAME);
+        IG_Char * outid_str = xmlGetProp(node,IG_VERARBEITER_RULE_OUTPUTID_VARNAME);
+        IG_Char * type_str = xmlGetProp(node,IG_VERARBEITER_RULE_TYPE_VARNAME);
+        IG_Char * interval_str = xmlGetProp(node,IG_VERARBEITER_RULE_INTERVAL_VARNAME);
         if(outid_str == NULL || type_str == NULL || interval_str == NULL) {
             free(result);
             xmlXPathFreeContext(ctx);
@@ -199,5 +201,5 @@ IG_Status get_interval_from_str(IG_Char * str, IG_Duration  * interval) {
     }
 
     *interval = IG_Duration_from_ms(intervalms);
-    IG_STATUS_GOOD;
+    return IG_STATUS_GOOD;
 }

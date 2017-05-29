@@ -6,6 +6,6 @@
         <rule type="maximum" outid="102" publishintervalms="60000" timeintervalsecs="60" />
     </ruleset>
     <ruleset inid="4" datatype="uint32">
-        <rule type="bitfield" outid="401" publishintervalms="1000" bitnr="0"/>
+        <rule type="minimum" outid="401" publishintervalms="1000" bitnr="0"/>
     </ruleset>
 </verarbeiterconfig>
