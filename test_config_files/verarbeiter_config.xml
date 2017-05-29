@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <verarbeiterconfig>
-    <input id="1" datatype="double">
+    <ruleset inid="1" datatype="double">
         <rule type="average"  outid="101" publishintervalms="3600000" timeintervalsecs="3600"/>
         <rule type="normal"   outid="100" publishintervalms="1000"/>
         <rule type="maximum"  outid="102" publishintervalms="60000" timeintervalsecs="60" />
-    </input>
-    <input id="4" datatype="uint32">
+    </ruleset>
+    <ruleset inid="4" datatype="uint32">
         <rule type="bitfield" outid="401" publishintervalms="1000" bitnr="0"/>
-    </input>
+    </ruleset>
 </verarbeiterconfig>

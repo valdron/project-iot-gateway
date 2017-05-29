@@ -11,3 +11,5 @@ add_subdirectory(QueueTest)
 
 add_subdirectory(ConfigTest)
 
+add_subdirectory(InternalsTest)
+

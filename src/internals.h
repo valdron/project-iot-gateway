@@ -6,13 +6,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-//Include für den ItemType int struct IG_Data
-// DEFINES FOR CONSTANTS
+//TYPEDEFS AND CONSTANTS
 
-
-//TYPEDEFS
-// Time in 100ns intervals since 01.01.1601;
-typedef int64_t IG_DateTime;
 
 // Internal Identification number
 typedef uint32_t IG_Id; 
@@ -22,10 +17,44 @@ typedef uint32_t IG_UInt32;
 typedef uint64_t IG_UInt64;
 typedef int32_t IG_Int32;
 typedef int64_t IG_Int64;
+typedef uint8_t IG_Byte;
 typedef float IG_Float;
 typedef double IG_Double;
-typedef uint8_t IG_Byte;
 //TODO: ... noch mehr?
+
+
+typedef unsigned char IG_Char;
+
+//Duration in 100ns intervals
+typedef uint64_t IG_Duration;
+
+static const IG_Duration IG_DURATION_MICROS = 10L;
+static const IG_Duration IG_DURATION_MILLIS = 10000L;
+static const IG_Duration IG_DURATION_SECS   = 10000000L;
+
+// Time in 100ns intervals since 01.01.1601;
+typedef uint64_t IG_DateTime;
+static const IG_DateTime IG_DATETIME_UNIX_TIME = 116444736000000000L;
+
+//returns the current time
+IG_DateTime IG_DateTime_now();
+
+//returns the new time for @time + @duration 
+IG_DateTime IG_DateTime_add_duration(IG_DateTime time, IG_Duration duration);
+
+//returns Duration from a milliseconds amount
+IG_Duration IG_Duration_from_ms(IG_UInt64 ms);
+
+//returns Duration from a seconds amount
+IG_Duration IG_Duration_from_sec(IG_UInt64 s);
+
+
+
+//contains string length in bytes and the string not null terminated
+typedef struct {
+    IG_UInt64 len;
+    IG_Byte * data;
+} IG_String;
 
 // IG Statuscode
 // TODO: 
@@ -47,6 +76,7 @@ typedef enum {
     IG_INT64,
     IG_UINT64,
     IG_DATETIME,
+    IG_DURATION,
     IG_BOOL
     /*...*/
 } IG_Datatype;
@@ -59,8 +89,6 @@ typedef struct{
     IG_DateTime timestamp;
 	void * data;
 } IG_Data;
-
-
 
 // Creates new IG_Data on the heap and inits it with the parameters
 IG_Data * IG_Data_create(IG_Id id, IG_Datatype type, void * data, IG_DateTime time);
