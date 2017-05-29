@@ -46,6 +46,7 @@ IG_Status IG_Verarbeiter_init(IG_Verarbeiter * verarbeiter){
 	verarbeiter->running = true;
 
 	pthread_t* thread = (pthread_t*)malloc(sizeof(pthread_t));
+
 	
 	pthread_create(thread,NULL,IG_WorkLoop,(void*)args);
 
