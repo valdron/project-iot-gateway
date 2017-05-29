@@ -35,6 +35,9 @@ IG_Status init_versender(IG_Datenversender * sender);
 //creates new struct on the heap and initializes it with the parameters
 IG_Datenversender * IG_Datenversender_create(IG_Config * config);
 
+//stops the threadloop
+void IG_Datenversender_stop(IG_Datenversender * sender);
+
 // frees the memory needed for the struct
 void IG_Datenversender_delete(IG_Datenversender * sender);
 
