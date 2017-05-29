@@ -92,7 +92,7 @@ IG_Status run(char * filename) {
 
     IG_Datenerfasser_stop(erfasser);
     IG_Verarbeiter_stop(verarbeiter);
-    IG_Datenversender_delete(sender);
+    IG_Datenversender_stop(sender);
     return IG_STATUS_GOOD;
     
 

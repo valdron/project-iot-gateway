@@ -106,6 +106,7 @@ void* IG_WorkLoop(void * argument){
 		IG_Verarbeiter_checkIntervals(ruleSetArray, ruleSetSize, queueSender);
 		// TODO: Maybe add some functions to create logs/print status
 	}
+	printf("shutting down verarbeiter!\n");
 }
 
 void IG_Verarbeiter_applyRule(IG_Data * data, IG_Input_RuleSet* ruleSet){

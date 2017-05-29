@@ -22,7 +22,7 @@ void start_OPC_Client_thread(void * param){
         break;
     UA_Client_Subscriptions_manuallySendPublishRequest(client);
   }  
-  printf("shutting down erfasser!");
+  
 
   UA_Client_disconnect(client);
   UA_Client_delete(client);

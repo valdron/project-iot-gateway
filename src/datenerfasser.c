@@ -19,6 +19,7 @@ void IG_Datenerfasser_delete(IG_Datenerfasser * erfasser) {
 
 void IG_Datenerfasser_stop(IG_Datenerfasser * erfasser) {
     erfasser->running = false;
+    printf("shutting down erfasser!");
     pthread_join(erfasser->erfasserThread, NULL);
 }
 
