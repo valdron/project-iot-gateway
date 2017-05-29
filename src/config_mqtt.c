@@ -115,6 +115,7 @@ IG_Status IG_Config_MQTT_get_client_name(IG_Config * config, unsigned char * buf
     }
 
     strncpy(buffer,name,100);
+    free(name);
 
     return IG_STATUS_GOOD;
 }

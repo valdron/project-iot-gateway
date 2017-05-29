@@ -81,6 +81,19 @@ typedef enum {
     /*...*/
 } IG_Datatype;
 
+static const IG_Char * IG_BYTE_TYPENAME = "byte";
+static const IG_Char * IG_DOUBLE_TYPENAME = "double";
+static const IG_Char * IG_FLOAT_TYPENAME = "float";
+static const IG_Char * IG_INT32_TYPENAME = "int32";
+static const IG_Char * IG_UINT32_TYPENAME = "uint32";
+static const IG_Char * IG_INT64_TYPENAME = "int64";
+static const IG_Char * IG_UINT64_TYPENAME = "uint64";
+static const IG_Char * IG_DATETIME_TYPENAME = "date";
+static const IG_Char * IG_DURATION_TYPENAME = "duration";
+static const IG_Char * IG_BOOL_TYPENAME = "bool";
+
+IG_Datatype IG_Datatype_from_str(IG_Char * str);
+
 
 // IG Data
 typedef struct{

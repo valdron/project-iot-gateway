@@ -9,6 +9,7 @@
 const static IG_Char * IG_VERARBEITER_RULES_XPATH_FORMAT = "/verarbeiterconfig/ruleset[@inid='%i']/rule";
 const static IG_Char * IG_VERARBEITER_RULESET_XPATH = "/verarbeiterconfig/ruleset";
 const static IG_Char * IG_VERARBEITER_RULESET_DATATYPE_VARNAME = "datatype";
+const static IG_Char * IG_VERARBEITER_RULESET_INPUTID_VARNAME = "inid";
 const static IG_Char * IG_VERARBEITER_RULE_TYPE_VARNAME = "type";
 const static IG_Char * IG_VERARBEITER_RULE_OUTPUTID_VARNAME = "outid";
 const static IG_Char * IG_VERARBEITER_RULE_INTERVAL_VARNAME = "intervalms";
@@ -17,6 +18,8 @@ const static IG_Char * IG_VERARBEITER_TRANSMIT_TYPENAME = "transmit";
 const static IG_Char * IG_VERARBEITER_AVERAGE_TYPENAME = "average";
 const static IG_Char * IG_VERARBEITER_MAXIMUM_TYPENAME = "maximum";
 const static IG_Char * IG_VERARBEITER_MINIMUM_TYPENAME = "minimum";
+
+
 
 
 
