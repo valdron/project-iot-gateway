@@ -195,7 +195,7 @@ IG_Status get_type_from_str(IG_Char * str, IG_RuleType  * type) {
 }
 IG_Status get_interval_from_str(IG_Char * str, IG_Duration  * interval) {
 
-    IG_UInt32 intervalms = atoi(str);
+    IG_UInt64 intervalms = atoi(str);
     if(intervalms == 0) {
         return IG_STATUS_BAD;
     }

@@ -36,5 +36,17 @@ int main(int argc, char * argv[]) {
         sets[i].rules = (IG_Rule *) res_rules.data;
     }
 
+    for(IG_UInt32 i = 0; i < size; i++) {
+        printf("\nRuleset %i:\n",i);
+        printf("\tInputId:\t%i\n",sets[i].inputId);
+        printf("\tDatatype:\t%i\n",sets[i].datatype);
+        printf("\tRules:\n");
+
+        for(IG_UInt32 j = 0; j < sets[i].ruleSize; j++) {
+            printf("\t\tRule %i:\tType:\t%i\tInterval:\t%10.i ms\tOutputId:\t%i\n", j, sets[i].rules[j].rule, sets[i].rules[j].interval/10000, sets[i].rules[j].outputId);
+        }
+        
+    }
+
     return 0;
 }
