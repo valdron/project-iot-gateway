@@ -47,8 +47,7 @@ IG_Status init_erfasser(IG_Datenerfasser * erfasser){
     printf("%i endpoints found\n", (int)endpointArraySize);
    
     for(size_t i=0;i<endpointArraySize;i++){
-        printf("URL of endpoint %i is %.*s\n", (int)++i,
-                (int)endpointArray[i].endpointUrl.length,
+        printf("URL of endpoint %i is %s\n", (int)++i,
                 endpointArray[i].endpointUrl.data);
     }
 
