@@ -6,10 +6,13 @@
 #include "internals.h"
 #include "configuration.h"
 #include "mqtt.h"
+#include <pthread.h>
 
 typedef struct{
     IG_Config * config;
     IG_Queue * queue;
+    IG_Bool running;
+    pthread_t th_loop;
 } IG_Datenversender;
 
 
