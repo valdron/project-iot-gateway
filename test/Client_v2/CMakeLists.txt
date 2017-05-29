@@ -8,11 +8,12 @@ ADD_EXECUTABLE(
 	OPCTestmain.c
 	${PROJECT_SOURCE_DIR}/src/internals.c
 	${PROJECT_SOURCE_DIR}/src/opc.c
+	${PROJECT_SOURCE_DIR}/src/config_main.c
 	${PROJECT_SOURCE_DIR}/src/queue.c
 	${PROJECT_SOURCE_DIR}/src/datenerfasser.c
 	${PROJECT_SOURCE_DIR}/src/config_opc.c
 	${PROJECT_SOURCE_DIR}/src/configuration.c
-	${PROJECT_SOURCE_DIR}/src/starter.c
+	
 	)
 
 TARGET_LINK_LIBRARIES(OPC_Test open62541 pthread xml2)

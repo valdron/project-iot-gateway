@@ -15,7 +15,7 @@ void IG_Verarbeiter_delete(IG_Verarbeiter * verarbeiter) {
     free(verarbeiter);
 }
 
-IG_Status init_verarbeiter(IG_Verarbeiter * verarbeiter){
+IG_Status IG_verarbeiter_init(IG_Verarbeiter * verarbeiter){
 	//Insert magic here for config where rules sets are created
 	
 	//Output of magic is an array of IG_Input_RuleSet	
