@@ -1,4 +1,5 @@
 #include "verarbeiter.h"
+#include<unistd.h>
 
 IG_Verarbeiter * IG_Verarbeiter_create(IG_Config * config, IG_Datenversender * sender, IG_Datenerfasser * erfasser){
     //create new on the heap
@@ -6,6 +7,7 @@ IG_Verarbeiter * IG_Verarbeiter_create(IG_Config * config, IG_Datenversender * s
     arbeiter->config = config;
     arbeiter->sender = sender;
     arbeiter->erfasser = erfasser;
+	arbeiter->running = true;
     return arbeiter;
 }
 
@@ -14,6 +16,7 @@ void IG_Verarbeiter_delete(IG_Verarbeiter * verarbeiter) {
     //TODO deletes vom sender und erfasser aufrufen evtl.
     free(verarbeiter);
 }
+
 
 IG_Status IG_Verarbeiter_init(IG_Verarbeiter * verarbeiter){
 
@@ -50,8 +53,12 @@ IG_Status IG_Verarbeiter_init(IG_Verarbeiter * verarbeiter){
 	
 	pthread_create(thread,NULL,IG_WorkLoop,(void*)args);
 
-
 	return IG_STATUS_GOOD;
+}
+
+void IG_Verarbeiter_stop(IG_Verarbeiter * verarbeiter) {
+	verarbeiter->running = false;
+	pthread_join(verarbeiter->th_loop, NULL);
 }
 
 void* IG_WorkLoop(void * argument){
@@ -67,6 +74,9 @@ void* IG_WorkLoop(void * argument){
 
 	IG_Queue * queueErfasser = verarbeiter->erfasser->queue;
 	IG_Queue * queueSender = verarbeiter->sender->queue;
+	
+	printf("Verarbeiter Thread started!\n");
+
 
 	// endless loop
 	while(1){
@@ -77,6 +87,9 @@ void* IG_WorkLoop(void * argument){
 		Maybe add some special variable which terminates loop directly (For error cases)
 		if(fatalError) break;
 		*/
+	    printf("VerarbeiterLoop!\n");
+		sleep(1);
+
 		if(!verarbeiter->running && IG_Queue_isEmpty(queueErfasser))
 			break;
 		IG_Data* data = IG_Queue_take(queueErfasser);

@@ -54,8 +54,8 @@ IG_Status run(char * filename) {
     opccfg_filename = (unsigned char *)res.data;
 
     IG_Config * verarbeitercfg = IG_Config_create(verarbeitercfg_filename, IG_CONFIG_VERARBEITER);
-    IG_Config * erfassercfg    = IG_Config_create(opccfg_filename, IG_CONFIG_VERARBEITER);
-    IG_Config * versendercfg   = IG_Config_create(mqttcfg_filename, IG_CONFIG_VERARBEITER);
+    IG_Config * erfassercfg    = IG_Config_create(opccfg_filename, IG_CONFIG_OPC);
+    IG_Config * versendercfg   = IG_Config_create(mqttcfg_filename, IG_CONFIG_MQTT);
     if(verarbeitercfg == NULL ||
        erfassercfg == NULL ||
        versendercfg == NULL) {
@@ -69,18 +69,18 @@ IG_Status run(char * filename) {
     IG_Datenversender * sender = IG_Datenversender_create(versendercfg);
     IG_Verarbeiter * verarbeiter = IG_Verarbeiter_create(verarbeitercfg, sender, erfasser);
     //init structs
-    
-    if(init_erfasser(erfasser) != IG_STATUS_GOOD){
+    rt = init_versender(sender);
+    if (rt != IG_STATUS_GOOD ) {
+        printf("could not initialize sender");
+        return IG_STATUS_BAD;
+    }
+    rt = init_erfasser(erfasser);
+    if(rt != IG_STATUS_GOOD){
         printf("could not initialize erfasser\n");
         return IG_STATUS_BAD;
     }
-
-    if (init_erfasser(erfasser) != IG_STATUS_GOOD ) {
-        printf("could not initialize erfasser");
-        return IG_STATUS_BAD;
-    }
-
-    if (IG_verarbeiter_init(verarbeiter) != IG_STATUS_GOOD ) {
+    rt = IG_verarbeiter_init(verarbeiter);
+    if (rt != IG_STATUS_GOOD ) {
         printf("could not initialize verarbeiter");
     }
 
@@ -90,9 +90,9 @@ IG_Status run(char * filename) {
     // start loop
     commandloop();
 
-    IG_Datenerfasser_delete(erfasser);
+    IG_Datenerfasser_stop(erfasser);
+    IG_Verarbeiter_stop(verarbeiter);
     IG_Datenversender_delete(sender);
-    IG_Verarbeiter_delete(verarbeiter);
     return IG_STATUS_GOOD;
     
 

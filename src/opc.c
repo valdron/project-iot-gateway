@@ -10,16 +10,22 @@
 void response_handler(UA_UInt32 monId, UA_DataValue *value, void *context);
 
 //parameter ist vom Typ IG_Datenerfasser
-void start_OPC_Client_thread(void * client){
-
-  while (1){
+void start_OPC_Client_thread(void * param){
+    printf("Erfasser Thread started!\n");
+    UA_Client * client = ((IG_Datenerfasser_threadparamerters*) param)->client;
+    IG_Datenerfasser * erfasser = ((IG_Datenerfasser_threadparamerters*) param)->erfasser;
+    IG_OPC_Nodes * node_struct = ((IG_Datenerfasser_threadparamerters*) param)->nodes;
+  while (1) {
     //Subscriptions werden ausgeführt/angefragt
     //Main loop des Clients
-    UA_Client_Subscriptions_manuallySendPublishRequest((UA_Client*)client);
+    if(!erfasser->running)
+        break;
+    UA_Client_Subscriptions_manuallySendPublishRequest(client);
   }  
+  printf("shutting down erfasser!");
 
-  UA_Client_disconnect((UA_Client*)client);
-  UA_Client_delete((UA_Client*)client);
+  UA_Client_disconnect(client);
+  UA_Client_delete(client);
 }
 
 
@@ -106,6 +112,8 @@ void response_handler(UA_UInt32 monId, UA_DataValue *value, void *newMonitoredIt
     
     value->value.storageType = UA_VARIANT_DATA_NODELETE;
     //Schreibe data in Queue
+    printf("Erfasser Thread writing data to queue!\n");
+
     IG_Queue_put(dataInfo->queue, data);
 }
 
