@@ -111,6 +111,7 @@ conn_opts.cleansession = 1;
         else {
             printf("\n Thread created successfully\n");
        }
+       return IG_STATUS_GOOD;
 }
 
 

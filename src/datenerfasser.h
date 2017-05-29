@@ -15,6 +15,7 @@ typedef struct{
     IG_Queue * queue;
     IG_Config * config;
     pthread_t erfasserThread;
+    IG_Bool running;
 } IG_Datenerfasser;
 
 
@@ -31,6 +32,9 @@ bool anyNewData(IG_Datenerfasser * erfasser);
 // TODO: needs config parameters (as pointer?) 
 // TODO: parameter for flags?
 IG_Status init_erfasser(IG_Datenerfasser * erfasser);
+
+//stops the threadloop
+void IG_Datenerfasser_stop(IG_Datenerfasser * erfasser);
 
 //Allocates new IG_Datenerfasser struct on the heap
 IG_Datenerfasser * IG_Datenerfasser_create_nonBlocking(IG_Config * config);

@@ -15,6 +15,13 @@ typedef struct{
     IG_OPC_Item **itemArray;
 }IG_OPC_Nodes;
 
+typedef struct {
+    UA_Client * client;
+    IG_OPC_Nodes * nodes;
+    IG_Datenerfasser * erfasser;
+} IG_Datenerfasser_threadparamerters;
+
+
 //parameter ist vom Typ IG_Datenerfasser
 void start_OPC_Client_thread(void * parameter);
 void IG_OPC_Nodes_init(IG_OPC_Nodes *,IG_UInt32 anzahlSubs);

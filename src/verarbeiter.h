@@ -5,6 +5,7 @@
 #include "internals.h"
 #include "datenversender.h"
 #include "datenerfasser.h"
+#include<pthread.h>
 
 
 typedef struct __IG_Rule IG_Rule;
@@ -40,6 +41,7 @@ typedef struct{
     IG_Config * config;
     IG_Datenversender * sender;
     IG_Datenerfasser * erfasser;
+	pthread_t th_loop;
     IG_Bool running;
 } IG_Verarbeiter;
 
@@ -67,6 +69,9 @@ IG_Status IG_verarbeiter_init(IG_Verarbeiter * verarbeiter);
 
 // Creates new struct on the heap and initializes it with the parameters
 IG_Verarbeiter * IG_Verarbeiter_create(IG_Config * config, IG_Datenversender * sender, IG_Datenerfasser * erfasser);
+
+//stops the threadloop after leftover data is sended
+void IG_Verarbeiter_stop(IG_Verarbeiter * verarbeiter);
 
 // Frees the memory needed for the struct
 void IG_Verarbeiter_delete(IG_Verarbeiter * verarbeiter);
