@@ -30,16 +30,21 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *m
     //Check what is inside of the context ptr
     //Maybe a switch over the topicname -> 
     //remember only int as switch value
-    int i;
-    //char* payloadptr;
+    char* payloadptr;
+    
+    //message->payload is a char array 
+    payloadptr = message->payload;
 
     if(!strcmp(topicName,Temperature)){
-        printf("%s\t\tDouble\t\t%f",topicName,atof(*message->payload));
+        printf("%s\t\tDouble\t\t\t%f\n",topicName,atof(payloadptr));
     }else if(!strcmp(topicName,Pressure)){
-        printf("%s\t\tDouble\t\t%f",topicName,atof(*message->payload));
+        printf("%s\t\tDouble\t\t\t%f\n",topicName,atof(payloadptr));
     }else if(!strcmp(topicName,State)){
-        printf("%s\t\tInt\t\t%d",topicName,atoi(*message->payload));
+        printf("%s\t\tInt\t\t\t%d\n",topicName,atoi(payloadptr));
+    }else{
+        printf("unknowen Topic\n");
     }
+
 
     MQTTClient_freeMessage(&message);
     MQTTClient_free(topicName);
@@ -74,7 +79,7 @@ int main(int argc, char* argv[])
     printf("Subscribing to topic %s\nfor client %s using QoS%d\n\n"
            "Press Q<Enter> to quit\n\n", TOPIC, CLIENTID, QOS);
 
-    printf("Topic\t\tValuetype\t\tValue\n\n");
+    printf("Topic\t\t\t\tValuetype\t\tValue\n\n");
 
     MQTTClient_subscribe(client, TOPIC, QOS);
 
