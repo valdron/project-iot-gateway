@@ -1,9 +1,9 @@
 
 
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "starter.h"
 #include "datenerfasser.h"
 #include "datenversender.h"
@@ -23,10 +23,10 @@ IG_Status run(char * filename) {
 
     
     //create structs
-    //IG_Datenerfasser * erfasser = (IG_Datenerfasser *) malloc(sizeof(IG_Datenerfasser));
     IG_Datenerfasser * erfasser = IG_Datenerfasser_create_nonBlocking(IG_Config_create("opc_config.xml", IG_CONFIG_OPC));
     IG_Datenversender * sender = (IG_Datenversender *) malloc(sizeof(IG_Datenversender));
     IG_Verarbeiter * verarbeiter = (IG_Verarbeiter *) malloc(sizeof(IG_Verarbeiter));
+   
     //init structs
     
     if(init_erfasser(erfasser) != IG_STATUS_GOOD){
@@ -59,7 +59,7 @@ IG_Status run(char * filename) {
 
 void commandloop() {
     char commandbuffer[50]; 
-    while(true) {
+    while(1) {
         printf(PROMPT);
         scanf("%s", commandbuffer);
 
