@@ -11,3 +11,6 @@ add_subdirectory(QueueTest)
 
 add_subdirectory(ConfigTest)
 
+#add mqtt Cloud Client_v2
+add_subdirectory(MQTT_Cloud_Client)
+
