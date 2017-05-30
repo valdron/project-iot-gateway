@@ -10,6 +10,12 @@
 #define QOS         1
 #define TIMEOUT     10000L
 
+//Topics form the IOT-Gateway
+//The following are testtopics!
+#define Temperature "Roboterarm/Temperature"
+#define Pressure    "Roboterarm/Pressure"
+#define State       "Roboterarm/State"
+
 volatile MQTTClient_deliveryToken deliveredtoken;
 
 void delivered(void *context, MQTTClient_deliveryToken dt)
@@ -17,6 +23,7 @@ void delivered(void *context, MQTTClient_deliveryToken dt)
     printf("Message with token value %d delivery confirmed\n", dt);
     deliveredtoken = dt;
 }
+
                                                            //MQTTClient_message contains some flags and a payload void ptr <- check this out
 int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *message)
 {
@@ -24,18 +31,16 @@ int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_message *m
     //Maybe a switch over the topicname -> 
     //remember only int as switch value
     int i;
-    char* payloadptr;
+    //char* payloadptr;
 
-    printf("Message arrived\n");
-    printf("     topic: %s\n", topicName);
-    printf("   message: ");
-
-    payloadptr = message->payload;
-    for(i=0; i<message->payloadlen; i++)
-    {
-        putchar(*payloadptr++);
+    if(!strcmp(topicName,Temperature)){
+        printf("%s\t\tDouble\t\t%f",topicName,atof(*message->payload));
+    }else if(!strcmp(topicName,Pressure)){
+        printf("%s\t\tDouble\t\t%f",topicName,atof(*message->payload));
+    }else if(!strcmp(topicName,State)){
+        printf("%s\t\tInt\t\t%d",topicName,atoi(*message->payload));
     }
-    putchar('\n');
+
     MQTTClient_freeMessage(&message);
     MQTTClient_free(topicName);
     return 1;
@@ -68,6 +73,9 @@ int main(int argc, char* argv[])
 
     printf("Subscribing to topic %s\nfor client %s using QoS%d\n\n"
            "Press Q<Enter> to quit\n\n", TOPIC, CLIENTID, QOS);
+
+    printf("Topic\t\tValuetype\t\tValue\n\n");
+
     MQTTClient_subscribe(client, TOPIC, QOS);
 
     do 
