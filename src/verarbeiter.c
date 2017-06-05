@@ -177,44 +177,54 @@ void IG_Transmit(IG_Data* data, IG_Rule * rule){
 }
 void IG_Average(IG_Data* data, IG_Rule * rule){
 	printf("avg\n");
+	// Formula is avg(new) = avg(old) + ( (value(new)-avg(old)) / size(new));
 	switch(data->datatype){
 		case IG_FLOAT:
-			*((IG_Float*)rule->data->data) += *((IG_Float*)data->data);
 			rule->size++;
+			*((IG_Float*)rule->data->data) = *((IG_Float*)rule->data->data) + 
+				(( *((IG_Float*)data->data) - *((IG_Float*)rule->data->data) ) / rule->size);
 			break;
 		case IG_DOUBLE:
-			*((IG_Double*)rule->data->data) += *((IG_Double*)data->data);			
 			rule->size++;
+			*((IG_Double*)rule->data->data) = *((IG_Double*)rule->data->data) + 
+				(( *((IG_Double*)data->data) - *((IG_Double*)rule->data->data) ) / rule->size);
 			break;
 		case IG_INT32:
-			*((IG_Int32*)rule->data->data) = *((IG_Int32*)rule->data->data) + *((IG_Int32*)data->data);			
 			rule->size++;
+			*((IG_Int32*)rule->data->data) = *((IG_Int32*)rule->data->data) + 
+				(( *((IG_Int32*)data->data) - *((IG_Int32*)rule->data->data) ) / rule->size);
 			break;
 		case IG_UINT32:
-			*((IG_UInt32*)rule->data->data) += *((IG_UInt32*)data->data);			
 			rule->size++;
+			*((IG_UInt32*)rule->data->data) = *((IG_UInt32*)rule->data->data) + 
+				(( *((IG_UInt32*)data->data) - *((IG_UInt32*)rule->data->data) ) / rule->size);
 			break;
 		case IG_INT64:
-			*((IG_Int64*)rule->data->data) += *((IG_Int64*)data->data);			
 			rule->size++;
+			*((IG_Int64*)rule->data->data) = *((IG_Int64*)rule->data->data) + 
+				(( *((IG_Int64*)data->data) - *((IG_Int64*)rule->data->data) ) / rule->size);
 			break;
 		case IG_UINT64:
 		case IG_DURATION:
 		case IG_DATETIME:
-			*((IG_UInt64*)rule->data->data) += *((IG_UInt64*)data->data);			
 			rule->size++;
+			*((IG_UInt64*)rule->data->data) = *((IG_UInt64*)rule->data->data) + 
+				(( *((IG_UInt64*)data->data) - *((IG_UInt64*)rule->data->data) ) / rule->size);
 			break;
 		case IG_BYTE:
-			*((IG_Byte*)rule->data->data) += *((IG_Byte*)data->data);			
 			rule->size++;
+			*((IG_Byte*)rule->data->data) = *((IG_Byte*)rule->data->data) + 
+				(( *((IG_Byte*)data->data) - *((IG_Byte*)rule->data->data) ) / rule->size);
 			break;
 		case IG_CHAR:
-			*((IG_Char*)rule->data->data) += *((IG_Char*)data->data);			
 			rule->size++;
+			*((IG_Char*)rule->data->data) = *((IG_Char*)rule->data->data) + 
+				(( *((IG_Char*)data->data) - *((IG_Char*)rule->data->data) ) / rule->size);
 			break;
 		case IG_BOOL:
-			*((IG_Bool*)rule->data->data) += *((IG_Bool*)data->data);			
 			rule->size++;
+			*((IG_Bool*)rule->data->data) = *((IG_Bool*)rule->data->data) + 
+				(( *((IG_Bool*)data->data) - *((IG_Bool*)rule->data->data) ) / rule->size);
 			break;
 		default:
 			break;
@@ -225,11 +235,11 @@ void IG_Maximum(IG_Data* data, IG_Rule * rule){
 	switch(data->datatype){
 		case IG_FLOAT:	
 			if(*((IG_Float*)rule->data->data) > *((IG_Float*)data->data)) return;
-			rule->data = data;
+			*((IG_Float*)rule->data->data) = *((IG_Float*)data->data);
 			break;
 		case IG_DOUBLE:		
 			if(*((IG_Double*)rule->data->data) > *((IG_Double*)data->data)) return;
-			rule->data = data;
+			*((IG_Double*)rule->data->data) = *((IG_Double*)data->data);
 			break;
 		case IG_INT32:		
 			if(*((IG_Int32*)rule->data->data) > *((IG_Int32*)data->data)) return;
@@ -237,29 +247,29 @@ void IG_Maximum(IG_Data* data, IG_Rule * rule){
 			break;
 		case IG_UINT32:	
 			if(*((IG_UInt32*)rule->data->data) > *((IG_UInt32*)data->data)) return;
-			rule->data = data;
+			*((IG_UInt32*)rule->data->data) = *((IG_UInt32*)data->data);
 			break;
 		case IG_INT64:					
 			if(*((IG_Int64*)rule->data->data) > *((IG_Int64*)data->data)) return;
-			rule->data = data;
+			*((IG_Int64*)rule->data->data) = *((IG_Int64*)data->data);
 			break;	
 		case IG_UINT64:
 		case IG_DURATION:
 		case IG_DATETIME:	
 			if(*((IG_UInt64*)rule->data->data) > *((IG_UInt64*)data->data)) return;
-			rule->data = data;
+			*((IG_UInt64*)rule->data->data) = *((IG_UInt64*)data->data);
 			break;	
 		case IG_BYTE:		
 			if(*((IG_Byte*)rule->data->data) > *((IG_Byte*)data->data)) return;
-			rule->data = data;
+			*((IG_Byte*)rule->data->data) = *((IG_Byte*)data->data);
 			break;
 		case IG_CHAR:		
 			if(*((IG_Char*)rule->data->data) > *((IG_Char*)data->data)) return;
-			rule->data = data;
+			*((IG_Char*)rule->data->data) = *((IG_Char*)data->data);
 			break;
 		case IG_BOOL:		
 			if(*((IG_Bool*)rule->data->data) > *((IG_Bool*)data->data)) return;
-			rule->data = data;
+			*((IG_Bool*)rule->data->data) = *((IG_Bool*)data->data);
 		default:
 			break;
 	}
@@ -269,41 +279,41 @@ void IG_Minimum(IG_Data* data, IG_Rule * rule){
 	switch(data->datatype){
 		case IG_FLOAT:	
 			if(*((IG_Float*)rule->data->data) < *((IG_Float*)data->data)) return;
-			rule->data = data;
+			*((IG_Float*)rule->data->data) = *((IG_Float*)data->data);
 			break;
 		case IG_DOUBLE:		
 			if(*((IG_Double*)rule->data->data) < *((IG_Double*)data->data)) return;
-			rule->data = data;
+			*((IG_Double*)rule->data->data) = *((IG_Double*)data->data);
 			break;
 		case IG_INT32:		
 			if(*((IG_Int32*)rule->data->data) < *((IG_Int32*)data->data)) return;
-			rule->data = data;
+			*((IG_Int32*)rule->data->data) = *((IG_Int32*)data->data);
 			break;
 		case IG_UINT32:	
 			if(*((IG_UInt32*)rule->data->data) < *((IG_UInt32*)data->data)) return;
-			rule->data = data;
+			*((IG_UInt32*)rule->data->data) = *((IG_UInt32*)data->data);
 			break;
 		case IG_INT64:					
 			if(*((IG_Int64*)rule->data->data) < *((IG_Int64*)data->data)) return;
-			rule->data = data;
+			*((IG_Int64*)rule->data->data) = *((IG_Int64*)data->data);
 			break;	
 		case IG_UINT64:
 		case IG_DURATION:
 		case IG_DATETIME:	
 			if(*((IG_UInt64*)rule->data->data) < *((IG_UInt64*)data->data)) return;
-			rule->data = data;
+			*((IG_UInt64*)rule->data->data) = *((IG_UInt64*)data->data);
 			break;	
 		case IG_BYTE:		
 			if(*((IG_Byte*)rule->data->data) < *((IG_Byte*)data->data)) return;
-			rule->data = data;
+			*((IG_Byte*)rule->data->data) = *((IG_Byte*)data->data);
 			break;
 		case IG_CHAR:		
 			if(*((IG_Char*)rule->data->data) < *((IG_Char*)data->data)) return;
-			rule->data = data;
+			*((IG_Char*)rule->data->data) = *((IG_Char*)data->data);
 			break;
 		case IG_BOOL:		
 			if(*((IG_Bool*)rule->data->data) < *((IG_Bool*)data->data)) return;
-			rule->data = data;
+			*((IG_Bool*)rule->data->data) = *((IG_Bool*)data->data);
 		default:
 			break;
 	}
