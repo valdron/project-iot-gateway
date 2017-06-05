@@ -103,7 +103,6 @@ void IG_Verarbeiter_applyRules(IG_Data * data, IG_Input_RuleSet * ruleSetArray, 
 		if(ruleSetArray[i].inputId = data->id){
 			// Apply entire RuleSet on data
 			printf("Found ruleSet for id %d\n", data->id);
-			printf("%p\n", &IG_Verarbeiter_applyRule);
 			IG_Verarbeiter_applyRule(data, &(ruleSetArray[i]));
 			break;
 		}				

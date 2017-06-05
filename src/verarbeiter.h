@@ -74,8 +74,8 @@ IG_Verarbeiter * IG_Verarbeiter_create(IG_Config * config, IG_Datenversender * s
 void IG_Verarbeiter_delete(IG_Verarbeiter * verarbeiter);
 
 // Function that apply rules on data
-void IG_Verarbeiter_applyRules(IG_Data * data,IG_Input_RuleSet * ruleSetArray, IG_UInt32 ruleSetSize);
-void IG_Verarbeiter_applyRule(IG_Data * data,IG_Input_RuleSet * ruleSet);
+void IG_Verarbeiter_applyRules(IG_Data * data, IG_Input_RuleSet * ruleSetArray, IG_UInt32 ruleSetSize);
+void IG_Verarbeiter_applyRule(IG_Data * data, IG_Input_RuleSet * ruleSet);
 
 // Function to check if data has to be send
 void IG_Verarbeiter_checkIntervals(IG_Input_RuleSet * ruleSet, IG_UInt32 ruleSetSize, IG_Queue * queue);
