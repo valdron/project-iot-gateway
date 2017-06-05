@@ -108,6 +108,8 @@ typedef struct{
 // Creates new IG_Data on the heap and inits it with the parameters
 IG_Data * IG_Data_create(IG_Id id, IG_Datatype type, void * data, IG_DateTime time);
 
+void * IG_Data_allocate(IG_Datatype);
+
 // This function is creating an uninitialized IG_Data struct
 IG_Data * IG_Data_create_empty();
 

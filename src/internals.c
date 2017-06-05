@@ -14,6 +14,62 @@ IG_Data * IG_Data_create(IG_Id id, IG_Datatype type, void * dataptr, IG_DateTime
     return data;
 }
 
+void * IG_Data_allocate(IG_Datatype type) {
+    switch(type) {
+    case IG_BYTE:
+        return malloc(sizeof(IG_Byte));
+    break;
+
+    case IG_DOUBLE:
+        return malloc(sizeof(IG_Double));
+    break;
+
+    case IG_FLOAT:
+        return malloc(sizeof(IG_Float));
+    break;
+
+    case IG_NULL:
+        return NULL;
+    break;
+
+    case IG_INT32:
+        return malloc(sizeof(IG_Int32));
+    break;
+
+    case IG_UINT32:
+        return malloc(sizeof(IG_UInt32));
+    break;
+
+    case IG_INT64:
+        return malloc(sizeof(IG_Int64));
+    break;
+
+    case IG_UINT64:
+        return malloc(sizeof(IG_UInt64));
+    break;
+
+    case IG_DATETIME:
+        return malloc(sizeof(IG_DateTime));
+    break;
+
+    case IG_DURATION:
+        return malloc(sizeof(IG_Duration));
+    break;
+
+    case IG_BOOL:
+        return malloc(sizeof(IG_Bool));
+    break;
+
+    case IG_CHAR:
+        return malloc(sizeof(IG_Char));
+    break;
+
+    default:
+        return NULL;
+    }
+}
+
+
 //care this doesnt free the memory needed for the data pointer
 void IG_Data_delete(IG_Data * data){
     free(data);
