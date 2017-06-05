@@ -1,6 +1,7 @@
 
 #include "internals.h"
 #include<time.h>
+#include<string.h>
 
 IG_Data * IG_Data_create(IG_Id id, IG_Datatype type, void * dataptr, IG_DateTime timestamp) {
     IG_Data * data = (IG_Data *) malloc(sizeof(IG_Data));
@@ -46,3 +47,30 @@ IG_Duration IG_Duration_from_sec(IG_UInt64 s) {
 IG_Data *IG_Data_create_empty(){
     return (IG_Data *) malloc(sizeof(IG_Data));
 }
+
+IG_Datatype IG_Datatype_from_str(IG_Char * str) {
+    if(!strcmp(str, IG_BYTE_TYPENAME)) {
+        return IG_BYTE;
+    } else if(!strcmp(str, IG_DOUBLE_TYPENAME)) {
+        return IG_DOUBLE;
+    } else if(!strcmp(str, IG_FLOAT_TYPENAME)) {
+        return IG_FLOAT;
+    } else if(!strcmp(str, IG_INT32_TYPENAME)) {
+        return IG_INT32;
+    } else if(!strcmp(str, IG_UINT32_TYPENAME)) {
+        return IG_UINT32;
+    } else if(!strcmp(str, IG_INT64_TYPENAME)) {
+        return IG_INT64;
+    } else if(!strcmp(str, IG_UINT64_TYPENAME)) {
+        return IG_UINT64;
+    } else if(!strcmp(str, IG_DATETIME_TYPENAME)) {
+        return IG_DATETIME;
+    } else if(!strcmp(str, IG_DURATION_TYPENAME)) {
+        return IG_DURATION;
+    } else if(!strcmp(str, IG_BOOL_TYPENAME)) {
+        return IG_BOOL;
+    } else {
+        return IG_NULL;
+    }
+}
+

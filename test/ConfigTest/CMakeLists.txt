@@ -11,6 +11,10 @@ ADD_EXECUTABLE(ConfigTest1 ConfigTest1.c ${PROJECT_SOURCE_DIR}/src/configuration
 TARGET_LINK_LIBRARIES(ConfigTest1 xml2)
 ADD_TEST(NAME ConfigTest1 COMMAND ConfigTest1 main_config.xml  WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 
+ADD_EXECUTABLE(ConfigTestVerarbeiter1 ConfigTestVerarbeiter1.c ${PROJECT_SOURCE_DIR}/src/configuration.c ${PROJECT_SOURCE_DIR}/src/config_verarbeiter.c ${PROJECT_SOURCE_DIR}/src/internals.c)
+TARGET_LINK_LIBRARIES(ConfigTestVerarbeiter1 xml2)
+ADD_TEST(NAME ConfigTestVerarbeiter1 COMMAND ConfigTestVerarbeiter1 verarbeiter_config.xml  WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+
 ADD_EXECUTABLE(OPCConfigTest1 ConfigTestOPC.c ${PROJECT_SOURCE_DIR}/src/configuration.c ${PROJECT_SOURCE_DIR}/src/config_opc.c)
 TARGET_LINK_LIBRARIES(OPCConfigTest1 xml2)
 ADD_TEST(NAME OPCConfigTest1 COMMAND OPCConfigTest1 opc_config.xml WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

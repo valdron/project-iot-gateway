@@ -81,6 +81,19 @@ typedef enum {
     /*...*/
 } IG_Datatype;
 
+static const IG_Char * IG_BYTE_TYPENAME = "byte";
+static const IG_Char * IG_DOUBLE_TYPENAME = "double";
+static const IG_Char * IG_FLOAT_TYPENAME = "float";
+static const IG_Char * IG_INT32_TYPENAME = "int32";
+static const IG_Char * IG_UINT32_TYPENAME = "uint32";
+static const IG_Char * IG_INT64_TYPENAME = "int64";
+static const IG_Char * IG_UINT64_TYPENAME = "uint64";
+static const IG_Char * IG_DATETIME_TYPENAME = "date";
+static const IG_Char * IG_DURATION_TYPENAME = "duration";
+static const IG_Char * IG_BOOL_TYPENAME = "bool";
+
+IG_Datatype IG_Datatype_from_str(IG_Char * str);
+
 
 // IG Data
 typedef struct{
@@ -101,5 +114,14 @@ void IG_Data_delete(IG_Data * data);
 
 // this frees the data ptr inside
 void IG_Data_delete_members(IG_Data * data);
+
+IG_DateTime IG_DateTime_now();
+
+IG_DateTime IG_DateTime_add_duration(IG_DateTime time, IG_Duration duration);
+
+
+IG_Duration IG_Duration_from_ms(IG_UInt64 ms);
+
+IG_Duration IG_Duration_from_sec(IG_UInt64 s);
 
 #endif
