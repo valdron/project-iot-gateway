@@ -88,20 +88,6 @@ void* IG_WorkLoop(void * argument){
 	}
 }
 
-void IG_Verarbeiter_applyRules(IG_Data * data, IG_Input_RuleSet * ruleSetArray, IG_UInt32 ruleSetSize){
-	printf("Applying all rules\n");
-	// Find the correct RuleSet
-	for(IG_UInt32 i = 0; i < ruleSetSize; i++){
-		if(ruleSetArray[i].inputId = data->id){
-			// Apply entire RuleSet on data
-			printf("Found ruleSet for id %d\n", data->id);
-			IG_Verarbeiter_applyRule(data, &(ruleSetArray[i]));
-			break;
-		}				
-	}
-
-}
-
 void IG_Verarbeiter_applyRule(IG_Data * data, IG_Input_RuleSet* ruleSet){
 	printf("Applying specific rules");
 	// Call all rule functions and invoke the data and the rule specific data
@@ -109,6 +95,22 @@ void IG_Verarbeiter_applyRule(IG_Data * data, IG_Input_RuleSet* ruleSet){
 		(*(ruleSet->rules[i].function))(data, &(ruleSet->rules[i]));
 	}
 }
+
+void IG_Verarbeiter_applyRules(IG_Data * data, IG_Input_RuleSet * ruleSetArray, IG_UInt32 ruleSetSize){
+	printf("Applying all rules\n");
+	// Find the correct RuleSet
+	for(IG_UInt32 i = 0; i < ruleSetSize; i++){
+		if(ruleSetArray[i].inputId = data->id){
+			// Apply entire RuleSet on data
+			printf("Found ruleSet for id %d\n", data->id);
+			printf("%p\n", &IG_Verarbeiter_applyRule);
+			IG_Verarbeiter_applyRule(data, &(ruleSetArray[i]));
+			break;
+		}				
+	}
+
+}
+
 
 void IG_Verarbeiter_checkIntervals(IG_Input_RuleSet * ruleSetArray, IG_UInt32 ruleSetSize, IG_Queue * queue){
 	printf("Checking intervals");
