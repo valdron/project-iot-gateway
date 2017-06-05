@@ -37,6 +37,7 @@ struct __IG_Rule{
 	IG_Data * data;
 };
 
+
 // Struct for the Verarbeiter
 typedef struct{
     IG_Config * config;
@@ -60,6 +61,7 @@ typedef struct{
 typedef struct{
 	IG_Verarbeiter * verarbeiter;
 	IG_UInt32 ruleSetSize;
+
 	IG_Input_RuleSet* ruleSetArray;
 } IG_WorkLoopArgs;
 
@@ -80,11 +82,13 @@ void IG_Verarbeiter_applyRule(IG_Data * data, IG_Input_RuleSet * ruleSet);
 // Function to check if data has to be send
 void IG_Verarbeiter_checkIntervals(IG_Input_RuleSet * ruleSet, IG_UInt32 ruleSetSize, IG_Queue * queue);
 
+
 // Function that proccesses all the data
 void* IG_WorkLoop(void * args);
 
 void IG_Verarbeiter_initFunktionen(IG_Input_RuleSet* ruleSetArray, IG_UInt32 ruleSetSize);
 
 IG_Char* IG_Verarbeiter_encodeToJSON(IG_Data* data);
+
 
 #endif

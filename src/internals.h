@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+
 //TYPEDEFS AND CONSTANTS
 
 
@@ -80,6 +81,7 @@ typedef enum {
     IG_DURATION,
     IG_BOOL,
     IG_CHAR
+
     /*...*/
 } IG_Datatype;
 
@@ -110,6 +112,7 @@ IG_Data * IG_Data_create(IG_Id id, IG_Datatype type, void * data, IG_DateTime ti
 
 void * IG_Data_allocate(IG_Datatype);
 
+
 // This function is creating an uninitialized IG_Data struct
 IG_Data * IG_Data_create_empty();
 
@@ -122,6 +125,7 @@ void IG_Data_delete_members(IG_Data * data);
 
 IG_Char* IG_Data_toString(IG_Data* data);
 
+
 IG_DateTime IG_DateTime_now();
 
 IG_DateTime IG_DateTime_add_duration(IG_DateTime time, IG_Duration duration);
@@ -129,4 +133,5 @@ IG_DateTime IG_DateTime_add_duration(IG_DateTime time, IG_Duration duration);
 IG_Duration IG_Duration_from_ms(IG_UInt64 ms);
 
 IG_Duration IG_Duration_from_sec(IG_UInt64 s);
+
 #endif

@@ -5,6 +5,7 @@
 
 #define BUFFSIZE 30
 
+
 IG_Data * IG_Data_create(IG_Id id, IG_Datatype type, void * dataptr, IG_DateTime timestamp) {
     IG_Data * data = (IG_Data *) malloc(sizeof(IG_Data));
     data->id = id;
@@ -172,3 +173,4 @@ IG_Datatype IG_Datatype_from_str(IG_Char * str) {
         return IG_NULL;
     }
 }
+
