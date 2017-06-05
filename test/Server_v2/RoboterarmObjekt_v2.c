@@ -4,36 +4,66 @@
 #include <time.h>   
 #include <stdlib.h>
 #include <unistd.h>
+#include "state.h"
 
 
+//Hardcoded für 3 Nodes mit Wertänderung -> ggf Dynamisch machen
+static UA_Variant *t_temperatureAttr,*t_pressureAttr, *t_stateAttr;
 
-UA_Variant *t_temperatureAttr,*t_pressureAttr;
-
-UA_NodeId RoborterarmId = {1,UA_NODEIDTYPE_NUMERIC, {1001}};
+static UA_NodeId RoborterarmId = {1,UA_NODEIDTYPE_NUMERIC, {1001}};
 static double Temperatur = 40.0;
-double Pressure = 1.0;
-double Drehzahl = 1000.0;
+static double Pressure = 1.0;
+static double Drehzahl = 1000.0;
+static UA_Byte state = STARTSTATE;
+
+static UA_NodeId *temperatureNodeId;
+static UA_NodeId *pressureNodeId;
+static UA_NodeId *stateNodeId;
+
 
 //Initialisieren der Variablen
-void initVariants(){
+//Hardcoded für 3 Nodes mit Wertänderung -> ggf Dynamisch machen
+void initVariables(){
+    temperatureNodeId = UA_NodeId_new();
+    UA_NodeId_init(temperatureNodeId);
+
+
+    pressureNodeId = UA_NodeId_new();
+    UA_NodeId_init(pressureNodeId);
+
+    stateNodeId = UA_NodeId_new();
+    UA_NodeId_init(stateNodeId);
+
+    //NodeIds werden zugewisen (Keine Optimale Lösung!!!)
+    *temperatureNodeId = UA_NODEID_NUMERIC(1,118);
+    *pressureNodeId = UA_NODEID_NUMERIC(1,119);
+    *stateNodeId = UA_NODEID_NUMERIC(1,120); 
+
     t_temperatureAttr = UA_Variant_new();
     UA_Variant_init(t_temperatureAttr);
 
     t_pressureAttr = UA_Variant_new();
     UA_Variant_init(t_pressureAttr);
+
+    t_stateAttr = UA_Variant_new();
+    UA_Variant_init(t_stateAttr);
 }
 
 //Funktion um Zufällige Werte zu generrieren
-UA_Double generateValues(double obere_grenze, double untere_grenze, double value){
+static UA_Double generateValues(double obere_grenze, double untere_grenze, double value){
     double deltaTemp = ((double) rand()/ RAND_MAX)*(obere_grenze-untere_grenze) + untere_grenze;
     value += deltaTemp;
     return (UA_Double)value;
 }
 
+//**************readFunktionen*************//
+//Benutze readfunktionen um NodeIds zu Bekommen
+//readFunktionen werden jeweils einmal bei start des Servers aufgerufen um Startwerte zu Initialisieren
+
 //Temperatur on call Funktion
 static UA_StatusCode readCurrentTemp(void *handle, const UA_NodeId nodeid, UA_Boolean sourceTimeStamp,
     const UA_NumericRange *range, UA_DataValue *dataValue) {
-
+    
     printf("ReadTemperature triggerd\n");
     //generateTemperature gibt neue Tempertur zurück vom Typ Double
     UA_Variant_setScalarCopy(&dataValue->value, &Temperatur, &UA_TYPES[UA_TYPES_DOUBLE]);
@@ -52,6 +82,36 @@ static UA_StatusCode readCurrentPressure(void *handle, const UA_NodeId nodeid, U
     return UA_STATUSCODE_GOOD;
 }
 
+
+
+static UA_StatusCode readCurrentState(void *handle, const UA_NodeId nodeid, UA_Boolean sourceTimeStamp, 
+                                        const UA_NumericRange *range, UA_DataValue *dataValue) {
+
+    printf("Read State triggerd\n");
+    UA_DateTimeStruct dt = getCurrentTimestruct();
+
+    UA_Byte  val = getState(dt);
+    UA_Variant_setScalarCopy(&dataValue->value, &val,  &UA_TYPES[UA_TYPES_BYTE]);
+    dataValue->hasValue = true;
+    return UA_STATUSCODE_GOOD;
+}
+
+//**************Threads*************//
+
+//State Threadfunktion
+void *askForState(void *serverPtr) {
+    printf("State Thread started\n");
+    while(true){
+        printf("State: %d\n", state);
+        //generateTemperature gibt neue Tempertur zurück vom Typ Double
+        state = getState(getCurrentTimestruct());
+        UA_Variant_setScalar(t_stateAttr, &state, &UA_TYPES[UA_TYPES_BYTE]);
+        UA_Server_writeValue(serverPtr,*stateNodeId,*t_stateAttr);
+        sleep(1);
+    }
+} 
+
+
 //Temperatur Threading Funktion
 void *calcCurrentTemp(void *serverPtr) {
     printf("Temperatur Thread started\n");
@@ -60,7 +120,7 @@ void *calcCurrentTemp(void *serverPtr) {
         //generateTemperature gibt neue Tempertur zurück vom Typ Double
         Temperatur = generateValues(2.0,-2.0,Temperatur);
         UA_Variant_setScalar(t_temperatureAttr, &Temperatur, &UA_TYPES[UA_TYPES_DOUBLE]);
-        UA_Server_writeValue(serverPtr,UA_NODEID_NUMERIC(1,117),*t_temperatureAttr);
+        UA_Server_writeValue(serverPtr,*temperatureNodeId,*t_temperatureAttr); //<- alternative NodeId Hardcodederstellen mit bsp. UA_NODEID_NUMERIC(1,119)
         sleep(1);
     }
 } 
@@ -73,10 +133,12 @@ void *calcCurrentPressure(void *serverPtr){
         //generateTemperature gibt neue Pressure zurück vom Typ Double
         Pressure = generateValues(0.02,-0.02,Pressure);
         UA_Variant_setScalar(t_pressureAttr , &Pressure, &UA_TYPES[UA_TYPES_DOUBLE]);
-        UA_Server_writeValue(serverPtr,UA_NODEID_NUMERIC(1,118),*t_pressureAttr);
+        UA_Server_writeValue(serverPtr,*pressureNodeId,*t_pressureAttr);
         sleep(1);
     }
 }
+
+
 
 void defineObjectTypes(UA_Server *server) {
     /* Define the object type for "Device" */
@@ -113,8 +175,11 @@ void defineObjectTypes(UA_Server *server) {
                                 UA_QUALIFIEDNAME(1, "Roborterarm Values"), ptAttr,
                                 NULL, NULL);
 
+
     
-    //Variablen/Messdaten für Roboterarm
+    //******************Variablen/Messdaten für Roboterarm**************//
+
+    //Temperatur Node
     UA_VariableAttributes tempertureAttr;
     UA_VariableAttributes_init(&tempertureAttr);
     UA_Variant_setScalar(&tempertureAttr.value, &Temperatur, &UA_TYPES[UA_TYPES_DOUBLE]);
@@ -124,15 +189,19 @@ void defineObjectTypes(UA_Server *server) {
     //Handling funktionen für Temperatur
     UA_DataSource temperatureDataSource;
     temperatureDataSource.handle = NULL;
+    //Readfunktionen werden für Client_v2 nicht benötigt
+    //Damit man aber den OPC Server mit UA Expert untersuchen kann braucht man diese
+    //-> UA Expert nutzt read. Ansonsten wird das Item nicht angezeigt
     temperatureDataSource.read = readCurrentTemp;
     temperatureDataSource.write = NULL;
-
+    
+    
     UA_Server_addDataSourceVariableNode(server, UA_NODEID_NULL, RoborterarmId,
                               UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
                               UA_QUALIFIEDNAME(1, "Temperature"),
                               UA_NODEID_NULL, tempertureAttr, temperatureDataSource, NULL);
 
-
+    //Pressure Node                              
     UA_VariableAttributes pressureAttr;
     UA_VariableAttributes_init(&pressureAttr);
     pressureAttr.displayName = UA_LOCALIZEDTEXT("en_US", "Pressure");
@@ -142,6 +211,9 @@ void defineObjectTypes(UA_Server *server) {
     //Handling funktionen für Temperatur
     UA_DataSource pressureDataSource;
     pressureDataSource.handle = NULL;
+    //Readfunktionen werden für Client_v2 nicht benötigt
+    //Damit man aber den OPC Server mit UA Expert untersuchen kann braucht man diese
+    //-> UA Expert nutzt read. Ansonsten wird das Item nicht angezeigt
     pressureDataSource.read = readCurrentPressure;
     pressureDataSource.write = NULL;
 
@@ -149,7 +221,30 @@ void defineObjectTypes(UA_Server *server) {
                               UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
                               UA_QUALIFIEDNAME(1, "Pressure"),
                               UA_NODEID_NULL, pressureAttr, pressureDataSource, NULL);
+
+    //State Node                              
+    UA_VariableAttributes stateAttr;
+    UA_VariableAttributes_init(&stateAttr);
+    stateAttr.displayName = UA_LOCALIZEDTEXT("en_US", "State");
+    UA_Variant_setScalar(&stateAttr.value, &state, &UA_TYPES[UA_TYPES_BYTE]);
+
+    
+    //Handling funktionen für State
+    UA_DataSource stateDataSource;
+    stateDataSource.handle = NULL;
+    //Readfunktionen werden für Client_v2 nicht benötigt
+    //Damit man aber den OPC Server mit UA Expert untersuchen kann braucht man diese
+    //-> UA Expert nutzt read. Ansonsten wird das Item nicht angezeigt
+    stateDataSource.read = readCurrentState;
+    stateDataSource.write = NULL;
+
+    UA_Server_addDataSourceVariableNode(server, UA_NODEID_NULL, RoborterarmId,
+                              UA_NODEID_NUMERIC(0, UA_NS0ID_HASCOMPONENT),
+                              UA_QUALIFIEDNAME(1, "State"),
+                              UA_NODEID_NULL, stateAttr, stateDataSource, NULL);
 }
+
+
 
 void addRoboterarmObjectInstance(UA_Server *server, char *name) {
     UA_ObjectAttributes oAttr;

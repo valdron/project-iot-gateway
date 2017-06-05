@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<igconfig>
+    <opcconfig filename="opc_config.xml"/>
+    <mqttconfig filename="mqtt_config.xml"/>
+    <verarbeiterconfig filename="verarbeiter_config.xml"/>
+</igconfig>

@@ -1,3 +1,4 @@
+
 #include "queue.h"
 
 IG_Queue * IG_Queue_new(IG_QueueType type){
@@ -22,7 +23,8 @@ void IG_Queue_delete(IG_Queue * queue){
 	pthread_mutex_lock(&queue->mutex);
 	while(!IG_Queue_isEmpty(queue)){
 		IG_Data* element = IG_Queue_take(queue);
-		free(element->data);		
+		IG_Data_delete_members(element->data);
+		IG_Data_delete(element->data);		
 		free(element);
 		//IG_Data_delete(element);
 	}
@@ -33,6 +35,7 @@ void IG_Queue_delete(IG_Queue * queue){
 	pthread_mutex_destroy(&queue->mutex);
 	
 	free(queue);
+	queue = NULL;
 }
 
 // Function to enqueue data
