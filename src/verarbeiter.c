@@ -68,6 +68,7 @@ void* IG_WorkLoop(void * argument){
 	// endless loop
 	while(1){
 		printf("Workloop working\n");
+		sleep(1);
 		/*
 		Maybe add some special variable which terminates loop directly (For error cases)
 		if(fatalError) break;
@@ -89,10 +90,11 @@ void* IG_WorkLoop(void * argument){
 }
 
 void IG_Verarbeiter_applyRule(IG_Data * data, IG_Input_RuleSet* ruleSet){
-	printf("Applying specific rules");
+	printf("Applying specific rules\n");
 	// Call all rule functions and invoke the data and the rule specific data
 	for(IG_UInt32 i = 0; i < (ruleSet->ruleSize);i++){
-		(*(ruleSet->rules[i].function))(data, &(ruleSet->rules[i]));
+		printf("Hello %i \n", i);
+		(&ruleSet->rules[i])->function(data, &ruleSet->rules[i]);
 	}
 }
 
@@ -100,10 +102,11 @@ void IG_Verarbeiter_applyRules(IG_Data * data, IG_Input_RuleSet * ruleSetArray, 
 	printf("Applying all rules\n");
 	// Find the correct RuleSet
 	for(IG_UInt32 i = 0; i < ruleSetSize; i++){
+		printf("i:%i ID:%i size:%i\n",i , data->id, ruleSetSize);
 		if(ruleSetArray[i].inputId = data->id){
 			// Apply entire RuleSet on data
 			printf("Found ruleSet for id %d\n", data->id);
-			IG_Verarbeiter_applyRule(data, &(ruleSetArray[i]));
+			IG_Verarbeiter_applyRule(data, &ruleSetArray[i]);
 			break;
 		}				
 	}
@@ -112,7 +115,7 @@ void IG_Verarbeiter_applyRules(IG_Data * data, IG_Input_RuleSet * ruleSetArray, 
 
 
 void IG_Verarbeiter_checkIntervals(IG_Input_RuleSet * ruleSetArray, IG_UInt32 ruleSetSize, IG_Queue * queue){
-	printf("Checking intervals");
+	printf("Checking intervals\n");
 	// Go through every rule and check if to Send
 	IG_DateTime now = IG_DateTime_now();
 	for(IG_UInt32 i = 0; i < ruleSetSize; i++){
@@ -141,16 +144,16 @@ void IG_Verarbeiter_initFunktionen(IG_Input_RuleSet* ruleSetArray, IG_UInt32 rul
 			printf("%p\n", rule);
 			switch(rule->rule){
 				case IG_RULE_TRANSMIT:
-					rule->function = IG_Transmit;
+					rule->function = &IG_Transmit;
 					break;
 				case IG_RULE_AVG:
-					rule->function = IG_Average;
+					rule->function = &IG_Average;
 					break;
 				case IG_RULE_MAX:
-					rule->function = IG_Maximum;
+					rule->function = &IG_Maximum;
 					break;
 				case IG_RULE_MIN:
-					rule->function = IG_Minimum;
+					rule->function = &IG_Minimum;
 					break;
 				default:
 					printf("ERROR\n");
@@ -161,7 +164,7 @@ void IG_Verarbeiter_initFunktionen(IG_Input_RuleSet* ruleSetArray, IG_UInt32 rul
 }
 
 IG_Char* IG_Verarbeiter_encodeToJSON(IG_Data* data){
-	char* s;
+	char* s = (char *) malloc(sizeof(char) * 40);
 	strcat(s,"{value:");
 	strcat(s,(char*)IG_Data_toString(data));
 	strcat(s,"}");
@@ -169,9 +172,11 @@ IG_Char* IG_Verarbeiter_encodeToJSON(IG_Data* data){
 }
 
 void IG_Transmit(IG_Data* data, IG_Rule * rule){
+	printf("transmit\n");
 	rule->data = data;
 }
 void IG_Average(IG_Data* data, IG_Rule * rule){
+	printf("avg\n");
 	switch(data->datatype){
 		case IG_FLOAT:
 			*((IG_Float*)rule->data->data) += *((IG_Float*)data->data);
@@ -182,7 +187,7 @@ void IG_Average(IG_Data* data, IG_Rule * rule){
 			rule->size++;
 			break;
 		case IG_INT32:
-			*((IG_Int32*)rule->data->data) += *((IG_Int32*)data->data);			
+			*((IG_Int32*)rule->data->data) = *((IG_Int32*)rule->data->data) + *((IG_Int32*)data->data);			
 			rule->size++;
 			break;
 		case IG_UINT32:
@@ -216,6 +221,7 @@ void IG_Average(IG_Data* data, IG_Rule * rule){
 	}
 }
 void IG_Maximum(IG_Data* data, IG_Rule * rule){
+	printf("max\n");
 	switch(data->datatype){
 		case IG_FLOAT:	
 			if(*((IG_Float*)rule->data->data) > *((IG_Float*)data->data)) return;
@@ -227,7 +233,7 @@ void IG_Maximum(IG_Data* data, IG_Rule * rule){
 			break;
 		case IG_INT32:		
 			if(*((IG_Int32*)rule->data->data) > *((IG_Int32*)data->data)) return;
-			rule->data = data;
+			*((IG_Int32*)rule->data->data) = *((IG_Int32*)data->data);
 			break;
 		case IG_UINT32:	
 			if(*((IG_UInt32*)rule->data->data) > *((IG_UInt32*)data->data)) return;
@@ -259,6 +265,7 @@ void IG_Maximum(IG_Data* data, IG_Rule * rule){
 	}
 }
 void IG_Minimum(IG_Data* data, IG_Rule * rule){
+	printf("min\n");
 	switch(data->datatype){
 		case IG_FLOAT:	
 			if(*((IG_Float*)rule->data->data) < *((IG_Float*)data->data)) return;
