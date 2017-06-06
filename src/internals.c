@@ -85,6 +85,8 @@ IG_Char * IG_Data_toString(IG_Data* data){
 	void* dataToEncode = data->data;
 	switch(data->datatype){
 		case IG_DOUBLE:
+			snprintf(value, BUFFSIZE, "%f", *((IG_Double*)dataToEncode));
+			break;
 		case IG_FLOAT:
 			snprintf(value, BUFFSIZE, "%f", *((IG_Float*)dataToEncode));
 			break;

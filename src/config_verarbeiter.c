@@ -158,7 +158,7 @@ IG_Status IG_Config_Verarbeiter_get_Rules(IG_Config* conf, IG_ConfigResponse * r
         result[i].rule = type;
         result[i].interval = interval;
         result[i].outputId = outid;
-        result[i].data = IG_Data_create(outid, type, IG_Data_allocate(type), IG_DateTime_now());
+        result[i].data = NULL;
         result[i].size = 0;
         result[i].function = NULL;
         result[i].deadline = 0;

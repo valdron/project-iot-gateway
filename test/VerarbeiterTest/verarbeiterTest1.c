@@ -23,19 +23,33 @@ int main(int argc, char* argv[]){
 	IG_Datenerfasser * erfasser = IG_Datenerfasser_create_nonBlocking(configErfasser);
 
 	printf("Creating Data\n");
-	for(int i = 0; i<100; ++i){
-		printf("Data %d \n", i);
+	for(int i = 0; i<100; i+=1.0){
+		
 
 		IG_Data* data = (IG_Data*)malloc(sizeof(IG_Data));
-		if(data==NULL) return EXIT_FAILURE;		
+		if(data==NULL) return EXIT_FAILURE;
 
-		data->id = (rand() % 2)?4:1;
-		data->datatype = IG_INT32;
+		void* record;
 
-		int* record = (int*)malloc(sizeof(int));
-		if(record==NULL) return EXIT_FAILURE;
+		if(rand()%2==1){
+			data->id = 1;
+			data->datatype = IG_DOUBLE;
 
-		*(record) = i*i;		
+			record = malloc(sizeof(IG_Double));
+			if(record==NULL) return EXIT_FAILURE;
+
+			*((IG_Double*)record) = (IG_Double)i*i;
+		}else{
+			data->id = 4;
+			data->datatype = IG_UINT32;
+
+			record = malloc(sizeof(IG_UInt32));
+			if(record==NULL) return EXIT_FAILURE;
+
+			*((IG_UInt32*)record) = (IG_UInt32)(i*i);
+		}
+
+				
 		data->data = (void*)record;
 		data->timestamp = 0;
 		// Inserting into the queue
