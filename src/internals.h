@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdio.h>
+
 
 //TYPEDEFS AND CONSTANTS
 
@@ -77,7 +79,9 @@ typedef enum {
     IG_UINT64,
     IG_DATETIME,
     IG_DURATION,
-    IG_BOOL
+    IG_BOOL,
+    IG_CHAR
+
     /*...*/
 } IG_Datatype;
 
@@ -106,6 +110,9 @@ typedef struct{
 // Creates new IG_Data on the heap and inits it with the parameters
 IG_Data * IG_Data_create(IG_Id id, IG_Datatype type, void * data, IG_DateTime time);
 
+void * IG_Data_allocate(IG_Datatype);
+
+
 // This function is creating an uninitialized IG_Data struct
 IG_Data * IG_Data_create_empty();
 
@@ -115,10 +122,13 @@ void IG_Data_delete(IG_Data * data);
 // this frees the data ptr inside
 void IG_Data_delete_members(IG_Data * data);
 
+
+IG_Char* IG_Data_toString(IG_Data* data);
+
+
 IG_DateTime IG_DateTime_now();
 
 IG_DateTime IG_DateTime_add_duration(IG_DateTime time, IG_Duration duration);
-
 
 IG_Duration IG_Duration_from_ms(IG_UInt64 ms);
 
