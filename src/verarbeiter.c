@@ -49,6 +49,7 @@ IG_Status IG_Verarbeiter_init(IG_Verarbeiter * verarbeiter){
 	
 	pthread_create(thread,NULL,IG_WorkLoop,(void*)args);
 
+
 	return IG_STATUS_GOOD;
 }
 
@@ -62,6 +63,7 @@ void* IG_WorkLoop(void * argument){
 	// Array of RuleSets
 	IG_Input_RuleSet * ruleSetArray = args->ruleSetArray;
 
+
 	IG_Queue * queueErfasser = verarbeiter->erfasser->queue;
 	IG_Queue * queueSender = verarbeiter->sender->queue;
 
@@ -69,6 +71,7 @@ void* IG_WorkLoop(void * argument){
 	while(1){
 		printf("Workloop working\n");
 		sleep(1);
+
 		/*
 		Maybe add some special variable which terminates loop directly (For error cases)
 		if(fatalError) break;
@@ -84,6 +87,7 @@ void* IG_WorkLoop(void * argument){
 			IG_Verarbeiter_applyRules(data, ruleSetArray, ruleSetSize);
 			data=NULL;
 		}
+
 
 		IG_Verarbeiter_checkIntervals(ruleSetArray, ruleSetSize, queueSender);
 		// TODO: Maybe add some functions to create logs/print status
@@ -115,6 +119,7 @@ void IG_Verarbeiter_applyRules(IG_Data * data, IG_Input_RuleSet * ruleSetArray, 
 			}	 
 			// Apply entire RuleSet on data
 			printf("Found ruleSet for id %d\n", data->id);
+
 			IG_Verarbeiter_applyRule(data, &ruleSetArray[i]);
 			break;
 		}				
@@ -148,6 +153,7 @@ void IG_Verarbeiter_checkIntervals(IG_Input_RuleSet * ruleSetArray, IG_UInt32 ru
 				IG_Queue_put(queue, dataToSend);
 				rule->deadline = IG_DateTime_add_duration(rule->deadline,rule->interval);
 				printf("New deadline %ld \n", rule->deadline);
+
 			}	
 		}							
 	}
@@ -358,3 +364,4 @@ void IG_Minimum(IG_Data* data, IG_Rule * rule){
 			break;
 	}
 }
+

@@ -163,6 +163,7 @@ IG_Status IG_Config_Verarbeiter_get_Rules(IG_Config* conf, IG_ConfigResponse * r
         result[i].function = NULL;
         result[i].deadline = 0;
 
+
     }
 
     res->responseAmount = resAmount;
