@@ -2,6 +2,8 @@
 <mqttconfig>
     <mqttbroker protocol="tcp" hostname="localhost" port="1883"/>
     <mqttclient name="IoT-Gateway" qos="0"/>
-    <topic igid="1" string="/maschine1/temp/avglasthour"/>
-    <topic igid="2" string="/maschine1/pressure/current"/>
+    <topic igid="101" string="/maschine1/temp/avglasthour"/>
+    <topic igid="100" string="/maschine1/temp/current"/>
+    <topic igid="102" string="/maschine1/temp/maxlastmin"/>
+    <topic igid="401" string="/maschine1/pressure/minlastsec"/>
 </mqttconfig>

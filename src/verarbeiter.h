@@ -70,7 +70,7 @@ typedef struct{
 
 
 // Initializes the struct and starts the thread-loop
-IG_Status IG_verarbeiter_init(IG_Verarbeiter * verarbeiter);
+IG_Status IG_Verarbeiter_init(IG_Verarbeiter * verarbeiter);
 
 // Creates new struct on the heap and initializes it with the parameters
 IG_Verarbeiter * IG_Verarbeiter_create(IG_Config * config, IG_Datenversender * sender, IG_Datenerfasser * erfasser);

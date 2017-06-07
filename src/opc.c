@@ -112,7 +112,6 @@ void response_handler(UA_UInt32 monId, UA_DataValue *value, void *newMonitoredIt
     
     value->value.storageType = UA_VARIANT_DATA_NODELETE;
     //Schreibe data in Queue
-    printf("Erfasser Thread writing data to queue!\n");
 
     IG_Queue_put(dataInfo->queue, data);
 }

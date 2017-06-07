@@ -79,7 +79,7 @@ IG_Status run(char * filename) {
         printf("could not initialize erfasser\n");
         return IG_STATUS_BAD;
     }
-    rt = IG_verarbeiter_init(verarbeiter);
+    rt = IG_Verarbeiter_init(verarbeiter);
     if (rt != IG_STATUS_GOOD ) {
         printf("could not initialize verarbeiter");
     }

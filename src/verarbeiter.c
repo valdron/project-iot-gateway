@@ -81,7 +81,6 @@ void* IG_WorkLoop(void * argument){
 	// endless loop
 	while(1){
 		printf("Workloop working\n");
-		sleep(1);
 
 		/*
 		Maybe add some special variable which terminates loop directly (For error cases)
@@ -97,7 +96,6 @@ void* IG_WorkLoop(void * argument){
 
 		// If there is data apply all rules
 		if(data!=NULL){
-			printf("Trying to apply rules\n");
 			IG_Verarbeiter_applyRules(data, ruleSetArray, ruleSetSize);
 			data=NULL;
 		}
@@ -120,10 +118,8 @@ void IG_Verarbeiter_applyRule(IG_Data * data, IG_Input_RuleSet* ruleSet){
 }
 
 void IG_Verarbeiter_applyRules(IG_Data * data, IG_Input_RuleSet * ruleSetArray, IG_UInt32 ruleSetSize){
-	printf("Applying all rules\n");
 	// Find the correct RuleSet
 	for(IG_UInt32 i = 0; i < ruleSetSize; i++){
-		printf("i:%i ID:%i size:%i\n",i , data->id, ruleSetSize);
 		if(ruleSetArray[i].inputId = data->id){	
 
 			// Checking if data is correct data type
@@ -133,7 +129,6 @@ void IG_Verarbeiter_applyRules(IG_Data * data, IG_Input_RuleSet * ruleSetArray, 
 				return;
 			}	 
 			// Apply entire RuleSet on data
-			printf("Found ruleSet for id %d\n", data->id);
 
 			IG_Verarbeiter_applyRule(data, &ruleSetArray[i]);
 			break;
@@ -144,7 +139,6 @@ void IG_Verarbeiter_applyRules(IG_Data * data, IG_Input_RuleSet * ruleSetArray, 
 
 
 void IG_Verarbeiter_checkIntervals(IG_Input_RuleSet * ruleSetArray, IG_UInt32 ruleSetSize, IG_Queue * queue){
-	printf("Checking intervals\n");
 
 	// Go through every rule and check if to Send
 	IG_DateTime now = IG_DateTime_now();
@@ -156,7 +150,6 @@ void IG_Verarbeiter_checkIntervals(IG_Input_RuleSet * ruleSetArray, IG_UInt32 ru
 
 				// Check if values arent null
 				if(rule->data==NULL){
-					printf("No Value assigned so far\n");
 					continue;
 				}
 
@@ -165,9 +158,9 @@ void IG_Verarbeiter_checkIntervals(IG_Input_RuleSet * ruleSetArray, IG_UInt32 ru
 				dataToSend->datatype = IG_CHAR;
 				dataToSend->data = (void*)IG_Verarbeiter_encodeToJSON(rule->data);
 				dataToSend->timestamp = IG_DateTime_now();
+				printf("sending: %s on ID:%i\n", (IG_Char*) dataToSend->data, dataToSend->id);
 				IG_Queue_put(queue, dataToSend);
 				rule->deadline = IG_DateTime_add_duration(rule->deadline,rule->interval);
-				printf("New deadline %ld \n", rule->deadline);
 
 			}	
 		}							
@@ -180,7 +173,7 @@ void IG_Verarbeiter_initFunktionen(IG_Input_RuleSet* ruleSetArray, IG_UInt32 rul
 		printf("%p with items: %u\n", ruleSet, ruleSet->ruleSize);
 		for(IG_UInt32 j = 0; j < ruleSet->ruleSize; j++){
 			IG_Rule* rule = &(ruleSet->rules[j]);
-			printf("%p\n", rule);
+			printf("ID: %i\n", rule->outputId);
 			switch(rule->rule){
 				case IG_RULE_TRANSMIT:
 					rule->function = &IG_Transmit;
@@ -205,8 +198,11 @@ void IG_Verarbeiter_initFunktionen(IG_Input_RuleSet* ruleSetArray, IG_UInt32 rul
 }
 
 IG_Char* IG_Verarbeiter_encodeToJSON(IG_Data* data){
-	char* s = (char *) malloc(sizeof(char) * 40);
+	unsigned char* s = (unsigned char *) malloc(sizeof(unsigned char) * 40);
+	
 	snprintf(s, 40, "{value:%s}", IG_Data_toString(data));
+
+	printf("ID:%i \t double: %lf ==> %s\n", data->id, *((IG_Double*) data->data), (IG_Char*) IG_Data_toString(data));
 	return (IG_Char*)s;
 }
 
