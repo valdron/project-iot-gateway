@@ -10,6 +10,7 @@
 
 
 
+
 typedef struct __IG_Rule IG_Rule;
 // Function pointer prototype
 typedef void (*IG_funcPtr)(IG_Data * data, IG_Rule * rule);

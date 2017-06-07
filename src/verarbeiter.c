@@ -1,5 +1,9 @@
 #include "verarbeiter.h"
 #include<unistd.h>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 8424463b1f7a78365feceb5faba1a6c02dc46735
 
 IG_Verarbeiter * IG_Verarbeiter_create(IG_Config * config, IG_Datenversender * sender, IG_Datenerfasser * erfasser){
     //create new on the heap
@@ -52,6 +56,7 @@ IG_Status IG_Verarbeiter_init(IG_Verarbeiter * verarbeiter){
 
 	
 	pthread_create(thread,NULL,IG_WorkLoop,(void*)args);
+
 
 	return IG_STATUS_GOOD;
 }
