@@ -116,6 +116,8 @@ void * IG_Data_allocate(IG_Datatype);
 // This function is creating an uninitialized IG_Data struct
 IG_Data * IG_Data_create_empty();
 
+IG_Data * IG_Data_copy(IG_Data * data);
+
 //care this doesnt free the memory needed for the data pointer
 void IG_Data_delete(IG_Data * data);
 

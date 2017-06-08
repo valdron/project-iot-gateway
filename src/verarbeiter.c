@@ -1,9 +1,6 @@
 #include "verarbeiter.h"
 #include<unistd.h>
-<<<<<<< HEAD
-=======
 
->>>>>>> 8424463b1f7a78365feceb5faba1a6c02dc46735
 
 IG_Verarbeiter * IG_Verarbeiter_create(IG_Config * config, IG_Datenversender * sender, IG_Datenerfasser * erfasser){
     //create new on the heap
@@ -85,24 +82,22 @@ void* IG_WorkLoop(void * argument){
 
 	// endless loop
 	while(1){
-		printf("Workloop working\n");
 
 		/*
 		Maybe add some special variable which terminates loop directly (For error cases)
 		if(fatalError) break;
 		*/
-	    printf("VerarbeiterLoop!\n");
-		sleep(1);
 
 		if(!verarbeiter->running && IG_Queue_isEmpty(queueErfasser))
 			break;
+
 		IG_Data* data = IG_Queue_take(queueErfasser);
-		printf("Taking Data at %p from Queue\n", data);
 
 		// If there is data apply all rules
 		if(data!=NULL){
 			IG_Verarbeiter_applyRules(data, ruleSetArray, ruleSetSize);
-			data=NULL;
+			IG_Data_delete_members(data);
+			IG_Data_delete(data);
 		}
 
 
@@ -113,7 +108,6 @@ void* IG_WorkLoop(void * argument){
 }
 
 void IG_Verarbeiter_applyRule(IG_Data * data, IG_Input_RuleSet* ruleSet){
-	printf("Applying specific rules\n");
 
 
 	// Call all rule functions and invoke the data and the rule specific data
@@ -125,10 +119,10 @@ void IG_Verarbeiter_applyRule(IG_Data * data, IG_Input_RuleSet* ruleSet){
 void IG_Verarbeiter_applyRules(IG_Data * data, IG_Input_RuleSet * ruleSetArray, IG_UInt32 ruleSetSize){
 	// Find the correct RuleSet
 	for(IG_UInt32 i = 0; i < ruleSetSize; i++){
-		if(ruleSetArray[i].inputId = data->id){	
+		if(ruleSetArray[i].inputId == data->id){	
 
 			// Checking if data is correct data type
-			if(data->datatype!=ruleSetArray[i].datatype){
+			if(data->datatype != ruleSetArray[i].datatype){
 				printf("Did not apply Rule\nIncorrect datatype on ruleset %d\n", ruleSetArray[i].inputId);
 				printf("Ruleset Datatype %d Datatype %d \n", ruleSetArray[i].datatype, data->datatype);
 				return;
@@ -163,10 +157,12 @@ void IG_Verarbeiter_checkIntervals(IG_Input_RuleSet * ruleSetArray, IG_UInt32 ru
 				dataToSend->datatype = IG_CHAR;
 				dataToSend->data = (void*)IG_Verarbeiter_encodeToJSON(rule->data);
 				dataToSend->timestamp = IG_DateTime_now();
-				printf("sending: %s on ID:%i\n", (IG_Char*) dataToSend->data, dataToSend->id);
 				IG_Queue_put(queue, dataToSend);
-				rule->deadline = IG_DateTime_add_duration(rule->deadline,rule->interval);
+				rule->deadline = IG_DateTime_add_duration(rule->deadline, rule->interval);
 
+				IG_Data_delete_members(rule->data);
+				IG_Data_delete(rule->data);
+				rule->data = NULL;
 			}	
 		}							
 	}
@@ -197,7 +193,7 @@ void IG_Verarbeiter_initFunktionen(IG_Input_RuleSet* ruleSetArray, IG_UInt32 rul
 					break;
 			}
 			// Init times also
-			rule->deadline= IG_DateTime_add_duration(IG_DateTime_now(),rule->interval);			
+			rule->deadline= IG_DateTime_add_duration(IG_DateTime_now() ,rule->interval);			
 		}
 	}
 }
@@ -207,22 +203,29 @@ IG_Char* IG_Verarbeiter_encodeToJSON(IG_Data* data){
 	
 	snprintf(s, 40, "{value:%s}", IG_Data_toString(data));
 
-	printf("ID:%i \t double: %lf ==> %s\n", data->id, *((IG_Double*) data->data), (IG_Char*) IG_Data_toString(data));
 	return (IG_Char*)s;
 }
 
 void IG_Transmit(IG_Data* data, IG_Rule * rule){
-	printf("transmit\n");
-	rule->data = data;
+	if(rule->data == NULL){
+		rule->data = IG_Data_copy(data);
+		return;
+	}
+
+	IG_Data_delete_members(rule->data);
+	IG_Data_delete(rule->data);
+
+	rule->data = IG_Data_copy(data);
 }
+
+
 void IG_Average(IG_Data* data, IG_Rule * rule){
-	printf("avg\n");
 
 	// Check if this is the first ever data
 	if(rule->data==NULL){
-		rule->data = (IG_Data*)malloc(sizeof(IG_Data));
-		rule->data = IG_Data_create(data->id, data->datatype, data->data, data->timestamp);
-		rule->size++;
+		rule->data = IG_Data_copy(data);
+		rule->size = 1;
+		return;
 	}
 
 	// Formula is avg(new) = avg(old) + ( (value(new)-avg(old)) / size(new));
@@ -235,7 +238,7 @@ void IG_Average(IG_Data* data, IG_Rule * rule){
 		case IG_DOUBLE:
 			rule->size++;
 			*((IG_Double*)rule->data->data) = *((IG_Double*)rule->data->data) + 
-				(( *((IG_Double*)data->data) - *((IG_Double*)rule->data->data) ) / rule->size);
+				(( *((IG_Double*)data->data) - *((IG_Double*)rule->data->data) ) / (IG_Double) rule->size);
 			break;
 		case IG_INT32:
 			rule->size++;
@@ -279,63 +282,79 @@ void IG_Average(IG_Data* data, IG_Rule * rule){
 	}
 }
 void IG_Maximum(IG_Data* data, IG_Rule * rule){
-	printf("max\n");
 
 	// Check if this is the first ever data
 	if(rule->data==NULL){
-		rule->data = (IG_Data*)malloc(sizeof(IG_Data));
-		rule->data = IG_Data_create(data->id, data->datatype, data->data, data->timestamp);
+		rule->data = IG_Data_copy(data);
+		return;
 	}
 
 	switch(data->datatype){
 		case IG_FLOAT:	
-			if(*((IG_Float*)rule->data->data) > *((IG_Float*)data->data)) return;
+			if(*((IG_Float*)rule->data->data) > *((IG_Float*)data->data)) 
+				return;
+
 			*((IG_Float*)rule->data->data) = *((IG_Float*)data->data);
 			break;
 		case IG_DOUBLE:	
-			if(*((IG_Double*)rule->data->data) > *((IG_Double*)data->data)) return;
+			if(*((IG_Double*)rule->data->data) > *((IG_Double*)data->data)) 
+				return;
+
 			*((IG_Double*)rule->data->data) = *((IG_Double*)data->data);
 			break;
 		case IG_INT32:		
-			if(*((IG_Int32*)rule->data->data) > *((IG_Int32*)data->data)) return;
+			if(*((IG_Int32*)rule->data->data) > *((IG_Int32*)data->data)) 
+				return;
+
 			*((IG_Int32*)rule->data->data) = *((IG_Int32*)data->data);
 			break;
 		case IG_UINT32:	
-			if(*((IG_UInt32*)rule->data->data) > *((IG_UInt32*)data->data)) return;
+			if(*((IG_UInt32*)rule->data->data) > *((IG_UInt32*)data->data)) 
+				return;
+
 			*((IG_UInt32*)rule->data->data) = *((IG_UInt32*)data->data);
 			break;
 		case IG_INT64:					
-			if(*((IG_Int64*)rule->data->data) > *((IG_Int64*)data->data)) return;
+			if(*((IG_Int64*)rule->data->data) > *((IG_Int64*)data->data)) 
+				return;
+
 			*((IG_Int64*)rule->data->data) = *((IG_Int64*)data->data);
 			break;	
 		case IG_UINT64:
 		case IG_DURATION:
 		case IG_DATETIME:	
-			if(*((IG_UInt64*)rule->data->data) > *((IG_UInt64*)data->data)) return;
+			if(*((IG_UInt64*)rule->data->data) > *((IG_UInt64*)data->data)) 
+				return;
+
 			*((IG_UInt64*)rule->data->data) = *((IG_UInt64*)data->data);
 			break;	
 		case IG_BYTE:		
-			if(*((IG_Byte*)rule->data->data) > *((IG_Byte*)data->data)) return;
+			if(*((IG_Byte*)rule->data->data) > *((IG_Byte*)data->data)) 
+				return;
+
 			*((IG_Byte*)rule->data->data) = *((IG_Byte*)data->data);
 			break;
 		case IG_CHAR:		
-			if(*((IG_Char*)rule->data->data) > *((IG_Char*)data->data)) return;
+			if(*((IG_Char*)rule->data->data) > *((IG_Char*)data->data)) 
+				return;
+
 			*((IG_Char*)rule->data->data) = *((IG_Char*)data->data);
 			break;
 		case IG_BOOL:		
-			if(*((IG_Bool*)rule->data->data) > *((IG_Bool*)data->data)) return;
+			if(*((IG_Bool*)rule->data->data) > *((IG_Bool*)data->data)) 
+				return;
+
 			*((IG_Bool*)rule->data->data) = *((IG_Bool*)data->data);
 		default:
 			break;
 	}
 }
 void IG_Minimum(IG_Data* data, IG_Rule * rule){
-	printf("min\n");
 
 	// Check if this is the first ever data
 	if(rule->data==NULL){
-		rule->data = (IG_Data*)malloc(sizeof(IG_Data));
-		rule->data = IG_Data_create(data->id, data->datatype, data->data, data->timestamp);
+		rule->data = IG_Data_copy(data);
+		return;
 	}
 
 	switch(data->datatype){

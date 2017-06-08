@@ -70,6 +70,72 @@ void * IG_Data_allocate(IG_Datatype type) {
     }
 }
 
+IG_Data * IG_Data_copy(IG_Data * data) {
+    IG_Data * new = (IG_Data * )malloc(sizeof(IG_Data) );
+    new->id = data->id;
+    new->datatype = data->datatype;
+    new->timestamp = data->timestamp;
+
+    new->data = IG_Data_allocate(new->datatype);
+
+    switch(data->datatype) {
+    case IG_BYTE:
+        *((IG_Byte*)new->data) = *((IG_Byte*)data->data);
+    break;
+
+    case IG_DOUBLE:
+        *((IG_Double*)new->data) = *((IG_Double*)data->data);
+    break;
+
+    case IG_FLOAT:
+        *((IG_Float*)new->data) = *((IG_Float*)data->data);
+    break;
+
+    case IG_NULL:
+        new->data = NULL;
+    break;
+
+    case IG_INT32:
+        *((IG_Int32*)new->data) = *((IG_Int32*)data->data);
+    break;
+
+    case IG_UINT32:
+        *((IG_UInt32*)new->data) = *((IG_UInt32*)data->data);
+    break;
+
+    case IG_INT64:
+        *((IG_Int64*)new->data) = *((IG_Int64*)data->data);
+    break;
+
+    case IG_UINT64:
+        *((IG_UInt64*)new->data) = *((IG_UInt64*)data->data);
+    break;
+
+    case IG_DATETIME:
+        *((IG_DateTime*)new->data) = *((IG_DateTime*)data->data);
+    break;
+
+    case IG_DURATION:
+        *((IG_Duration*)new->data) = *((IG_Duration*)data->data);
+    break;
+
+    case IG_BOOL:
+        *((IG_Bool*)new->data) = *((IG_Bool*)data->data);
+    break;
+
+    case IG_CHAR:
+        *((IG_Char*)new->data) = *((IG_Char*)data->data);
+    break;
+
+    default:
+        printf("hello\n");
+        new->data = NULL;
+    }
+    return new;
+
+}
+
+
 
 //care this doesnt free the memory needed for the data pointer
 void IG_Data_delete(IG_Data * data){
