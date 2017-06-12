@@ -44,10 +44,8 @@ IG_Status IG_Config_get_node_attribute(IG_Config * config, const unsigned char *
         xmlXPathFreeContext(ctx);
         return IG_STATUS_BAD;
     }
-
-    IG_UInt32 size = strlen(attr_value) + 1;
-    *attr_res = (unsigned char *) malloc((size)* sizeof(unsigned char));
-    strncpy(*attr_res, attr_value, size);
+    
+    *attr_res = attr_value;
     return IG_STATUS_GOOD;
 }
 

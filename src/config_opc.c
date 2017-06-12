@@ -136,12 +136,19 @@ IG_Status create_subscriptions_response(xmlXPathObjectPtr obj, IG_ConfigResponse
 
         IG_UInt32 subid = atoi(curr_node_subid);
         if(subid == 0) {
+            free(curr_node_interval);
+            free(curr_node_subid);
             continue;
         }
         IG_UInt32 interval = atoi(curr_node_interval);
         if(interval == 0) {
+            free(curr_node_interval);
+            free(curr_node_subid);
             continue;
         }
+
+        free(curr_node_interval);
+        free(curr_node_subid);
         
         subs[j].subscription_id = subid;
         subs[j].timeintervalms = interval;
@@ -181,6 +188,8 @@ IG_Status create_opc_items(xmlXPathObjectPtr obj,
 
         IG_Id igid = atoi(curr_node_igid);
         IG_UInt32 nodeid = atoi(curr_node_nodeid);
+        free(curr_node_nodeid);
+        free(curr_node_igid);
         if(igid == 0 || nodeid == 0) {
             continue;
         }

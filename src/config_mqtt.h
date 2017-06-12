@@ -1,3 +1,6 @@
+#ifndef CONFIG_MQTT_H
+#define CONFIG_MQTT_H
+
 #include "configuration.h"
 
 //XPATH STATICS
@@ -36,5 +39,6 @@ IG_Status IG_Config_MQTT_get_topic(IG_Config * config,
 IG_Status IG_Config_MQTT_get_ClientConfig(IG_Config * config, 
                                           IG_ConfigResponse * response);
 
+#endif
 
 

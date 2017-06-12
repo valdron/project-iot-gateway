@@ -11,7 +11,9 @@ SET(SOURCES_IG  main.c
                 config_main.c
                 config_mqtt
                 config_opc.c
+                config_verarbeiter.c
                 internals.c
+                verarbeiter.c
                 opc.c
                 mqtt.c)
 
