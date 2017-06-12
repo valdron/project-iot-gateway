@@ -260,10 +260,6 @@ void addRoboterarmObjectInstance(UA_Server *server, char *name) {
 }
 
 
-/*UA_Server *s = NULL; /* required to get the server pointer into the constructor
-                        function (will change for v0.3) */
-
-
 //IN DIESER FUNKTION WURDE ETWAS ENTFERNT. --> SIEHE DOKU
 void * roboterarmTypeConstructor(const UA_NodeId instance) {
     UA_LOG_INFO(UA_Log_Stdout, UA_LOGCATEGORY_USERLAND, "Roborterarm created");
