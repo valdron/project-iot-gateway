@@ -201,7 +201,7 @@ void IG_Verarbeiter_initFunktionen(IG_Input_RuleSet* ruleSetArray, IG_UInt32 rul
 IG_Char* IG_Verarbeiter_encodeToJSON(IG_Data* data){
 	unsigned char* s = (unsigned char *) malloc(sizeof(unsigned char) * 40);
 	
-	snprintf(s, 40, "{\"value\": \"%s\"}", IG_Data_toString(data));
+	snprintf(s, 40, "{\"value\": %s}", IG_Data_toString(data));
 
 	return (IG_Char*)s;
 }
