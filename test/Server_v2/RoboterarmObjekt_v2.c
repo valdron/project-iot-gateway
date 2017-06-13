@@ -107,7 +107,7 @@ void *askForState(void *serverPtr) {
         state = getState(getCurrentTimestruct());
         UA_Variant_setScalar(t_stateAttr, &state, &UA_TYPES[UA_TYPES_BYTE]);
         UA_Server_writeValue(serverPtr,*stateNodeId,*t_stateAttr);
-        sleep(1);
+        usleep(200000);
     }
 } 
 
@@ -121,7 +121,7 @@ void *calcCurrentTemp(void *serverPtr) {
         Temperatur = generateValues(2.0,-2.0,Temperatur);
         UA_Variant_setScalar(t_temperatureAttr, &Temperatur, &UA_TYPES[UA_TYPES_DOUBLE]);
         UA_Server_writeValue(serverPtr,*temperatureNodeId,*t_temperatureAttr); //<- alternative NodeId Hardcodederstellen mit bsp. UA_NODEID_NUMERIC(1,119)
-        sleep(1);
+        usleep(200000);
     }
 } 
 
@@ -134,7 +134,7 @@ void *calcCurrentPressure(void *serverPtr){
         Pressure = generateValues(0.02,-0.02,Pressure);
         UA_Variant_setScalar(t_pressureAttr , &Pressure, &UA_TYPES[UA_TYPES_DOUBLE]);
         UA_Server_writeValue(serverPtr,*pressureNodeId,*t_pressureAttr);
-        sleep(1);
+        usleep(200000);
     }
 }
 
