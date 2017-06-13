@@ -9,7 +9,7 @@ cmake_minimum_required(VERSION 3.0)
 
 find_package(LibXml2 REQUIRED)
 find_library(open62541_LIB open62541)
-find_library(paho_LIB paho-mqtt3a)
+find_library(paho_LIB paho-mqtt3c)
 
 
 if(NOT open62541_LIB)

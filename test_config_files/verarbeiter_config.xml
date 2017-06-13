@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <verarbeiterconfig>
     <ruleset inid="1" datatype="double">
-        <rule type="average" outid="101" publishintervalms="3600000" timeintervalsecs="3600"/>
+        <rule type="average" outid="101" publishintervalms="6000"/>
         <rule type="transmit" outid="100" publishintervalms="1000"/>
-        <rule type="maximum" outid="102" publishintervalms="60000" timeintervalsecs="60" />
+        <rule type="maximum" outid="102" publishintervalms="6000"/>
     </ruleset>
-    <ruleset inid="4" datatype="uint32">
-        <rule type="minimum" outid="401" publishintervalms="1000" bitnr="0"/>
+    <ruleset inid="2" datatype="double">
+        <rule type="minimum" outid="201" publishintervalms="6000"/>
+        <rule type="transmit" outid="200" publishintervalms="500"/>
     </ruleset>
 </verarbeiterconfig>

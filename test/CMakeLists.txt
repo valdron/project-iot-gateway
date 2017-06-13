@@ -8,6 +8,8 @@ add_subdirectory(Server_v2)
 #add queue test
 add_subdirectory(QueueTest)
 
+add_subdirectory(VerarbeiterTest)
+
 
 add_subdirectory(ConfigTest)
 
