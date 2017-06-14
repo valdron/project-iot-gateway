@@ -166,7 +166,6 @@ void defineObjectTypes(UA_Server *server) {
                               UA_NODEID_NULL, nameAttr, NULL, NULL);
 
     
-    /* Define the object type for "Pump" */
     UA_ObjectTypeAttributes ptAttr;
     UA_ObjectTypeAttributes_init(&ptAttr);
     ptAttr.displayName = UA_LOCALIZEDTEXT("en_US", "Roborterarm Values");
