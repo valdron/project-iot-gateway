@@ -13,12 +13,19 @@ IG_Datenversender * IG_Datenversender_create(IG_Config * config) {
     IG_Datenversender * sender = (IG_Datenversender *) malloc(sizeof(IG_Datenversender));
     sender->config = config;
     sender->queue = IG_Queue_new(IG_QUEUE_BLOCKING);
+    sender->running = true;
     return sender;
 }
 
 void IG_Datenversender_delete(IG_Datenversender * sender) {
     IG_Queue_delete(sender->queue);
     free(sender);
+}
+
+void IG_Datenversender_stop(IG_Datenversender * sender) {
+    sender->running = false;
+    IG_Queue_put(sender->queue, NULL);
+    pthread_join(sender->th_loop,NULL);
 }
 
 
@@ -29,21 +36,24 @@ IG_Status sendData(IG_Datenversender * sender, IG_Data * data) {
  // TODO: ?
 }
 
-void* doSomeThing(void *arg)
-{
+void* doSomeThing(void *arg) {
 
-  readThreadParams *params = arg;
-  IG_Mqtt *stack = params->stack;
-  IG_Datenversender * sender = params->sender;  
-  //IG_Data * data = params->data;
+    readThreadParams *params = arg;
+    IG_Mqtt *stack = params->stack;
+    IG_Datenversender * sender = params->sender;  
+    //IG_Data * data = params->data;
 
-            // Loop, when thread creation is succeeded
-    while ( 1 )
-    {
+    // Loop, when thread creation is succeeded
+    while (1) {
         //  delay safe!
         IG_Data * data = IG_Queue_take(sender->queue);
-        
 
+        if(sender->running == false && data == NULL){
+            break;
+        }
+        if(data == NULL)
+            continue;
+        
         IG_Status rt;
         IG_ConfigResponse res;
         rt = IG_Config_MQTT_get_topic(sender->config,data->id, &res );
@@ -61,14 +71,13 @@ void* doSomeThing(void *arg)
         IG_Data_delete_members(data);
         IG_Data_delete(data);
     }
-   
+    printf("shutting down sender!\n");   
 }
 
 IG_Status init_versender(IG_Datenversender * sender) {
     /* All this value in config struct "sender" || ADDRESS "tcp://localhost:1883" || CLIENTID "ExampleClientPub" || TOPIC "MQTT Examples"  ||QOS 1 TIMEOUT 10000L*/
     int rc;
     int err;
-    pthread_t tid;
     IG_Status rt;
     IG_ConfigResponse res;
     rt = IG_Config_MQTT_get_ClientConfig(sender->config, &res );
@@ -100,16 +109,17 @@ IG_Status init_versender(IG_Datenversender * sender) {
         return IG_STATUS_BAD;
     }
 
-    // CallBackMethod Sending out
-    err = pthread_create(&tid, NULL, &doSomeThing, readParams);
-    if (err != 0) {
-        printf("\ncan't create thread");
-        disconnect(&(readParams->stack->client));
-        return IG_STATUS_BAD;
-    }
-    else {
-        printf("\n Thread created successfully\n");
-    }
+ // CallBackMethod Sending out
+    err = pthread_create(&sender->th_loop, NULL, &doSomeThing, readParams);
+        if (err != 0) {
+            printf("\ncan't create thread");
+            disconnect(&(readParams->stack->client));
+            return IG_STATUS_BAD;
+        }
+        else {
+            printf("\n Thread created successfully\n");
+       }
+       return IG_STATUS_GOOD;
 }
 
 
