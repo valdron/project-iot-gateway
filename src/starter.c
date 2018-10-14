@@ -1,9 +1,9 @@
 
 
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "starter.h"
 #include "datenerfasser.h"
 #include "datenversender.h"
@@ -60,6 +60,8 @@ IG_Status run(char * filename) {
        erfassercfg == NULL ||
        versendercfg == NULL) {
         printf("could not create config from file");
+        //Hier könnte man ja noch freen oder ist das egal weil das Programm sich 
+        //dann sowieso beended?
         return IG_STATUS_BAD;    
     }
 
@@ -101,7 +103,7 @@ IG_Status run(char * filename) {
 
 void commandloop() {
     char commandbuffer[50]; 
-    while(true) {
+    while(1) {
         printf(PROMPT);
         scanf("%s", commandbuffer);
 

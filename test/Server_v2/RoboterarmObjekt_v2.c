@@ -166,7 +166,6 @@ void defineObjectTypes(UA_Server *server) {
                               UA_NODEID_NULL, nameAttr, NULL, NULL);
 
     
-    /* Define the object type for "Pump" */
     UA_ObjectTypeAttributes ptAttr;
     UA_ObjectTypeAttributes_init(&ptAttr);
     ptAttr.displayName = UA_LOCALIZEDTEXT("en_US", "Roborterarm Values");
@@ -258,10 +257,6 @@ void addRoboterarmObjectInstance(UA_Server *server, char *name) {
                                            identifier */
                             oAttr, NULL, NULL);
 }
-
-
-/*UA_Server *s = NULL; /* required to get the server pointer into the constructor
-                        function (will change for v0.3) */
 
 
 //IN DIESER FUNKTION WURDE ETWAS ENTFERNT. --> SIEHE DOKU

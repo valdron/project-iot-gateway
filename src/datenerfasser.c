@@ -34,6 +34,7 @@ IG_Status init_erfasser(IG_Datenerfasser * erfasser){
 
     IG_ConfigResponse res;
     if(IG_Config_OPC_get_conn_string(erfasser->config,&res) != IG_STATUS_GOOD){
+        UA_Client_delete(client);
         return IG_STATUS_BAD;
     }
 
@@ -43,6 +44,7 @@ IG_Status init_erfasser(IG_Datenerfasser * erfasser){
         UA_Array_delete(endpointArray, endpointArraySize, &UA_TYPES[UA_TYPES_ENDPOINTDESCRIPTION]);
         UA_Client_delete(client);
         return IG_STATUS_BAD;
+
     }
     
     printf("%i endpoints found\n", (int)endpointArraySize);
@@ -69,6 +71,7 @@ IG_Status init_erfasser(IG_Datenerfasser * erfasser){
     OPC_init(client, nodeStruct, erfasser);
 
     printf("\nInit done!\n\n");
+
 
     IG_Datenerfasser_threadparamerters * param = (IG_Datenerfasser_threadparamerters*)malloc(sizeof(IG_Datenerfasser_threadparamerters));
     param->erfasser = erfasser;

@@ -65,47 +65,45 @@ void* doSomeThing(void *arg) {
         char * payload = (char*)data->data;
         int len = strlen(payload);
     
-         // publish the message
+        // publish the message
         pubmsg(stack, payload,len, topic, timeout);
         free(topic);
         IG_Data_delete_members(data);
         IG_Data_delete(data);
-
     }
-    printf("shutting down sender!\n");
-   
+    printf("shutting down sender!\n");   
 }
 
 IG_Status init_versender(IG_Datenversender * sender) {
-/* All this value in config struct "sender" || ADDRESS "tcp://localhost:1883" || CLIENTID "ExampleClientPub" || TOPIC "MQTT Examples"  ||QOS 1 TIMEOUT 10000L*/
-int rc;
-int err;
-IG_Status rt;
-IG_ConfigResponse res;
-rt = IG_Config_MQTT_get_ClientConfig(sender->config, &res );
+    /* All this value in config struct "sender" || ADDRESS "tcp://localhost:1883" || CLIENTID "ExampleClientPub" || TOPIC "MQTT Examples"  ||QOS 1 TIMEOUT 10000L*/
+    int rc;
+    int err;
+    IG_Status rt;
+    IG_ConfigResponse res;
+    rt = IG_Config_MQTT_get_ClientConfig(sender->config, &res );
 
-if(rt != IG_STATUS_GOOD) {
-    return IG_STATUS_BAD;
-}   
-IG_Config_MQTT_ClientConfig * configptr =  (IG_Config_MQTT_ClientConfig*) res.data;
-
-
-readThreadParams *readParams;
-readParams = malloc(sizeof(readThreadParams));
-readParams->sender = sender;                                                                                                     
-readParams->stack = IG_Mqtt_create();
-readParams->stack->qos_level = configptr->qos_level;
+    if(rt != IG_STATUS_GOOD) {
+        return IG_STATUS_BAD;
+    }   
+    IG_Config_MQTT_ClientConfig * configptr =  (IG_Config_MQTT_ClientConfig*) res.data;
 
 
-// Create the Client
-MQTTClient_create(&readParams->stack->client, configptr->conn_string, configptr->client_name, MQTTCLIENT_PERSISTENCE_NONE, NULL);
+    readThreadParams *readParams;
+    readParams = malloc(sizeof(readThreadParams));
+    readParams->sender = sender;                                                                                                     
+    readParams->stack = IG_Mqtt_create();
+    readParams->stack->qos_level = configptr->qos_level;
 
-MQTTClient_connectOptions conn_opts = MQTTClient_connectOptions_initializer;
-conn_opts.keepAliveInterval = 20;
-conn_opts.cleansession = 1;
 
-// check for Conn_ACK
- if ((rc = MQTTClient_connect(readParams->stack->client, &conn_opts)) != MQTTCLIENT_SUCCESS)
+    // Create the Client
+    MQTTClient_create(&readParams->stack->client, configptr->conn_string, configptr->client_name, MQTTCLIENT_PERSISTENCE_NONE, NULL);
+
+    MQTTClient_connectOptions conn_opts = MQTTClient_connectOptions_initializer;
+    conn_opts.keepAliveInterval = 20;
+    conn_opts.cleansession = 1;
+
+    // check for Conn_ACK
+    if ((rc = MQTTClient_connect(readParams->stack->client, &conn_opts)) != MQTTCLIENT_SUCCESS)
     {
         printf("Failed to connect, return code %d\n", rc);
         return IG_STATUS_BAD;
